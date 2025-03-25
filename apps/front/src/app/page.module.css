@@ -26,6 +26,10 @@
   font-weight: 600;
 }
 
+.subheader-box {
+  margin-bottom: 125px;
+}
+
 .subheader-box h2 {
   margin-bottom: 1.5rem;
   font-size: 3rem;

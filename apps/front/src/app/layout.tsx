@@ -1,8 +1,12 @@
-import MainHeader from '@/components/MainHeader/MainHeader';
 import { ReactNode } from 'react';
-import './globals.css';
-import { Work_Sans } from 'next/font/google';
 import { Metadata } from 'next';
+import { Work_Sans } from 'next/font/google';
+import FontAwesomeConfig from './font-awesome';
+
+import { Providers } from './providers';
+import MainHeader from '@/components/MainHeader/MainHeader';
+
+import './globals.css';
 
 const workSansFont = Work_Sans({
   subsets: ['latin'],
@@ -26,11 +30,16 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
+      <head>
+        <FontAwesomeConfig />
+      </head>
       <body className={workSansFont.className}>
         <header>
           <MainHeader />
         </header>
-        <main>{children}</main>
+        <main>
+          <Providers>{children}</Providers>
+        </main>
       </body>
     </html>
   );

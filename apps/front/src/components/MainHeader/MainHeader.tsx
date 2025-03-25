@@ -1,10 +1,12 @@
 'use client';
+
 import Link from 'next/link';
-import classes from './MainHeader.module.css';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+
+import classes from './MainHeader.module.css';
 
 export default function MainHeader() {
   return (
@@ -14,7 +16,7 @@ export default function MainHeader() {
           <Link className={classes['home-link']} href="/">
             <span>Next Step</span>
             <Image
-              src="/images/stairs.png"
+              src="/icons/stairs.png"
               alt="stairs-image"
               width={50}
               height={50}
