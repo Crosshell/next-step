@@ -74,3 +74,32 @@
   border: 2px solid white;
   border-radius: 10px;
 }
+
+@media (max-width: 1028px) {
+  .header-box {
+    padding: 0px;
+  }
+  .main-nav {
+    gap: 15px;
+  }
+  .home-link {
+    font-size: 1.75rem;
+  }
+
+  .home-link img {
+    width: 1.25rem;
+  }
+
+  .search-link-box {
+    font-size: 1rem;
+  }
+
+  .auth-nav {
+    font-size: 1rem;
+  }
+
+  .sign-up-btn,
+  .log-in-btn {
+    padding: 7px 20px;
+  }
+}

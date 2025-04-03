@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -9,6 +10,8 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import classes from './MainHeader.module.css';
 
 export default function MainHeader() {
+  const pathname = usePathname();
+  
   return (
     <div className={classes['header-box']}>
       <div className={classes['main-nav']}>
@@ -25,14 +28,21 @@ export default function MainHeader() {
           </Link>
         </motion.div>
 
-        <div className={classes['search-link-box']}>
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <Link href="/">
-              <span>Make your first step</span>
-              <FontAwesomeIcon icon={faArrowRight} />
-            </Link>
-          </motion.div>
-        </div>
+        <motion.div
+          className={classes['search-link-box']}
+          whileHover={{ scale: 1.05 }}
+        >
+          <Link href="/vacancies">
+            {pathname === '/vacancies' ? (
+              <span>You&apos;re making your first step!</span>
+            ) : (
+              <>
+                <span>Make your first step</span>
+                <FontAwesomeIcon icon={faArrowRight} />
+              </>
+            )}
+          </Link>
+        </motion.div>
       </div>
       <div className={classes['auth-nav']}>
         <motion.div
