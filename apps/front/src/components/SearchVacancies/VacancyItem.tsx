@@ -3,10 +3,16 @@ import Image from 'next/image';
 
 import classes from './SearchVacancies.module.css';
 
-export default function VacancyItem() {
+import { Vacancy } from '@/types/vacancy';
+
+interface Props {
+  data: Vacancy;
+}
+
+export default function VacancyItem({ data }: Props) {
   return (
     <div>
-      <Link href="/vacancies" className={classes['vacancy-item']}>
+      <Link href={`/vacancies/${data.id}`} className={classes['vacancy-item']}>
         <div>
           <Image
             src="/images/suitcase.png"
@@ -16,8 +22,8 @@ export default function VacancyItem() {
             priority
           />
           <div className={classes['short-info']}>
-            <h4>Company Name</h4>
-            <h3>Vacancy Name</h3>
+            <h4>{data.title}</h4>
+            <h3>{data.company_name}</h3>
           </div>
         </div>
 

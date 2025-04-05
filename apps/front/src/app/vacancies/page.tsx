@@ -7,7 +7,9 @@ import VacancyItem from '@/components/SearchVacancies/VacancyItem';
 
 import classes from './page.module.css';
 
-export default function Vacancies() {
+import { vacanciesData } from '@/lib/test-data';
+
+export default function VacanciesPage() {
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -26,9 +28,9 @@ export default function Vacancies() {
       >
         <InputContainer />
         <VacanciesTagBox />
-        <VacancyItem />
-        <VacancyItem />
-        <VacancyItem />
+        {vacanciesData.map((vacancyData) => {
+          return <VacancyItem key={vacancyData.id} data={vacancyData} />;
+        })}
       </form>
     </div>
   );

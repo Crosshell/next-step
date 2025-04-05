@@ -43,6 +43,7 @@ a {
 
 .container {
   margin: auto;
+  margin-bottom: 50px;
   width: 90%;
 }
 
