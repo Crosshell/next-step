@@ -48,7 +48,7 @@
 .auth-nav {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   margin-right: 20px;
   font-size: 1.5rem;
   font-weight: 500;

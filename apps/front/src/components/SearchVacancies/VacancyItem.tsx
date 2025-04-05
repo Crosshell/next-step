@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 import classes from './SearchVacancies.module.css';
 
@@ -11,7 +14,7 @@ interface Props {
 
 export default function VacancyItem({ data }: Props) {
   return (
-    <div>
+    <motion.div whileHover={{ scale: 1.02 }}>
       <Link href={`/vacancies/${data.id}`} className={classes['vacancy-item']}>
         <div>
           <Image
@@ -29,6 +32,6 @@ export default function VacancyItem({ data }: Props) {
 
         <p>Posted about millenium ago</p>
       </Link>
-    </div>
+    </motion.div>
   );
 }

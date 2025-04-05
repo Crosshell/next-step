@@ -30,6 +30,10 @@
   font-size: 2rem;
 }
 
+.search-btn:hover {
+  scale: 1.05;
+}
+
 /*  InputContainer */
 
 /* TagBox */
