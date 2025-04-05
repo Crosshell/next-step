@@ -1,6 +1,9 @@
 'use client';
 
+import { Suspense } from 'react';
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
+
 import {
   motion,
   useScroll,
@@ -9,11 +12,12 @@ import {
 } from 'framer-motion';
 
 import CompanyInfos from '@/components/CompanyInfos/CompanyInfos';
+import CompanyInfoModal from '@/components/CompanyInfos/CompanyInfoModal';
+import LoadingPage from './loading-out';
 
 import classes from './page.module.css';
-import { useSelector } from 'react-redux';
+
 import { RootState } from '@/store/store';
-import CompanyInfoModal from '@/components/CompanyInfos/CompanyInfoModal';
 
 export default function Home() {
   const isModal = useSelector((state: RootState) => state.modal.isOpen);
@@ -64,7 +68,9 @@ export default function Home() {
             Partnering with industry leaders to drive innovation and growth.
           </h3>
         </div>
-        <CompanyInfos />
+        <Suspense fallback={<LoadingPage />}>
+          <CompanyInfos />
+        </Suspense>
       </div>
     </>
   );
