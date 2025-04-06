@@ -40,3 +40,9 @@
   font-size: 2rem;
   font-weight: 500;
 }
+
+.loading {
+  font-size: 3rem;
+  padding: 30px;
+  margin: 10px;
+}
