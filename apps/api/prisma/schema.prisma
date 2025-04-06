@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URI")
+}
+
+enum UserType {
+  JOB_SEEKER
+  COMPANY
+}
+
+enum SeniorityLevel {
+  TRAINEE
+  JUNIOR
+  MIDDLE
+  SENIOR
+  LEAD
+}
+
+enum LanguageLevel {
+  ELEMENTARY
+  PRE_INTERMEDIATE
+  INTERMEDIATE
+  UPPER_INTERMEDIATE
+  ADVANCED
+  PROFICIENT
+}
+
+enum WorkFormat {
+  OFFICE
+  REMOTE
+  HYBRID
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  INTERNSHIP
+  CONTRACT
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  avatarUrl String?  @map("avatar_url")
+  userType  UserType @map("user_type")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  jobSeeker JobSeeker?
+  company   Company?
+
+  @@map("user")
+}
+
+model JobSeeker {
+  id             String  @id @default(uuid())
+  userId         String  @unique @map("user_id")
+  firstName      String  @map("first_name")
+  lastName       String  @map("last_name")
+  location       String?
+  bio            String?
+  expectedSalary Int?    @map("expected_salary")
+
+  seniorityLevel SeniorityLevel @map("seniority_level")
+
+  user User @relation(fields: [userId], references: [id])
+
+  contacts  JobSeekerContacts?
+  languages JobSeekerLanguage[]
+  skills    JobSeekerSkill[]
+
+  @@map("job_seeker")
+}
+
+model JobSeekerContacts {
+  id          String  @id @default(uuid())
+  jobSeekerId String  @unique @map("job_seeker_id")
+  githubUrl   String? @map("github_url")
+  linkedinUrl String? @map("linkedin_url")
+  telegramUrl String? @map("telegram_url")
+  publicEmail String? @map("public_email")
+  phoneNumber String? @map("phone_number")
+
+  jobSeeker JobSeeker @relation(fields: [jobSeekerId], references: [id])
+
+  @@map("job_seeker_contacts")
+}
+
+model JobSeekerLanguage {
+  languageLevel LanguageLevel @map("language_level")
+
+  jobSeekerId String    @map("job_seeker_id")
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id])
+  languageId  String    @map("language_id")
+  language    Language  @relation(fields: [languageId], references: [id])
+
+  @@id([jobSeekerId, languageId])
+  @@map("job_seeker_language")
+}
+
+model Language {
+  id   String @id @default(uuid())
+  name String @unique
+
+  jobSeekers JobSeekerLanguage[]
+
+  @@map("language")
+}
+
+model JobSeekerSkill {
+  jobSeekerId String    @map("job_seeker_id")
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id])
+  skillId     String    @map("skill_id")
+  skill       Skill     @relation(fields: [skillId], references: [id])
+
+  @@id([jobSeekerId, skillId])
+  @@map("job_seeker_skill")
+}
+
+model Skill {
+  id   String @id @default(uuid())
+  name String @unique
+
+  jobSeekers   JobSeekerSkill[]
+  VacancySkill VacancySkill[]
+
+  @@map("skill")
+}
+
+model Company {
+  id          String  @id @default(uuid())
+  userId      String  @unique @map("user_id")
+  name        String
+  description String?
+  url         String
+  isVerified  Boolean @default(false) @map("is_verified")
+
+  user      User      @relation(fields: [userId], references: [id])
+  vacancies Vacancy[]
+
+  @@map("company")
+}
+
+model Vacancy {
+  id                 String           @id @default(uuid())
+  companyId          String           @map("company_id")
+  title              String
+  description        String
+  salaryMin          Int?             @map("salary_min")
+  salaryMax          Int?             @map("salary_max")
+  officeLocation     String?          @map("office_location")
+  experienceRequired Int?             @default(0) @map("experience_required")
+  isActive           Boolean?         @default(true) @map("is_active")
+  archivedAt         DateTime?        @map("archived_at")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+  workFormat         WorkFormat[]     @map("work_format")
+  employmentType     EmploymentType[] @map("employment_type")
+  seniorityLevel     SeniorityLevel   @map("seniority_level")
+
+  company        Company        @relation(fields: [companyId], references: [id])
+  requiredSkills VacancySkill[]
+
+  @@map("vacancy")
+}
+
+model VacancySkill {
+  vacancyId String  @map("vacancy_id")
+  vacancy   Vacancy @relation(fields: [vacancyId], references: [id])
+  skillId   String  @map("skill_id")
+  skill     Skill   @relation(fields: [skillId], references: [id])
+
+  @@id([vacancyId, skillId])
+  @@map("vacancy_skill")
+}
