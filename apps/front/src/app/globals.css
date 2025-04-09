@@ -43,6 +43,7 @@ a {
 
 .container {
   margin: auto;
+  margin-top: 50px;
   margin-bottom: 50px;
   width: 90%;
 }
@@ -60,4 +61,22 @@ h3,
 h4,
 h5 {
   font-weight: 500;
+}
+
+.row-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
+.font-weight-500 {
+  font-weight: 500;
+}
+
+.font-size-1-5 {
+  font-size: 1.5rem;
 }

@@ -54,25 +54,32 @@
   font-weight: 500;
 }
 
-.sign-up-btn,
-.log-in-btn {
+.no-border-btn,
+.border-btn {
   display: inline-block;
   padding: 10px 30px;
 }
 
-.sign-up-btn,
-.log-in-btn:hover {
-  cursor: pointer;
-}
-
-.sign-up-btn {
+.no-border-btn {
   border: 2px solid transparent;
   border-radius: 10px;
 }
 
-.log-in-btn {
+.border-btn {
   border: 2px solid white;
   border-radius: 10px;
+}
+
+.active-link {
+  border: 3px solid #37aa9c;
+}
+
+.active-link a {
+  color: #37aa9c;
+}
+
+.active-link a:hover {
+  color: white;
 }
 
 @media (max-width: 1028px) {

@@ -6,12 +6,16 @@ import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import {
+  greenBorderBtnHover,
+  whiteBorderBtnHover,
+} from '@/animations/variants';
 
 import classes from './MainHeader.module.css';
 
 export default function MainHeader() {
   const pathname = usePathname();
-  
+
   return (
     <div className={classes['header-box']}>
       <div className={classes['main-nav']}>
@@ -46,7 +50,7 @@ export default function MainHeader() {
       </div>
       <div className={classes['auth-nav']}>
         <motion.div
-          className={classes['sign-up-btn']}
+          className={classes['no-border-btn']}
           whileHover={{
             scale: 1.1,
             borderColor: 'white',
@@ -55,7 +59,7 @@ export default function MainHeader() {
           <Link href="/">Sign Up</Link>
         </motion.div>
         <motion.div
-          className={classes['log-in-btn']}
+          className={classes['border-btn']}
           whileHover={{
             scale: 1.1,
             backgroundColor: 'white',
@@ -63,6 +67,14 @@ export default function MainHeader() {
           }}
         >
           <Link href="/">Log In</Link>
+        </motion.div>
+        <motion.div
+          className={`${classes['border-btn']} ${pathname === '/profile' ? classes['active-link'] : ''} `}
+          whileHover={
+            pathname === '/profile' ? greenBorderBtnHover : whiteBorderBtnHover
+          }
+        >
+          <Link href="/profile">Profile</Link>
         </motion.div>
       </div>
     </div>
