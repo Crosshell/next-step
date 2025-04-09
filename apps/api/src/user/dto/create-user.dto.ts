@@ -1,12 +1,5 @@
 import { UserType } from '@prisma/client';
-import {
-  IsEmail,
-  IsEnum,
-  IsOptional,
-  IsString,
-  IsUrl,
-  Length,
-} from 'class-validator';
+import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
@@ -27,15 +20,6 @@ export class CreateUserDto {
     message: 'Password must be between 8 and 50 characters',
   })
   password: string;
-
-  @ApiProperty({
-    description: 'automatically generated URL from user image',
-    required: false,
-    example: 'https://example.com/avatar.jpg',
-  })
-  @IsOptional()
-  @IsUrl()
-  avatarUrl?: string;
 
   @ApiProperty({
     enum: UserType,
