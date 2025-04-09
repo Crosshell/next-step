@@ -66,7 +66,7 @@ model JobSeeker {
   bio            String?
   expectedSalary Int?    @map("expected_salary")
 
-  seniorityLevel SeniorityLevel @map("seniority_level")
+  seniorityLevel SeniorityLevel? @map("seniority_level")
 
   user User @relation(fields: [userId], references: [id])
 
@@ -137,7 +137,7 @@ model Company {
   userId      String  @unique @map("user_id")
   name        String
   description String?
-  url         String
+  url         String?
   isVerified  Boolean @default(false) @map("is_verified")
 
   user      User      @relation(fields: [userId], references: [id])
