@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
-  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -41,13 +40,7 @@ export class UserController {
   @ApiResponse({ status: 400, description: 'Invalid uuid format' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findById(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const user = await this.userService.findById(id);
-
-    if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
-    }
-
-    return user;
+    return this.userService.findById(id);
   }
 
   @Patch(':id')
@@ -59,13 +52,7 @@ export class UserController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    const user = await this.userService.update(id, updateUserDto);
-
-    if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
-    }
-
-    return user;
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
@@ -74,12 +61,6 @@ export class UserController {
   @ApiResponse({ status: 400, description: 'Invalid uuid format' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async remove(@Param('id', ParseUUIDPipe) id: string): Promise<User> {
-    const user = await this.userService.remove(id);
-
-    if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
-    }
-
-    return user;
+    return this.userService.remove(id);
   }
 }
