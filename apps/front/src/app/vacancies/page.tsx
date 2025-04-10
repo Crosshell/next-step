@@ -20,6 +20,7 @@ export default function VacanciesPage() {
     const formData = new FormData(formRef.current);
     console.log(JSON.stringify(Object.fromEntries(formData), null, 2));
   };
+
   return (
     <div className="container">
       <form

@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import AnimatedIcon from '../AnimatedIcon/AnimatedIcon';
 
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import classes from './SearchVacancies.module.css';
 
 export default function InputContainer() {
@@ -13,7 +13,7 @@ export default function InputContainer() {
         placeholder="Search for jobs..."
       />
       <button className={classes['search-btn']} type="submit">
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
+        <AnimatedIcon iconType={faMagnifyingGlass} />
       </button>
     </div>
   );
