@@ -42,19 +42,35 @@ enum EmploymentType {
   CONTRACT
 }
 
+enum TokenType {
+  REFRESH
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
   avatarUrl String?  @map("avatar_url")
-  userType  UserType @map("user_type")
+  type      UserType
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   jobSeeker JobSeeker?
   company   Company?
+  tokens    Token[]
 
-  @@map("user")
+  @@map("users")
+}
+
+model Token {
+  userId    String    @map("user_id")
+  value     String    @unique
+  user      User      @relation(fields: [userId], references: [id])
+  type      TokenType
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@unique([userId, type])
+  @@map("tokens")
 }
 
 model JobSeeker {
@@ -74,7 +90,7 @@ model JobSeeker {
   languages JobSeekerLanguage[]
   skills    JobSeekerSkill[]
 
-  @@map("job_seeker")
+  @@map("job_seekers")
 }
 
 model JobSeekerContacts {
@@ -100,7 +116,7 @@ model JobSeekerLanguage {
   language    Language  @relation(fields: [languageId], references: [id])
 
   @@id([jobSeekerId, languageId])
-  @@map("job_seeker_language")
+  @@map("job_seekers_languages")
 }
 
 model Language {
@@ -109,7 +125,7 @@ model Language {
 
   jobSeekers JobSeekerLanguage[]
 
-  @@map("language")
+  @@map("languages")
 }
 
 model JobSeekerSkill {
@@ -119,7 +135,7 @@ model JobSeekerSkill {
   skill       Skill     @relation(fields: [skillId], references: [id])
 
   @@id([jobSeekerId, skillId])
-  @@map("job_seeker_skill")
+  @@map("job_seekers_skills")
 }
 
 model Skill {
@@ -129,7 +145,7 @@ model Skill {
   jobSeekers   JobSeekerSkill[]
   VacancySkill VacancySkill[]
 
-  @@map("skill")
+  @@map("skills")
 }
 
 model Company {
@@ -143,7 +159,7 @@ model Company {
   user      User      @relation(fields: [userId], references: [id])
   vacancies Vacancy[]
 
-  @@map("company")
+  @@map("companies")
 }
 
 model Vacancy {
@@ -166,7 +182,7 @@ model Vacancy {
   company        Company        @relation(fields: [companyId], references: [id])
   requiredSkills VacancySkill[]
 
-  @@map("vacancy")
+  @@map("vacancies")
 }
 
 model VacancySkill {
@@ -176,5 +192,5 @@ model VacancySkill {
   skill     Skill   @relation(fields: [skillId], references: [id])
 
   @@id([vacancyId, skillId])
-  @@map("vacancy_skill")
+  @@map("vacancies_skills")
 }

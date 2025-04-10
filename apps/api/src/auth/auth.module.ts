@@ -4,27 +4,15 @@ import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
-import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtConfig } from '../config/jwt.config';
 import { CookieService } from '../cookie.service';
-import { ConfigService } from '@nestjs/config';
 import { CookieConfig } from '../config/cookie.config';
+import { RefreshStrategy } from './strategies/refresh.strategy';
+import { TokenModule } from '../token/token.module';
 
 @Module({
-  imports: [
-    UserModule,
-    PassportModule,
-    JwtModule.registerAsync({
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.getOrThrow('jwt.secret'),
-        signOptions: {
-          expiresIn: configService.getOrThrow('jwt.accessExpiresIn'),
-        },
-      }),
-      inject: [ConfigService],
-    }),
-  ],
+  imports: [UserModule, PassportModule, TokenModule],
   controllers: [AuthController],
   providers: [
     AuthService,
@@ -33,6 +21,7 @@ import { CookieConfig } from '../config/cookie.config';
     CookieService,
     JwtConfig,
     CookieConfig,
+    RefreshStrategy,
   ],
 })
 export class AuthModule {}

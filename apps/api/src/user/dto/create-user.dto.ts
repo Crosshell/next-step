@@ -28,5 +28,5 @@ export class CreateUserDto {
     description: 'User type (JOB_SEEKER or COMPANY)',
   })
   @IsEnum(UserType, { message: 'User type must be an enum UserType' })
-  userType: UserType;
+  type: UserType;
 }

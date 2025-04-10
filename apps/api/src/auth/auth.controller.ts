@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { CookieService } from '../cookie.service';
+import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +23,7 @@ export class AuthController {
       req.user,
     );
     this.cookieService.setRefreshTokenCookie(res, refreshToken);
-    return { accessToken: accessToken };
+    return { accessToken };
   }
 
   @Post('register')
@@ -33,6 +34,19 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.register(createUserDto);
     this.cookieService.setRefreshTokenCookie(res, refreshToken);
-    return { accessToken: accessToken };
+    return { accessToken };
+  }
+
+  @Post('refresh')
+  @UseGuards(RefreshAuthGuard)
+  async refresh(
+    @Req() req,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{ accessToken: string }> {
+    const { accessToken, refreshToken } = await this.authService.login(
+      req.user,
+    );
+    this.cookieService.setRefreshTokenCookie(res, refreshToken);
+    return { accessToken };
   }
 }

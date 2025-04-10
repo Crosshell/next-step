@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { CookieConfig } from './config/cookie.config';
 
 @Injectable()
@@ -14,5 +14,9 @@ export class CookieService {
       maxAge: this.cookieConfig.maxAge,
       path: this.cookieConfig.path,
     });
+  }
+
+  getRefreshToken(req: Request): string | null {
+    return req?.cookies?.refreshToken || null;
   }
 }

@@ -1,19 +1,17 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { User } from '@prisma/client';
+import { TokenType, User } from '@prisma/client';
 import * as argon2 from 'argon2';
-import { JwtService } from '@nestjs/jwt';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtTokensDto } from './dto/jwt-tokens.dto';
-import { JwtConfig } from '../config/jwt.config';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
-    private readonly jwtConfig: JwtConfig,
+    private readonly tokenService: TokenService,
   ) {}
 
   async validateUser(
@@ -31,7 +29,15 @@ export class AuthService {
   }
 
   async login(jwtPayloadDto: JwtPayloadDto): Promise<JwtTokensDto> {
-    return this.generateTokens(jwtPayloadDto);
+    const { id, email, type } = jwtPayloadDto;
+    const { accessToken, refreshToken } =
+      await this.tokenService.generateTokens({ id, email, type });
+    await this.tokenService.upsertToken(
+      jwtPayloadDto.id,
+      TokenType.REFRESH,
+      refreshToken,
+    );
+    return { accessToken, refreshToken };
   }
 
   async register(createUserDto: CreateUserDto): Promise<JwtTokensDto> {
@@ -42,16 +48,11 @@ export class AuthService {
     }
 
     const newUser = await this.userService.create(createUserDto);
-    const { id, email, userType } = newUser;
-    return this.generateTokens({ id, email, userType });
-  }
+    const { id, email, type } = newUser;
 
-  private async generateTokens(payload: JwtPayloadDto): Promise<JwtTokensDto> {
-    const accessToken = await this.jwtService.signAsync(payload);
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: this.jwtConfig.refreshExpiresIn,
-    });
-
+    const { accessToken, refreshToken } =
+      await this.tokenService.generateTokens({ id, email, type });
+    await this.tokenService.upsertToken(id, TokenType.REFRESH, refreshToken);
     return { accessToken, refreshToken };
   }
 }
