@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 
-import AnimatedIcon from '../AnimatedIcon/AnimatedIcon';
+import AnimatedIcon from '../HoveredItem/HoveredItem';
 
 import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import classes from './Profile.module.css';

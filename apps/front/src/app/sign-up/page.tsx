@@ -1,3 +1,22 @@
+import Image from 'next/image';
+
+import RegistrationForm from '@/components/SignUpItems/RegistrationForm';
+
+import classes from './page.module.css';
+
 export default function SignUpPage() {
-  return <h1>Sign Up Page</h1>;
+  return (
+    <>
+      <div className={classes['background']}>
+        <Image
+          src="/images/arrow.png"
+          alt="background-arrow"
+          width={1920}
+          height={1080}
+          priority
+        />
+      </div>
+      <RegistrationForm />
+    </>
+  );
 }

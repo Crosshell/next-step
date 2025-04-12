@@ -1,4 +1,4 @@
-import AnimatedIcon from '../AnimatedIcon/AnimatedIcon';
+import AnimatedIcon from '../HoveredItem/HoveredItem';
 
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import classes from './SearchVacancies.module.css';

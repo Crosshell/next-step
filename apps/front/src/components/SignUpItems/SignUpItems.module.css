@@ -1,0 +1,109 @@
+.sign-up-container {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  width: 30%;
+  height: 80vh;
+}
+
+.sign-up-form {
+  margin: auto;
+  padding: 25px 30px;
+  background-color: #1f1f21;
+  border: 3px solid #37aa9c;
+  border-radius: 20px;
+}
+
+.sign-up-form h3 {
+  margin-bottom: 15px;
+  font-size: 2rem;
+}
+
+.sign-up-form h5 {
+  margin-bottom: 30px;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.role-form {
+  display: flex;
+  gap: 30px;
+}
+
+.role-btn {
+  padding: 10px 20px;
+  margin-bottom: 30px;
+  background-color: white;
+  border: 0;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f1f21;
+}
+
+.link {
+  font-size: 1rem;
+  text-decoration: underline;
+  background-color: transparent;
+  border: 0;
+  color: white;
+}
+
+/* Create Account Item */
+
+.go-back-btn {
+  padding: 15px 20px;
+  font-size: 1.25rem;
+  background-color: transparent;
+  border: 0;
+  color: white;
+}
+
+.go-back-btn svg {
+  margin-right: 10px;
+}
+
+.continue-btn {
+  padding: 15px 20px;
+  background-color: transparent;
+  border: 3px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.form-input {
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  background-color: rgb(257, 257, 257);
+  border: 0;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  color: rgb(0, 0, 0);
+}
+
+.form-input:last-child {
+  margin-bottom: 30px;
+}
+
+.error-container {
+  margin-bottom: 30px;
+}
+
+/* Create Account Item */
+
+/* ConfirmBoxItem */
+
+.image-container {
+  margin: auto;
+  margin-bottom: 20px;
+  width: 80%;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+}
+
+/* ConfirmBoxItem */

@@ -1,0 +1,13 @@
+.background {
+  position: absolute;
+  z-index: -10;
+  display: flex;
+  align-items: center;
+  height: 80vh;
+  width: 100%;
+}
+
+.background img {
+  width: 95%;
+  height: auto;
+}

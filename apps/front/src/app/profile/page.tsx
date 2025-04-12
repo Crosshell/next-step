@@ -4,7 +4,7 @@ import Image from 'next/image';
 import ContactLink from '@/components/ProfileItems/ContactLink';
 import InfoBox from '@/components/ProfileItems/InfoBox';
 import InfoItem from '@/components/ProfileItems/InfoItem';
-import AnimatedIcon from '@/components/AnimatedIcon/AnimatedIcon';
+import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import classes from './page.module.css';

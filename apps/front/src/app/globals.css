@@ -68,6 +68,11 @@ h5 {
   justify-content: space-between;
 }
 
+.row-center {
+  display: flex;
+  justify-content: center;
+}
+
 .align-center {
   display: flex;
   align-items: center;

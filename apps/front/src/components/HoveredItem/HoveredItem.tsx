@@ -1,23 +1,26 @@
 'use client';
+import { ReactNode } from 'react';
 
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-import classes from './AnimatedIcon.module.css';
+import classes from './HoveredItem.module.css';
 
 interface Props {
-  iconType: IconDefinition;
+  children?: ReactNode;
+  iconType?: IconDefinition;
   scale?: number;
 }
 
-export default function AnimatedIcon({ iconType, scale }: Props) {
+export default function HoveredItem({ children, iconType, scale }: Props) {
   return (
     <motion.div
       className={classes['basic-icon']}
       whileHover={{ scale: scale ? scale : 1.1 }}
     >
-      <FontAwesomeIcon icon={iconType} />
+      {iconType && <FontAwesomeIcon icon={iconType} />}
+      {children && children}
     </motion.div>
   );
 }
