@@ -5,6 +5,7 @@ import { JwtPayloadDto } from '../auth/dto/jwt-payload.dto';
 import { JwtTokensDto } from '../auth/dto/jwt-tokens.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtConfig } from '../config/jwt.config';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class TokenService {
@@ -17,12 +18,13 @@ export class TokenService {
   async upsertToken(
     userId: string,
     type: TokenType,
-    value: string,
+    plainToken: string,
   ): Promise<void> {
+    const hash = await argon2.hash(plainToken);
     await this.prismaService.token.upsert({
       where: { userId_type: { userId, type } },
-      update: { value },
-      create: { userId, type, value },
+      update: { hash },
+      create: { userId, type, hash },
     });
   }
 

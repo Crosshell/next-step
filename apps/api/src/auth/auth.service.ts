@@ -32,11 +32,7 @@ export class AuthService {
     const { id, email, type } = jwtPayloadDto;
     const { accessToken, refreshToken } =
       await this.tokenService.generateTokens({ id, email, type });
-    await this.tokenService.upsertToken(
-      jwtPayloadDto.id,
-      TokenType.REFRESH,
-      refreshToken,
-    );
+    await this.tokenService.upsertToken(id, TokenType.REFRESH, refreshToken);
     return { accessToken, refreshToken };
   }
 
