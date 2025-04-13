@@ -1,12 +1,13 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthService } from '../auth.service';
 import { User } from '@prisma/client';
+import * as argon2 from 'argon2';
+import { UserService } from '../../user/user.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
+  constructor(private readonly userService: UserService) {
     super({ usernameField: 'email' });
   }
 
@@ -14,10 +15,14 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     email: string,
     password: string,
   ): Promise<Omit<User, 'password'>> {
-    const user = await this.authService.validateUser(email, password);
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+    const user = await this.userService.findByEmail(email);
+    const isValid = user && (await argon2.verify(user.password, password));
+
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid email or password');
     }
-    return user;
+
+    const { password: _, ...safeUser } = user;
+    return safeUser;
   }
 }

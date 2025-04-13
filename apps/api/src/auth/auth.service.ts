@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { TokenType, User } from '@prisma/client';
-import * as argon2 from 'argon2';
+import { TokenType } from '@prisma/client';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtTokensDto } from './dto/jwt-tokens.dto';
@@ -13,20 +12,6 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
   ) {}
-
-  async validateUser(
-    email: string,
-    password: string,
-  ): Promise<Omit<User, 'password'> | null> {
-    const user = await this.userService.findByEmail(email);
-
-    if (user && (await argon2.verify(user.password, password))) {
-      const { password, ...safeUser } = user;
-      return safeUser;
-    }
-
-    return null;
-  }
 
   async login(jwtPayloadDto: JwtPayloadDto): Promise<JwtTokensDto> {
     const { id, email, type } = jwtPayloadDto;
