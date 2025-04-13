@@ -1,4 +1,8 @@
-import { PartialRegistrationFormData, ValidationError } from '@/types/authForm';
+import {
+  PartialRegistrationFormData,
+  ProfileFormData,
+  ValidationError,
+} from '@/types/authForm';
 
 export const validateRegistrationForm = (data: PartialRegistrationFormData) => {
   const errors: ValidationError[] = [];
@@ -16,6 +20,26 @@ export const validateRegistrationForm = (data: PartialRegistrationFormData) => {
 
   if (data.password !== data.confirm) {
     errors.push({ field: 'confirm', message: 'Passwords do not match' });
+  }
+
+  return errors;
+};
+
+export const validateProfileForm = (data: ProfileFormData) => {
+  const errors: ValidationError[] = [];
+
+  if (!data['first-name']) {
+    errors.push({
+      field: 'first-name',
+      message: 'Fill the First Name field, please',
+    });
+  }
+
+  if (!data['last-name']) {
+    errors.push({
+      field: 'last-name',
+      message: 'Fill the Last Name field, please',
+    });
   }
 
   return errors;

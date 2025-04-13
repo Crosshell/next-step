@@ -1,4 +1,7 @@
+'use client';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
@@ -6,12 +9,27 @@ import HoveredItem from '../HoveredItem/HoveredItem';
 import classes from './SignUpItems.module.css';
 
 import { PartialRegistrationFormData } from '@/types/authForm';
+import { AppDispatch } from '@/store/store';
+import { changeRegFormData } from '@/store/slices/signUpSlice';
 
-interface Props {
-  onRoleSelect: (newFormData: PartialRegistrationFormData) => void;
-}
+export default function RoleFormItem() {
+  const dispatch = useDispatch<AppDispatch>();
 
-export default function RoleFormItem({ onRoleSelect }: Props) {
+  const router = useRouter();
+
+  const stepUpHandler = () => {
+    router.push('/sign-up?step=account');
+  };
+
+  const changeFormData = (accountData: PartialRegistrationFormData) => {
+    dispatch(changeRegFormData(accountData));
+  };
+
+  const handleChangeFormData = (accountData: PartialRegistrationFormData) => {
+    changeFormData(accountData);
+    stepUpHandler();
+  };
+
   return (
     <motion.div
       className={classes['sign-up-form']}
@@ -27,7 +45,7 @@ export default function RoleFormItem({ onRoleSelect }: Props) {
           <button
             className={classes['role-btn']}
             onClick={() =>
-              onRoleSelect({
+              handleChangeFormData({
                 role: 'job-seeker',
               })
             }
@@ -39,7 +57,7 @@ export default function RoleFormItem({ onRoleSelect }: Props) {
           <button
             className={classes['role-btn']}
             onClick={() =>
-              onRoleSelect({
+              handleChangeFormData({
                 role: 'company',
               })
             }

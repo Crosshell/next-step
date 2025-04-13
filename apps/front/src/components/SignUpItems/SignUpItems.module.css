@@ -107,3 +107,24 @@
 }
 
 /* ConfirmBoxItem */
+
+/* Profile Form */
+
+.profile-form-container {
+  display: flex;
+  margin: auto;
+  width: 35%;
+}
+
+.profile-form-container form {
+  margin: 50px 0;
+}
+
+.sign-up-form label {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+/* Profile Form */

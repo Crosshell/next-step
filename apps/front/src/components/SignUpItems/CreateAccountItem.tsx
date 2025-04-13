@@ -1,5 +1,6 @@
 'use client';
 import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
@@ -9,17 +10,14 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import classes from './SignUpItems.module.css';
 
 import { PartialRegistrationFormData, ValidationError } from '@/types/authForm';
-import {
-  changeRegFormData,
-  stepBack,
-  stepUp,
-} from '@/store/slices/signUpSlice';
+import { changeRegFormData } from '@/store/slices/signUpSlice';
 import { AppDispatch } from '@/store/store';
 import { useDispatch } from 'react-redux';
 import { validateRegistrationForm } from '@/utils/validation';
 import ErrorItem from '../ErrorItem/ErrorItem';
 
 export default function CreateAccountItem() {
+  const router = useRouter();
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
   const emailRef = useRef<HTMLInputElement>(null);
@@ -29,11 +27,11 @@ export default function CreateAccountItem() {
   const dispatch = useDispatch<AppDispatch>();
 
   const stepUpHandler = () => {
-    dispatch(stepUp());
+    router.push('/sign-up?step=confirm');
   };
 
   const stepBackHandler = () => {
-    dispatch(stepBack());
+    router.push('/sign-up?step=role');
   };
 
   const changeFormData = (accountData: PartialRegistrationFormData) => {

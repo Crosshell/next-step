@@ -7,6 +7,16 @@ interface RegistrationFormData {
 
 type PartialRegistrationFormData = Partial<RegistrationFormData>;
 
+interface ProfileFormData {
+  'first-name': string;
+  'last-name': string;
+  'birth-date': string;
+  field: string;
+  level: string;
+  university: string;
+  specialty: string;
+}
+
 interface ValidationError {
   field: string;
   message: string;
@@ -15,5 +25,6 @@ interface ValidationError {
 export {
   type RegistrationFormData,
   type PartialRegistrationFormData,
+  type ProfileFormData,
   type ValidationError,
 };
