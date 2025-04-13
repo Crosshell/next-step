@@ -55,4 +55,8 @@ export class AuthService {
     await this.tokenService.upsertToken(id, TokenType.REFRESH, refreshToken);
     return { accessToken, refreshToken };
   }
+
+  async logout(id: string): Promise<void> {
+    await this.tokenService.deleteToken(id, TokenType.REFRESH);
+  }
 }

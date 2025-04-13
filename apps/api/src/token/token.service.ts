@@ -40,4 +40,10 @@ export class TokenService {
       where: { userId_type: { userId, type } },
     });
   }
+
+  async deleteToken(userId: string, type: TokenType): Promise<void> {
+    await this.prismaService.token.delete({
+      where: { userId_type: { userId, type } },
+    });
+  }
 }

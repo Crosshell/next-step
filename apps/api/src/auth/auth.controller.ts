@@ -5,6 +5,7 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { CookieService } from '../cookie.service';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -48,5 +49,12 @@ export class AuthController {
     );
     this.cookieService.setRefreshTokenCookie(res, refreshToken);
     return { accessToken };
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  async logout(@Req() req): Promise<string> {
+    await this.authService.logout(req.user.id);
+    return 'Logged out successfully';
   }
 }
