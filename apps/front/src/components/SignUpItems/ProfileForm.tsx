@@ -3,15 +3,12 @@ import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
+import ErrorItem from '../ErrorItem/ErrorItem';
 
 import classes from './SignUpItems.module.css';
 
 import { ProfileFormData, ValidationError } from '@/types/authForm';
-import {
-  validateProfileForm,
-  validateRegistrationForm,
-} from '@/utils/validation';
-import ErrorItem from '../ErrorItem/ErrorItem';
+import { validateProfileForm } from '@/utils/validation';
 
 export default function ProfileForm() {
   const [errors, setErrors] = useState<ValidationError[]>([]);
@@ -53,7 +50,7 @@ export default function ProfileForm() {
         <h3>Step 3: Your Professional Profile</h3>
         <h5>Tell us about yourself</h5>
 
-        <div>
+        <div className={classes['personal-info']}>
           <label htmlFor="first-name">1. First Name</label>
           <input
             className={classes['form-input']}
@@ -122,9 +119,11 @@ export default function ProfileForm() {
           <span className="font-weight-600">Profile Page</span>
         </h5>
         <div className="row-center">
-          <button className={classes['continue-btn']} type="submit">
-            Finish registration
-          </button>
+          <HoveredItem>
+            <button className={classes['continue-btn']} type="submit">
+              Finish registration
+            </button>
+          </HoveredItem>
         </div>
       </motion.form>
     </div>

@@ -25,20 +25,38 @@
   font-weight: 400;
 }
 
+/* Role Form Item */
+
+.hidden {
+  display: none;
+}
+
 .role-form {
   display: flex;
   gap: 30px;
 }
 
 .role-btn {
+  display: inline-block;
   padding: 10px 20px;
   margin-bottom: 30px;
   background-color: white;
   border: 0;
   border-radius: 5px;
+}
+
+.role-btn span {
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 500;
   color: #1f1f21;
+}
+
+.role-btn:hover {
+  cursor: pointer;
+}
+
+.role-btn input[type='radio'] {
+  display: none;
 }
 
 .link {
@@ -48,6 +66,8 @@
   border: 0;
   color: white;
 }
+
+/* Role Form Item */
 
 /* Create Account Item */
 
@@ -120,7 +140,7 @@
   margin: 50px 0;
 }
 
-.sign-up-form label {
+.personal-info label {
   display: inline-block;
   margin-bottom: 10px;
   font-size: 1.25rem;

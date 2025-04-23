@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import modalReducer from './slices/modalSlice';
-import signUpReducer from './slices/signUpSlice';
 
 export const store = configureStore({
   reducer: {
     modal: modalReducer,
-    signUp: signUpReducer,
   },
 });
 

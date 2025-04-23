@@ -1,54 +1,30 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
+import ErrorItem from '../ErrorItem/ErrorItem';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import classes from './SignUpItems.module.css';
 
-import { PartialRegistrationFormData, ValidationError } from '@/types/authForm';
-import { changeRegFormData } from '@/store/slices/signUpSlice';
-import { AppDispatch } from '@/store/store';
-import { useDispatch } from 'react-redux';
-import { validateRegistrationForm } from '@/utils/validation';
-import ErrorItem from '../ErrorItem/ErrorItem';
+import { ValidationError } from '@/types/authForm';
 
-export default function CreateAccountItem() {
+interface Props {
+  errors: ValidationError[];
+}
+
+export default function CreateAccountItem({ errors }: Props) {
   const router = useRouter();
-  const [errors, setErrors] = useState<ValidationError[]>([]);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmRef = useRef<HTMLInputElement>(null);
 
-  const dispatch = useDispatch<AppDispatch>();
-
-  const stepUpHandler = () => {
-    router.push('/sign-up?step=confirm');
-  };
-
   const stepBackHandler = () => {
     router.push('/sign-up?step=role');
-  };
-
-  const changeFormData = (accountData: PartialRegistrationFormData) => {
-    dispatch(changeRegFormData(accountData));
-  };
-
-  const handleChangeFormData = (accountData: PartialRegistrationFormData) => {
-    const validationErrors = validateRegistrationForm(accountData);
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors([...validationErrors]);
-      return;
-    } else {
-      setErrors([]);
-      changeFormData(accountData);
-      stepUpHandler();
-    }
   };
 
   return (
@@ -67,26 +43,29 @@ export default function CreateAccountItem() {
           className={classes['form-input']}
           ref={emailRef}
           type="email"
+          name="email"
           placeholder="Enter your e-mail address"
         />
         <input
           className={classes['form-input']}
           ref={passwordRef}
           type="password"
+          name="password"
           placeholder="Create a cool password"
         />
         <input
           className={classes['form-input']}
           ref={confirmRef}
           type="password"
+          name="confirm"
           placeholder="Repeat your cool password"
         />
       </div>
 
       {errors.length > 0 && (
         <div className={classes['error-container']}>
-          {errors.map((error, index) => {
-            return <ErrorItem key={index} message={error.message} />;
+          {errors.map((error) => {
+            return <ErrorItem key={error.field} message={error.message} />;
           })}
         </div>
       )}
@@ -104,16 +83,7 @@ export default function CreateAccountItem() {
           </HoveredItem>
         </div>
         <HoveredItem scale={1.05}>
-          <button
-            className={classes['continue-btn']}
-            onClick={() =>
-              handleChangeFormData({
-                email: emailRef.current?.value,
-                password: passwordRef.current?.value,
-                confirm: confirmRef.current?.value,
-              })
-            }
-          >
+          <button type="submit" className={classes['continue-btn']}>
             Create account
           </button>
         </HoveredItem>
