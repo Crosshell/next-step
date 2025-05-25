@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { TokenService } from './token.service';
 import { JwtConfig } from '../config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';

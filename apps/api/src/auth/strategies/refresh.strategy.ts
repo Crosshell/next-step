@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { CookieService } from '../../cookie.service';
+import { CookieService } from '../../cookie/cookie.service';
 import fromExtractors = ExtractJwt.fromExtractors;
 import { JwtConfig } from '../../config/jwt.config';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';

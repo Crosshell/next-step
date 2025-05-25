@@ -6,7 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtConfig } from '../config/jwt.config';
-import { CookieService } from '../cookie.service';
+import { CookieService } from '../cookie/cookie.service';
 import { CookieConfig } from '../config/cookie.config';
 import { RefreshStrategy } from './strategies/refresh.strategy';
 import { TokenModule } from '../token/token.module';
