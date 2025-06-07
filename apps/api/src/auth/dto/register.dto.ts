@@ -1,10 +1,10 @@
-import { UserType } from '@prisma/client';
-import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
+import { UserType } from '@prisma/client';
 
-export class CreateUserDto {
+export class RegisterDto {
   @ApiProperty({
-    example: 'coolusername@gmail.com',
+    example: 'coolemail@gmail.com',
     description: 'Valid email address',
   })
   @IsEmail()
