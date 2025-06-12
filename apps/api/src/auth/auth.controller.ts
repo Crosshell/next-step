@@ -2,10 +2,10 @@ import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { CreateUserDto } from '../user/dto/create-user.dto';
 import { CookieService } from '../cookie/cookie.service';
 import { RefreshAuthGuard } from './guards/refresh-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -29,11 +29,11 @@ export class AuthController {
 
   @Post('register')
   async register(
-    @Body() createUserDto: CreateUserDto,
+    @Body() registerDto: RegisterDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<{ accessToken: string }> {
     const { accessToken, refreshToken } =
-      await this.authService.register(createUserDto);
+      await this.authService.register(registerDto);
     this.cookieService.setRefreshTokenCookie(res, refreshToken);
     return { accessToken };
   }

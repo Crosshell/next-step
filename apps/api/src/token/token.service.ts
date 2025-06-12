@@ -48,4 +48,21 @@ export class TokenService {
       where: { userId_type: { userId, type } },
     });
   }
+
+  async generateAndSaveTokens(payload: JwtPayloadDto): Promise<JwtTokensDto> {
+    const { accessToken, refreshToken } = await this.generateTokens(payload);
+
+    await this.upsertToken(payload.id, TokenType.REFRESH, refreshToken);
+    return { accessToken, refreshToken };
+  }
+
+  async verifyRefreshToken(
+    userId: string,
+    plainToken: string,
+  ): Promise<boolean> {
+    const storedToken = await this.findToken(userId, TokenType.REFRESH);
+    if (!storedToken) return false;
+
+    return argon2.verify(storedToken.hash, plainToken);
+  }
 }

@@ -11,9 +11,8 @@ import fromExtractors = ExtractJwt.fromExtractors;
 import { JwtConfig } from '../../config/jwt.config';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';
 import { UserService } from '../../user/user.service';
-import { TokenType, User } from '@prisma/client';
 import { TokenService } from '../../token/token.service';
-import * as argon2 from 'argon2';
+import { UserWithoutPassword } from '../../user/types/user-without-password.type';
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
@@ -36,32 +35,26 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   async validate(
     req: Request,
     payload: JwtPayloadDto,
-  ): Promise<Omit<User, 'password'>> {
-    const user = await this.userService.findById(payload.id);
+  ): Promise<UserWithoutPassword> {
+    const user = await this.userService.findOne({ id: payload.id });
     if (!user) {
       throw new NotFoundException(`User not found`);
     }
 
-    const currentRefreshToken = this.cookieService.getRefreshToken(req);
-    if (!currentRefreshToken) {
+    const refreshToken = this.cookieService.getRefreshToken(req);
+    if (!refreshToken) {
       throw new UnauthorizedException('Refresh token is missing');
     }
 
-    const storedRefreshToken = await this.tokenService.findToken(
+    const isValidToken = await this.tokenService.verifyRefreshToken(
       user.id,
-      TokenType.REFRESH,
+      refreshToken,
     );
-
-    const isValidToken =
-      storedRefreshToken?.hash &&
-      (await argon2.verify(storedRefreshToken.hash, currentRefreshToken));
-
     if (!isValidToken) {
       throw new UnauthorizedException('Invalid or revoked refresh token');
     }
 
-    const { password, ...safeUser } = user;
-    return safeUser;
+    return user;
   }
 
   private extractRefresh(req: Request): string | null {

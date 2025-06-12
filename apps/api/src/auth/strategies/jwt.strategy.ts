@@ -3,8 +3,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';
 import { JwtConfig } from '../../config/jwt.config';
-import { User } from '@prisma/client';
 import { UserService } from '../../user/user.service';
+import { UserWithoutPassword } from '../../user/types/user-without-password.type';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -19,10 +19,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayloadDto): Promise<Omit<User, 'password'>> {
-    const user = await this.userService.findById(payload.id);
+  async validate(payload: JwtPayloadDto): Promise<UserWithoutPassword> {
+    const user = await this.userService.findOne({ id: payload.id });
     if (!user) throw new UnauthorizedException();
-    const { password, ...safeUser } = user;
-    return safeUser;
+    return user;
   }
 }

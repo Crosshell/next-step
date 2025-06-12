@@ -11,4 +11,7 @@ export default () => ({
     accessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
   },
+  app: {
+    port: process.env.APP_PORT || 3001,
+  },
 });
