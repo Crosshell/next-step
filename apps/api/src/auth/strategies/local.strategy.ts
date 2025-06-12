@@ -1,9 +1,10 @@
 import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { User } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { UserService } from '../../user/user.service';
+import { UserWithoutPassword } from '../../user/types/user-without-password.type';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -14,8 +15,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   async validate(
     email: string,
     password: string,
-  ): Promise<Omit<User, 'password'>> {
-    const user = await this.userService.findByEmail(email);
+  ): Promise<UserWithoutPassword> {
+    const user = (await this.userService.findOne({ email }, false)) as User;
     const isValid = user && (await argon2.verify(user.password, password));
 
     if (!isValid) {
