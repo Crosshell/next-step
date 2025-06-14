@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { TokenType } from '@prisma/client';
-import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { JwtTokensDto } from './dto/jwt-tokens.dto';
 import { TokenService } from '../token/token.service';
 import { RegisterDto } from './dto/register.dto';
+import { UserWithoutPassword } from '../user/types/user-without-password.type';
 
 @Injectable()
 export class AuthService {
@@ -13,8 +13,9 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async login(jwtPayloadDto: JwtPayloadDto): Promise<JwtTokensDto> {
-    return this.tokenService.generateAndSaveTokens(jwtPayloadDto);
+  async login(user: UserWithoutPassword): Promise<JwtTokensDto> {
+    const { id, email, type } = user;
+    return this.tokenService.generateAndSaveTokens({ id, email, type });
   }
 
   async register(registerDto: RegisterDto): Promise<JwtTokensDto> {
@@ -24,8 +25,8 @@ export class AuthService {
     }
 
     const newUser = await this.userService.create(registerDto);
-    const { id, email, type } = newUser;
 
+    const { id, email, type } = newUser;
     return this.tokenService.generateAndSaveTokens({ id, email, type });
   }
 
