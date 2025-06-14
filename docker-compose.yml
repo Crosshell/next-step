@@ -1,0 +1,44 @@
+name: next-step
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - apps/api/.env
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - next-step-network
+
+  api:
+    container_name: api
+    build:
+      context: apps/api
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "8020:8020"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - apps/api/.env
+    restart: unless-stopped
+    command: sh -c "npx prisma migrate deploy && npm run start"
+    networks:
+      - next-step-network
+
+networks:
+  next-step-network:
+    driver: bridge
+
+volumes:
+  postgres:
