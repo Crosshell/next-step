@@ -14,4 +14,8 @@ export default () => ({
   app: {
     port: process.env.APP_PORT || 3001,
   },
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+  },
 });
