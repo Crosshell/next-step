@@ -20,7 +20,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const isValid = user && (await argon2.verify(user.password, password));
 
     if (!isValid) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const { password: _, ...safeUser } = user;
