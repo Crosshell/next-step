@@ -8,6 +8,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterDto } from './dto/register.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
+import { AuthSwagger } from '../../docs/swagger/auth.swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -16,6 +17,7 @@ export class AuthController {
     private readonly cookieService: CookieService,
   ) {}
 
+  @AuthSwagger.login()
   @Post('login')
   @UseGuards(LocalAuthGuard)
   async login(
@@ -27,6 +29,7 @@ export class AuthController {
     return { accessToken };
   }
 
+  @AuthSwagger.register()
   @Post('register')
   async register(
     @Body() registerDto: RegisterDto,
@@ -38,6 +41,7 @@ export class AuthController {
     return { accessToken };
   }
 
+  @AuthSwagger.refresh()
   @Post('refresh')
   @UseGuards(RefreshAuthGuard)
   async refresh(
@@ -49,6 +53,7 @@ export class AuthController {
     return { accessToken };
   }
 
+  @AuthSwagger.logout()
   @Post('logout')
   @UseGuards(JwtAuthGuard)
   async logout(
