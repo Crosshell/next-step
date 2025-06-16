@@ -6,7 +6,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { CookieService } from '../../cookie/cookie.service';
 import fromExtractors = ExtractJwt.fromExtractors;
 import { JwtConfig } from '../../config/jwt.config';
 import { JwtPayloadDto } from '../dto/jwt-payload.dto';
@@ -18,7 +17,6 @@ import { UserWithoutPassword } from '../../user/types/user-without-password.type
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   constructor(
     private readonly jwtConfig: JwtConfig,
-    private readonly cookieService: CookieService,
     private readonly userService: UserService,
     private readonly tokenService: TokenService,
   ) {
@@ -41,7 +39,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       throw new NotFoundException(`User not found`);
     }
 
-    const refreshToken = this.cookieService.getRefreshToken(req);
+    const refreshToken = this.extractRefresh(req);
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token is missing');
     }
@@ -58,6 +56,6 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   }
 
   private extractRefresh(req: Request): string | null {
-    return this.cookieService.getRefreshToken(req);
+    return req?.cookies?.refreshToken || null;
   }
 }
