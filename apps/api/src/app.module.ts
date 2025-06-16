@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import config from './config/config';
 import { TokenModule } from './token/token.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { TokenModule } from './token/token.module';
     UserModule,
     AuthModule,
     TokenModule,
+    RedisModule,
   ],
   controllers: [],
   providers: [],

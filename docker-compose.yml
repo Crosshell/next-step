@@ -19,15 +19,34 @@ services:
     networks:
       - next-step-network
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ['CMD-SHELL', "redis-cli ping | grep PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - redis:/data
+    networks:
+      - next-step-network
+
   api:
     container_name: api
     build:
       context: apps/api
-      dockerfile: apps/api/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8020:8020"
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     env_file:
       - apps/api/.env
@@ -42,3 +61,4 @@ networks:
 
 volumes:
   postgres:
+  redis:
