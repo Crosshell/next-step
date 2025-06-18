@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SessionData } from './types/session-data';
+import { SessionData } from './types/session-data.type';
 import { RedisService } from '../redis/redis.service';
 import { randomUUID } from 'crypto';
 import { ConfigService } from '@nestjs/config';

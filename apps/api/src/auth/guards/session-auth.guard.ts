@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../../user/user.service';
 import { SessionService } from '../../session/session.service';
-import { RequestWithUser } from '../types/request-with-user';
+import { RequestWithUser } from '../types/request-with-user.type';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class SessionAuthGuard implements CanActivate {
   constructor(
     private readonly sessionService: SessionService,
     private readonly userService: UserService,
