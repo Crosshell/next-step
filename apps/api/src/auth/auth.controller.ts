@@ -12,8 +12,8 @@ import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { AuthSwagger } from '../../docs/swagger/auth.swagger';
 import { LoginDto } from './dto/login.dto';
-import { CurrentSessionId } from './decorators/current-session';
-import { AuthGuard } from './guards/auth-guard.service';
+import { CurrentSessionId } from './decorators/current-session-id.decorator';
+import { SessionAuthGuard } from './guards/session-auth.guard';
 import { ConfigService } from '@nestjs/config';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
@@ -52,7 +52,7 @@ export class AuthController {
   @AuthSwagger.logout()
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
+  @UseGuards(SessionAuthGuard)
   async logout(
     @CurrentSessionId() sid: string,
     @Res({ passthrough: true })
@@ -65,7 +65,7 @@ export class AuthController {
 
   @Post('logout-all')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
+  @UseGuards(SessionAuthGuard)
   async logoutAll(
     @CurrentUser() user: UserWithoutPassword,
     @Res({ passthrough: true }) res: Response,
