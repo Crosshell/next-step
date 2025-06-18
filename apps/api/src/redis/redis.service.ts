@@ -1,5 +1,5 @@
 import { Inject, Injectable, OnModuleDestroy } from '@nestjs/common';
-import Redis from 'ioredis';
+import Redis, { ChainableCommander } from 'ioredis';
 
 @Injectable()
 export class RedisService implements OnModuleDestroy {
@@ -9,15 +9,23 @@ export class RedisService implements OnModuleDestroy {
     this.redisClient.disconnect();
   }
 
-  async set(key: string, value: string, expireSec: number): Promise<void> {
-    await this.redisClient.set(key, value, 'EX', expireSec);
-  }
-
   async get(key: string): Promise<string | null> {
     return this.redisClient.get(key);
   }
 
-  async del(key: string): Promise<number> {
-    return this.redisClient.del(key);
+  async lrange(key: string, start: number, stop: number): Promise<string[]> {
+    return this.redisClient.lrange(key, start, stop);
+  }
+
+  async lrem(key: string, count: number, element: string) {
+    return this.redisClient.lrem(key, count, element);
+  }
+
+  pipeline(): ChainableCommander {
+    return this.redisClient.pipeline();
+  }
+
+  async mget(keys: string[]): Promise<(string | null)[]> {
+    return this.redisClient.mget(keys);
   }
 }

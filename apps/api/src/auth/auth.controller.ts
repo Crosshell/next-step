@@ -1,36 +1,41 @@
-import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { RefreshAuthGuard } from './guards/refresh-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterDto } from './dto/register.dto';
+import { AuthSwagger } from '../../docs/swagger/auth.swagger';
+import { LoginDto } from './dto/login.dto';
+import { CurrentSessionId } from './decorators/current-session';
+import { AuthGuard } from './guards/auth-guard.service';
+import { ConfigService } from '@nestjs/config';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
-import { AuthSwagger } from '../../docs/swagger/auth.swagger';
-import { CookieConfig } from '../config/cookie.config';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly cookieConfig: CookieConfig,
+    private readonly configService: ConfigService,
   ) {}
 
   @AuthSwagger.login()
   @Post('login')
-  @UseGuards(LocalAuthGuard)
+  @HttpCode(HttpStatus.OK)
   async login(
-    @CurrentUser() user: UserWithoutPassword,
+    @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<{ accessToken: string }> {
-    const { accessToken, refreshToken } = await this.authService.login(user);
-    res.cookie(
-      'refreshToken',
-      refreshToken,
-      this.cookieConfig.refreshTokenOptions,
-    );
-    return { accessToken };
+  ): Promise<{ message: string }> {
+    const user = await this.authService.validateCredentials(loginDto);
+    const sid = await this.authService.login(user);
+    res.cookie('sid', sid, this.configService.getOrThrow('cookie'));
+    return { message: 'Login successful' };
   }
 
   @AuthSwagger.register()
@@ -38,42 +43,35 @@ export class AuthController {
   async register(
     @Body() registerDto: RegisterDto,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<{ accessToken: string }> {
-    const { accessToken, refreshToken } =
-      await this.authService.register(registerDto);
-    res.cookie(
-      'refreshToken',
-      refreshToken,
-      this.cookieConfig.refreshTokenOptions,
-    );
-    return { accessToken };
-  }
-
-  @AuthSwagger.refresh()
-  @Post('refresh')
-  @UseGuards(RefreshAuthGuard)
-  async refresh(
-    @CurrentUser() user: UserWithoutPassword,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<{ accessToken: string }> {
-    const { accessToken, refreshToken } = await this.authService.login(user);
-    res.cookie(
-      'refreshToken',
-      refreshToken,
-      this.cookieConfig.refreshTokenOptions,
-    );
-    return { accessToken };
+  ): Promise<{ message: string }> {
+    const sid = await this.authService.register(registerDto);
+    res.cookie('sid', sid, this.configService.getOrThrow('cookie'));
+    return { message: 'Registration successful' };
   }
 
   @AuthSwagger.logout()
   @Post('logout')
-  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   async logout(
+    @CurrentSessionId() sid: string,
+    @Res({ passthrough: true })
+    res: Response,
+  ): Promise<{ message: string }> {
+    await this.authService.logout(sid);
+    res.clearCookie('sid');
+    return { message: 'Logged out successfully' };
+  }
+
+  @Post('logout-all')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async logoutAll(
     @CurrentUser() user: UserWithoutPassword,
     @Res({ passthrough: true }) res: Response,
   ): Promise<{ message: string }> {
-    await this.authService.logout(user.id);
-    res.clearCookie('refreshToken');
-    return { message: 'Logged out successfully' };
+    await this.authService.logoutAll(user.id);
+    res.clearCookie('sid');
+    return { message: 'Logged out from all devices successfully' };
   }
 }

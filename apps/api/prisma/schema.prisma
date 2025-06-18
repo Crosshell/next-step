@@ -42,10 +42,6 @@ enum EmploymentType {
   CONTRACT
 }
 
-enum TokenType {
-  REFRESH
-}
-
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -57,20 +53,8 @@ model User {
 
   jobSeeker JobSeeker?
   company   Company?
-  tokens    Token[]
 
   @@map("users")
-}
-
-model Token {
-  userId    String    @map("user_id")
-  hash      String    @unique
-  user      User      @relation(fields: [userId], references: [id])
-  type      TokenType
-  createdAt DateTime  @default(now()) @map("created_at")
-
-  @@unique([userId, type])
-  @@map("tokens")
 }
 
 model JobSeeker {
