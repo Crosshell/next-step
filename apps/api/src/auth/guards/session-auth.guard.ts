@@ -20,15 +20,17 @@ export class SessionAuthGuard implements CanActivate {
 
     const sessionId = this.extractSessionId(request);
 
-    const sessionData = await this.sessionService.getSessionData(sessionId);
-    if (!sessionData) {
+    const session = await this.sessionService.getSession(sessionId);
+    if (!session) {
       throw new UnauthorizedException('Invalid or expired session');
     }
 
-    const user = await this.userService.findOne({ id: sessionData.userId });
+    const user = await this.userService.findOne({ id: session.userId });
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
+
+    await this.sessionService.refreshSessionTTL(session.userId, sessionId);
 
     request.user = user;
     return true;

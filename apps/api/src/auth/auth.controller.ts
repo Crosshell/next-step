@@ -3,58 +3,65 @@ import {
   Controller,
   HttpCode,
   HttpStatus,
+  Ip,
   Post,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { CookieOptions, Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
-import { AuthSwagger } from '../../docs/swagger/auth.swagger';
 import { LoginDto } from './dto/login.dto';
-import { CurrentSessionId } from './decorators/current-session-id.decorator';
+import { SessionId } from './decorators/session-id.decorator';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { ConfigService } from '@nestjs/config';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
+import { UserAgent } from './decorators/user-agent.decorator';
 
 @Controller('auth')
 export class AuthController {
+  private readonly cookieOptions: CookieOptions;
+
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    this.cookieOptions = this.configService.getOrThrow('cookie');
+  }
 
-  @AuthSwagger.login()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
+    @UserAgent() ua: string,
+    @Ip() ip: string,
   ): Promise<{ message: string }> {
     const user = await this.authService.validateCredentials(loginDto);
-    const sid = await this.authService.login(user);
-    res.cookie('sid', sid, this.configService.getOrThrow('cookie'));
+    const sid = await this.authService.login(user, ua, ip);
+    res.cookie('sid', sid, this.cookieOptions);
     return { message: 'Login successful' };
   }
 
-  @AuthSwagger.register()
   @Post('register')
+  @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() registerDto: RegisterDto,
     @Res({ passthrough: true }) res: Response,
+    @UserAgent() ua: string,
+    @Ip() ip: string,
   ): Promise<{ message: string }> {
-    const sid = await this.authService.register(registerDto);
-    res.cookie('sid', sid, this.configService.getOrThrow('cookie'));
+    const sid = await this.authService.register(registerDto, ua, ip);
+    res.cookie('sid', sid, this.cookieOptions);
     return { message: 'Registration successful' };
   }
 
-  @AuthSwagger.logout()
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @UseGuards(SessionAuthGuard)
   async logout(
-    @CurrentSessionId() sid: string,
+    @SessionId() sid: string,
     @Res({ passthrough: true })
     res: Response,
   ): Promise<{ message: string }> {

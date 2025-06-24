@@ -31,11 +31,19 @@ export class AuthService {
     return safeUser;
   }
 
-  async login(user: UserWithoutPassword): Promise<string> {
-    return this.sessionService.createSession({ userId: user.id });
+  async login(
+    user: UserWithoutPassword,
+    ua: string,
+    ip: string,
+  ): Promise<string> {
+    return this.sessionService.createSession(user.id, ua, ip);
   }
 
-  async register(registerDto: RegisterDto): Promise<string> {
+  async register(
+    registerDto: RegisterDto,
+    ua: string,
+    ip: string,
+  ): Promise<string> {
     const existingUser = await this.userService.findOne({
       email: registerDto.email,
     });
@@ -45,7 +53,7 @@ export class AuthService {
     }
 
     const newUser = await this.userService.create(registerDto);
-    return this.sessionService.createSession({ userId: newUser.id });
+    return this.sessionService.createSession(newUser.id, ua, ip);
   }
 
   async logout(sid: string): Promise<void> {
