@@ -17,4 +17,11 @@ export default () => ({
     ttl: process.env.SESSION_TTL,
     max: process.env.SESSION_MAX,
   },
+  email: {
+    service: process.env.EMAIL_SERVICE,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  },
 });
