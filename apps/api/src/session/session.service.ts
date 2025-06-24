@@ -17,8 +17,8 @@ export class SessionService {
     private readonly redisService: RedisService,
     private readonly configService: ConfigService,
   ) {
-    this.maxSessions = configService.getOrThrow<number>('session.max');
-    this.sessionTTL = configService.getOrThrow<number>('session.ttl');
+    this.maxSessions = this.configService.getOrThrow<number>('session.max');
+    this.sessionTTL = this.configService.getOrThrow<number>('session.ttl');
   }
 
   async createSession(userId: string, ua: string, ip: string): Promise<string> {

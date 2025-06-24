@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import config from './config/config';
 import { RedisModule } from './redis/redis.module';
 import { SessionModule } from './session/session.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SessionModule } from './session/session.module';
     AuthModule,
     RedisModule,
     SessionModule,
+    EmailModule,
   ],
   controllers: [],
   providers: [],
