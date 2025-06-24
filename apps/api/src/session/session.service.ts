@@ -135,7 +135,7 @@ export class SessionService {
       const [nextCursor, keys] = await this.redisService.scan(
         cursor,
         pattern,
-        100,
+        10,
       );
       for (const key of keys) {
         sids.push(this.extractSid(key));
