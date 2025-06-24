@@ -13,19 +13,23 @@ export class RedisService implements OnModuleDestroy {
     return this.redisClient.get(key);
   }
 
-  async lrange(key: string, start: number, stop: number): Promise<string[]> {
-    return this.redisClient.lrange(key, start, stop);
+  async mget(keys: string[]): Promise<(string | null)[]> {
+    return this.redisClient.mget(keys);
   }
 
-  async lrem(key: string, count: number, element: string) {
-    return this.redisClient.lrem(key, count, element);
+  async scan(
+    cursor: string,
+    pattern: string,
+    count: number,
+  ): Promise<[cursor: string, elements: string[]]> {
+    return this.redisClient.scan(cursor, 'MATCH', pattern, 'COUNT', count);
+  }
+
+  async ttl(key: string): Promise<number> {
+    return this.redisClient.ttl(key);
   }
 
   pipeline(): ChainableCommander {
     return this.redisClient.pipeline();
-  }
-
-  async mget(keys: string[]): Promise<(string | null)[]> {
-    return this.redisClient.mget(keys);
   }
 }
