@@ -17,6 +17,11 @@ interface ProfileFormData {
   specialty: string;
 }
 
+interface LogInFormData {
+  email: string;
+  password: string;
+}
+
 interface ValidationError {
   field: string;
   message: string;
@@ -25,6 +30,7 @@ interface ValidationError {
 export {
   type RegistrationFormData,
   type PartialRegistrationFormData,
+  type LogInFormData,
   type ProfileFormData,
   type ValidationError,
 };

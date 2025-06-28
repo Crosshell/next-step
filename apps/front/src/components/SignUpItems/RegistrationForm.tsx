@@ -52,7 +52,7 @@ export default function RegistrationForm() {
             {step === 'account' && <CreateAccountItem errors={errors} />}
           </form>
         )}
-        {step === 'confirm' && <ConfirmBoxItem />}{' '}
+        {step === 'confirm' && <ConfirmBoxItem />}
       </AnimatePresence>
     </div>
   );

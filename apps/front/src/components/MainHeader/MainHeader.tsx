@@ -66,7 +66,7 @@ export default function MainHeader() {
             color: 'black',
           }}
         >
-          <Link href="/log-in">Log In</Link>
+          <Link href="/sign-in">Sign In</Link>
         </motion.div>
         <motion.div
           className={`${classes['border-btn']} ${pathname === '/profile' ? classes['active-link'] : ''} `}
