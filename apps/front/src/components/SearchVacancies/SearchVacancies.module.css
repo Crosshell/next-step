@@ -17,7 +17,7 @@
   color: rgb(0, 0, 0, 0.7);
 }
 
-.search-btn {
+.search-btn div {
   position: absolute;
   top: 7;
   right: 8;
@@ -28,10 +28,7 @@
   border: none;
   border-radius: 10px;
   font-size: 2rem;
-}
-
-.search-btn:hover {
-  scale: 1.05;
+  color: white;
 }
 
 /*  InputContainer */

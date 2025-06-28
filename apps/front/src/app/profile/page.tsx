@@ -4,8 +4,8 @@ import Image from 'next/image';
 import ContactLink from '@/components/ProfileItems/ContactLink';
 import InfoBox from '@/components/ProfileItems/InfoBox';
 import InfoItem from '@/components/ProfileItems/InfoItem';
+import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import classes from './page.module.css';
 import itemClasses from '../../components/ProfileItems/Profile.module.css';
@@ -34,7 +34,7 @@ export default function ProfilePage() {
             <p>Kyiv, Maidan Nezalezhnosti, 32</p>
           </div>
           <Link href="/profile" className={classes['edit-link']}>
-            <FontAwesomeIcon icon={faPencil} />
+            <AnimatedIcon iconType={faPencil} />
           </Link>
         </div>
       </div>

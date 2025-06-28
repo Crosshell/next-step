@@ -1,0 +1,13 @@
+.error-box {
+  padding: 20px;
+  margin-bottom: 10px;
+  border: 2px solid #f37199;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #f37199;
+}
+
+.error-box:last-child {
+  margin-bottom: 20px;
+}

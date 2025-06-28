@@ -48,19 +48,16 @@
   font-weight: 500;
 }
 
-.edit-link {
+.edit-link div {
   position: absolute;
   bottom: 0;
   right: 0;
   padding: 5px 8px;
+  background-color: transparent;
   border: 2px solid #37aa9c;
   border-radius: 5px;
   font-size: 2rem;
   color: #37aa9c;
-}
-
-.edit-link:hover {
-  scale: 1.1;
 }
 
 .contacts {
