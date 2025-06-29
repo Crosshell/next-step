@@ -21,6 +21,9 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
 import { UserAgent } from './decorators/user-agent.decorator';
 import { MessageResponse } from '@common/responses';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -91,9 +94,28 @@ export class AuthController {
   @Post('verify/resend')
   @HttpCode(HttpStatus.OK)
   async resendVerification(
-    @Body('email') email: string,
+    @Body() resendVerificationDto: ResendVerificationDto,
   ): Promise<MessageResponse> {
-    await this.authService.resendVerificationLink(email);
+    await this.authService.resendVerification(resendVerificationDto);
     return { message: 'Verification link sent' };
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  async forgotPassword(
+    @Body() forgotPasswordDto: ForgotPasswordDto,
+  ): Promise<MessageResponse> {
+    await this.authService.forgotPassword(forgotPasswordDto);
+    return { message: 'Password reset link sent' };
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(
+    @Query('token') token: string,
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ): Promise<MessageResponse> {
+    await this.authService.resetPassword(token, resetPasswordDto);
+    return { message: 'Password reset successfully' };
   }
 }

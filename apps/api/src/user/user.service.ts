@@ -58,18 +58,25 @@ export class UserService {
     return this.prismaService.user.deleteMany({ where });
   }
 
-  async markEmailVerified(email: string): Promise<UserWithoutPassword> {
-    const existingUser = await this.findOne({
-      email,
-    });
+  async update(
+    where: Prisma.UserWhereUniqueInput,
+    data: Prisma.UserUpdateInput,
+  ): Promise<UserWithoutPassword> {
+    const existingUser = await this.findOne(where);
 
     if (!existingUser) {
       throw new SubjectNotFoundException('User');
     }
 
+    const hashedPassword =
+      data.password && (await argon2.hash(data.password as string));
+
     return this.prismaService.user.update({
-      where: { email },
-      data: { isEmailVerified: true },
+      where,
+      data: {
+        ...data,
+        password: hashedPassword,
+      },
       omit: { password: true },
     });
   }

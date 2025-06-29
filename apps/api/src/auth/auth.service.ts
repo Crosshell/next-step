@@ -8,12 +8,16 @@ import { SessionService } from '../session/session.service';
 import { EmailService } from '../email/email.service';
 import { TokenService } from '../token/token.service';
 import {
-  InvalidCredentialsException,
   EmailNotVerifiedException,
-  SubjectNotFoundException,
   EmailVerifiedException,
+  InvalidCredentialsException,
   InvalidOrExpiredSubjectException,
+  SubjectNotFoundException,
 } from '@common/exceptions';
+import { TokenType } from '../token/enums/token-type.enum';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
 
 @Injectable()
 export class AuthService {
@@ -54,7 +58,8 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<void> {
     await this.userService.create(registerDto);
 
-    const verifyToken = await this.tokenService.createVerifyToken(
+    const verifyToken = await this.tokenService.createToken(
+      TokenType.VERIFY,
       registerDto.email,
     );
     await this.emailService.sendVerificationEmail(
@@ -72,16 +77,20 @@ export class AuthService {
   }
 
   async verifyEmail(token: string): Promise<void> {
-    const email = await this.tokenService.consumeVerifyToken(token);
+    const email = await this.tokenService.consumeToken(TokenType.VERIFY, token);
     if (!email) {
-      throw new InvalidOrExpiredSubjectException('token');
+      throw new InvalidOrExpiredSubjectException('verify token');
     }
 
-    await this.userService.markEmailVerified(email);
+    await this.userService.update({ email }, { isEmailVerified: true });
   }
 
-  async resendVerificationLink(email: string): Promise<void> {
-    const user = await this.userService.findOne({ email });
+  async resendVerification(
+    resendVerificationDto: ResendVerificationDto,
+  ): Promise<void> {
+    const user = await this.userService.findOne({
+      email: resendVerificationDto.email,
+    });
 
     if (!user) {
       throw new SubjectNotFoundException('User');
@@ -91,7 +100,46 @@ export class AuthService {
       throw new EmailVerifiedException();
     }
 
-    const verifyToken = await this.tokenService.createVerifyToken(user.email);
-    await this.emailService.sendVerificationEmail(user.email, verifyToken);
+    const verifyToken = await this.tokenService.createToken(
+      TokenType.VERIFY,
+      resendVerificationDto.email,
+    );
+    await this.emailService.sendVerificationEmail(
+      resendVerificationDto.email,
+      verifyToken,
+    );
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
+    const user = await this.userService.findOne({
+      email: forgotPasswordDto.email,
+    });
+    if (!user) {
+      throw new SubjectNotFoundException('User');
+    }
+
+    const resetToken = await this.tokenService.createToken(
+      TokenType.RESET,
+      forgotPasswordDto.email,
+    );
+    await this.emailService.sendResetPasswordEmail(
+      forgotPasswordDto.email,
+      resetToken,
+    );
+  }
+
+  async resetPassword(
+    token: string,
+    resetPasswordDto: ResetPasswordDto,
+  ): Promise<void> {
+    const email = await this.tokenService.consumeToken(TokenType.RESET, token);
+    if (!email) {
+      throw new InvalidOrExpiredSubjectException('reset token');
+    }
+
+    await this.userService.update(
+      { email },
+      { password: resetPasswordDto.password },
+    );
   }
 }
