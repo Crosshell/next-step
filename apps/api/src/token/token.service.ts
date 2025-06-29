@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { RedisService } from '../redis/redis.service';
 import { ConfigService } from '@nestjs/config';
-import { VERIFY_PREFIX } from './constants/token.constants';
+import { TokenType } from './enums/token-type.enum';
 
 @Injectable()
 export class TokenService {
@@ -10,25 +10,28 @@ export class TokenService {
     private readonly redisService: RedisService,
     private readonly configService: ConfigService,
   ) {}
-
-  async createVerifyToken(email: string): Promise<string> {
+  async createToken(type: TokenType, email: string): Promise<string> {
     const token = randomUUID();
-
-    const key = this.verifyKey(token);
-
-    const ttl = this.configService.getOrThrow<number>('token.verify.ttl');
+    const key = this.tokenKey(type, token);
+    const ttl = this.tokenTtl(type);
 
     await this.redisService.setex(key, email, ttl);
-
     return token;
   }
 
-  async consumeVerifyToken(token: string): Promise<string | null> {
-    const key = this.verifyKey(token);
+  async consumeToken(type: TokenType, token: string): Promise<string | null> {
+    const key = this.tokenKey(type, token);
     return this.redisService.getdel(key);
   }
 
-  private verifyKey(token: string): string {
-    return `${VERIFY_PREFIX}${token}`;
+  private tokenKey(type: TokenType, token: string): string {
+    return `${type}:${token}`;
+  }
+
+  private tokenTtl(type: TokenType): number {
+    return {
+      [TokenType.VERIFY]: this.configService.getOrThrow('token.verify.ttl'),
+      [TokenType.RESET]: this.configService.getOrThrow('token.reset.ttl'),
+    }[type];
   }
 }

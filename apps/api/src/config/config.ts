@@ -29,6 +29,11 @@ export default () => ({
         process.env.TOKEN_VERIFY_TTL &&
         parseInt(process.env.TOKEN_VERIFY_TTL, 10),
     },
+    reset: {
+      ttl:
+        process.env.TOKEN_RESET_TTL &&
+        parseInt(process.env.TOKEN_RESET_TTL, 10),
+    },
   },
 
   email: {

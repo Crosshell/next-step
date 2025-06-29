@@ -10,7 +10,7 @@ export class EmailService {
   ) {}
 
   async sendVerificationEmail(email: string, token: string): Promise<void> {
-    const baseUrl = this.configService.getOrThrow('baseUrl');
+    const baseUrl = this.configService.getOrThrow<string>('baseUrl');
     const verifyLink = `${baseUrl}/auth/verify?token=${token}`;
 
     await this.mailerService.sendMail({
@@ -19,6 +19,20 @@ export class EmailService {
       template: 'verify-email',
       context: {
         verifyLink,
+      },
+    });
+  }
+
+  async sendResetPasswordEmail(email: string, token: string): Promise<void> {
+    const baseUrl = this.configService.getOrThrow<string>('baseUrl');
+    const resetLink = `${baseUrl}/auth/reset-password?token=${token}`;
+
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Reset Password',
+      template: 'reset-password',
+      context: {
+        resetLink,
       },
     });
   }
