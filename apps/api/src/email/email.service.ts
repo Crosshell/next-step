@@ -1,16 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { Transporter, createTransport, SendMailOptions } from 'nodemailer';
+import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailService {
-  private transporter: Transporter;
+  constructor(
+    private readonly mailerService: MailerService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  constructor(private readonly configService: ConfigService) {
-    this.transporter = createTransport(this.configService.getOrThrow('email'));
-  }
+  async sendVerificationEmail(email: string, token: string): Promise<void> {
+    const baseUrl = this.configService.getOrThrow('baseUrl');
+    const verifyLink = `${baseUrl}/auth/verify?token=${token}`;
 
-  async sendEmail(options: SendMailOptions): Promise<void> {
-    await this.transporter.sendMail(options);
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Email Confirmation',
+      template: 'verify-email',
+      context: {
+        verifyLink,
+      },
+    });
   }
 }

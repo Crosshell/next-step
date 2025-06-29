@@ -6,6 +6,8 @@ import config from './config/config';
 import { RedisModule } from './redis/redis.module';
 import { SessionModule } from './session/session.module';
 import { EmailModule } from './email/email.module';
+import { TokenModule } from './token/token.module';
+import { SchedulerModule } from './scheduler/scheduler.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { EmailModule } from './email/email.module';
     RedisModule,
     SessionModule,
     EmailModule,
+    TokenModule,
+    SchedulerModule,
   ],
   controllers: [],
   providers: [],

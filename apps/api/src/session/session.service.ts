@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Session } from './types/session-data.type';
 import { RedisService } from '../redis/redis.service';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
 import {
   SESSION_PREFIX,

@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Ip,
   Post,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -18,6 +20,7 @@ import { ConfigService } from '@nestjs/config';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
 import { UserAgent } from './decorators/user-agent.decorator';
+import { MessageResponse } from '@common/responses';
 
 @Controller('auth')
 export class AuthController {
@@ -37,7 +40,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
     @UserAgent() ua: string,
     @Ip() ip: string,
-  ): Promise<{ message: string }> {
+  ): Promise<MessageResponse> {
     const user = await this.authService.validateCredentials(loginDto);
     const sid = await this.authService.login(user, ua, ip);
     res.cookie('sid', sid, this.cookieOptions);
@@ -46,15 +49,11 @@ export class AuthController {
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(
-    @Body() registerDto: RegisterDto,
-    @Res({ passthrough: true }) res: Response,
-    @UserAgent() ua: string,
-    @Ip() ip: string,
-  ): Promise<{ message: string }> {
-    const sid = await this.authService.register(registerDto, ua, ip);
-    res.cookie('sid', sid, this.cookieOptions);
-    return { message: 'Registration successful' };
+  async register(@Body() registerDto: RegisterDto): Promise<MessageResponse> {
+    await this.authService.register(registerDto);
+    return {
+      message: 'Registration successful. Verify your email address',
+    };
   }
 
   @Post('logout')
@@ -64,7 +63,7 @@ export class AuthController {
     @SessionId() sid: string,
     @Res({ passthrough: true })
     res: Response,
-  ): Promise<{ message: string }> {
+  ): Promise<MessageResponse> {
     await this.authService.logout(sid);
     res.clearCookie('sid');
     return { message: 'Logged out successfully' };
@@ -76,9 +75,25 @@ export class AuthController {
   async logoutAll(
     @CurrentUser() user: UserWithoutPassword,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<{ message: string }> {
+  ): Promise<MessageResponse> {
     await this.authService.logoutAll(user.id);
     res.clearCookie('sid');
     return { message: 'Logged out from all devices successfully' };
+  }
+
+  @Get('verify')
+  @HttpCode(HttpStatus.OK)
+  async verifyEmail(@Query('token') token: string): Promise<MessageResponse> {
+    await this.authService.verifyEmail(token);
+    return { message: 'Email verified successfully' };
+  }
+
+  @Post('verify/resend')
+  @HttpCode(HttpStatus.OK)
+  async resendVerification(
+    @Body('email') email: string,
+  ): Promise<MessageResponse> {
+    await this.authService.resendVerificationLink(email);
+    return { message: 'Verification link sent' };
   }
 }
