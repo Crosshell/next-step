@@ -24,6 +24,7 @@ import { MessageResponse } from '@common/responses';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { AuthSwagger } from '../../docs/swagger/auth.swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -38,6 +39,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @AuthSwagger.login()
   async login(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
@@ -52,6 +54,7 @@ export class AuthController {
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
+  @AuthSwagger.register()
   async register(@Body() registerDto: RegisterDto): Promise<MessageResponse> {
     await this.authService.register(registerDto);
     return {
@@ -62,6 +65,7 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @UseGuards(SessionAuthGuard)
+  @AuthSwagger.logout()
   async logout(
     @SessionId() sid: string,
     @Res({ passthrough: true })
@@ -75,6 +79,7 @@ export class AuthController {
   @Post('logout-all')
   @HttpCode(HttpStatus.OK)
   @UseGuards(SessionAuthGuard)
+  @AuthSwagger.logoutAll()
   async logoutAll(
     @CurrentUser() user: UserWithoutPassword,
     @Res({ passthrough: true }) res: Response,
@@ -86,6 +91,7 @@ export class AuthController {
 
   @Get('verify')
   @HttpCode(HttpStatus.OK)
+  @AuthSwagger.verify()
   async verifyEmail(@Query('token') token: string): Promise<MessageResponse> {
     await this.authService.verifyEmail(token);
     return { message: 'Email verified successfully' };
@@ -93,6 +99,7 @@ export class AuthController {
 
   @Post('verify/resend')
   @HttpCode(HttpStatus.OK)
+  @AuthSwagger.verifyResend()
   async resendVerification(
     @Body() resendVerificationDto: ResendVerificationDto,
   ): Promise<MessageResponse> {
@@ -102,6 +109,7 @@ export class AuthController {
 
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
+  @AuthSwagger.forgotPassword()
   async forgotPassword(
     @Body() forgotPasswordDto: ForgotPasswordDto,
   ): Promise<MessageResponse> {
@@ -111,6 +119,7 @@ export class AuthController {
 
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
+  @AuthSwagger.resetPassword()
   async resetPassword(
     @Query('token') token: string,
     @Body() resetPasswordDto: ResetPasswordDto,
