@@ -1,5 +1,7 @@
 'use client';
 import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 import { motion } from 'framer-motion';
 
 import classes from './SignUpItems.module.css';
@@ -7,15 +9,31 @@ import classes from './SignUpItems.module.css';
 import HoveredItem from '../HoveredItem/HoveredItem';
 import ErrorItem from '../ErrorItem/ErrorItem';
 
-import { RegistrationFormData, ValidationError } from '@/types/authForm';
+import { RegistrationFormData } from '@/types/authForm';
 import { validateLogInForm } from '@/utils/validation';
+import { loginUser } from '@/services/userService';
+import { useMutation } from '@tanstack/react-query';
 
 export default function SignInForm() {
   const formRef = useRef<HTMLFormElement>(null);
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const router = useRouter();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+
+  const { mutate } = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (result) => {
+      if (result.error) {
+        setErrors(result.error);
+        console.log('Error:', result.error);
+        return;
+      }
+      router.push('/profile');
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,10 +47,14 @@ export default function SignInForm() {
     const validationErrors = validateLogInForm(registrationData);
 
     if (Object.keys(validationErrors).length > 0) {
-      setErrors([...validationErrors]);
+      setErrors(validationErrors);
       return;
     } else {
       setErrors([]);
+      mutate({
+        email: registrationData.email,
+        password: registrationData.password,
+      });
     }
 
     console.log(JSON.stringify(registrationData, null, 2));
@@ -74,7 +96,7 @@ export default function SignInForm() {
         {errors.length > 0 && (
           <div className={classes['error-container']}>
             {errors.map((error) => {
-              return <ErrorItem key={error.field} message={error.message} />;
+              return <ErrorItem key={error} message={error} />;
             })}
           </div>
         )}
