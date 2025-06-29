@@ -1,12 +1,11 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { UserService } from '../../user/user.service';
 import { SessionService } from '../../session/session.service';
 import { RequestWithUser } from '../types/request-with-user.type';
+import {
+  SubjectNotFoundException,
+  InvalidOrExpiredSubjectException,
+} from '@common/exceptions';
 
 @Injectable()
 export class SessionAuthGuard implements CanActivate {
@@ -22,12 +21,12 @@ export class SessionAuthGuard implements CanActivate {
 
     const session = await this.sessionService.getSession(sessionId);
     if (!session) {
-      throw new UnauthorizedException('Invalid or expired session');
+      throw new InvalidOrExpiredSubjectException('session');
     }
 
     const user = await this.userService.findOne({ id: session.userId });
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new SubjectNotFoundException('User');
     }
 
     await this.sessionService.refreshSessionTTL(session.userId, sessionId);
@@ -39,7 +38,7 @@ export class SessionAuthGuard implements CanActivate {
   private extractSessionId(request: RequestWithUser): string {
     const sessionId = request.cookies?.sid;
     if (!sessionId) {
-      throw new UnauthorizedException('No session id found');
+      throw new SubjectNotFoundException('Session id');
     }
     return sessionId;
   }

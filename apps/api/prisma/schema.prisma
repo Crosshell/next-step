@@ -43,13 +43,14 @@ enum EmploymentType {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  avatarUrl String?  @map("avatar_url")
-  type      UserType
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id              String   @id @default(uuid())
+  email           String   @unique
+  password        String
+  avatarUrl       String?  @map("avatar_url")
+  type            UserType
+  isEmailVerified Boolean  @default(false) @map("is_email_verified")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
   jobSeeker JobSeeker?
   company   Company?

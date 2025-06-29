@@ -9,8 +9,16 @@ export class RedisService implements OnModuleDestroy {
     this.redisClient.disconnect();
   }
 
+  async setex(key: string, value: string, seconds: number): Promise<void> {
+    await this.redisClient.setex(key, seconds, value);
+  }
+
   async get(key: string): Promise<string | null> {
     return this.redisClient.get(key);
+  }
+
+  async getdel(key: string): Promise<string | null> {
+    return this.redisClient.getdel(key);
   }
 
   async mget(keys: string[]): Promise<(string | null)[]> {
