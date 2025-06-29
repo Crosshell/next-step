@@ -23,7 +23,6 @@ interface LogInFormData {
 }
 
 interface ValidationError {
-  field: string;
   message: string;
 }
 

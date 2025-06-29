@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
 
 import { AnimatePresence } from 'framer-motion';
 
@@ -10,16 +11,29 @@ import ConfirmBoxItem from './ConfirmBoxItem';
 
 import classes from './SignUpItems.module.css';
 
-import { RegistrationFormData, ValidationError } from '@/types/authForm';
+import { RegistrationFormData } from '@/types/authForm';
 import { validateRegistrationForm } from '@/utils/validation';
+import { registerUser } from '@/services/userService';
 
 export default function RegistrationForm() {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const searchParams = useSearchParams();
   const step = searchParams.get('step');
+
+  const { mutate } = useMutation({
+    mutationFn: registerUser,
+    onSuccess: (result) => {
+      if (result.error) {
+        setErrors(result.error);
+        console.log('Error:', result.error);
+        return;
+      }
+      router.push('/sign-up?step=confirm');
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,12 +46,16 @@ export default function RegistrationForm() {
 
     const validationErrors = validateRegistrationForm(registrationData);
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors([...validationErrors]);
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
       return;
     } else {
       setErrors([]);
-      router.push('/sign-up?step=confirm');
+      mutate({
+        email: registrationData.email,
+        password: registrationData.password,
+        type: registrationData.role,
+      });
     }
 
     console.log(JSON.stringify(registrationData, null, 2));

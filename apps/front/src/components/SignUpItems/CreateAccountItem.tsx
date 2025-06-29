@@ -10,10 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import classes from './SignUpItems.module.css';
 
-import { ValidationError } from '@/types/authForm';
-
 interface Props {
-  errors: ValidationError[];
+  errors: string[];
 }
 
 export default function CreateAccountItem({ errors }: Props) {
@@ -65,7 +63,7 @@ export default function CreateAccountItem({ errors }: Props) {
       {errors.length > 0 && (
         <div className={classes['error-container']}>
           {errors.map((error) => {
-            return <ErrorItem key={error.field} message={error.message} />;
+            return <ErrorItem key={error} message={error} />;
           })}
         </div>
       )}

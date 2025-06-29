@@ -1,10 +1,12 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+
 import { motion } from 'framer-motion';
+import classes from './SignUpItems.module.css';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
-
-import classes from './SignUpItems.module.css';
 
 export default function ConfirmBoxItem() {
   const router = useRouter();

@@ -1,0 +1,33 @@
+.check-box {
+  margin: auto;
+  width: 40%;
+  padding: 25px 30px;
+  background-color: #1f1f21;
+  border: 3px solid #37aa9c;
+  border-radius: 20px;
+}
+
+.check-box h2 {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.continue-btn {
+  padding: 15px 20px;
+  background-color: transparent;
+  border: 3px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.image-container {
+  margin: auto;
+  margin-bottom: 20px;
+  width: 50%;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+}
