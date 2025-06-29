@@ -127,7 +127,7 @@ export class AuthSwagger {
     );
   }
 
-  private static sessionAuthDecorators() {
+  static sessionAuthDecorators() {
     return [
       ApiCookieAuth('sid'),
       ApiNotFoundResponse({ description: 'Session or user not found' }),
