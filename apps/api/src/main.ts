@@ -20,8 +20,7 @@ async function bootstrap() {
     .setTitle('Next Step API Documentation')
     .setDescription('Next Step API description')
     .setVersion('1.0')
-    .addBearerAuth()
-    .addCookieAuth()
+    .addCookieAuth('sid')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
