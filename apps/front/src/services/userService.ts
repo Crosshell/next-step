@@ -29,9 +29,9 @@ export async function registerUser(data: {
   return { data: await response.json() };
 }
 
-export async function checkUserConfirmed() {
+export async function checkUserConfirmed(token: string | null) {
   const response = await fetch(
-    'http://localhost:8020/api/auth/verify?token=96d36cca-19ab-447e-8041-688ffed4abac'
+    `http://localhost:8020/api/auth/verify?token=${token}`
   );
 
   if (!response.ok) {
@@ -39,7 +39,8 @@ export async function checkUserConfirmed() {
   }
 
   const result = await response.json();
-  return result.confirmed as boolean; // очікуємо { confirmed: true/false }
+
+  return !!result.confirmed;
 }
 
 export async function loginUser(data: { email: string; password: string }) {

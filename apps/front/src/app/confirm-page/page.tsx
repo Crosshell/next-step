@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 import { checkUserConfirmed } from '@/services/userService';
@@ -9,9 +10,13 @@ import { motion } from 'framer-motion';
 import classes from './page.module.css';
 
 export default function ConfirmPage() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
+
   const { isSuccess, isLoading, isError } = useQuery({
-    queryKey: ['checkUserConfirmed'],
-    queryFn: checkUserConfirmed,
+    queryKey: ['checkUserConfirmed', token],
+    queryFn: ({ queryKey }) => checkUserConfirmed(queryKey[1]),
+    enabled: !!token,
   });
 
   let message;

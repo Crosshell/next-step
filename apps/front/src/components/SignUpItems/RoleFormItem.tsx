@@ -55,7 +55,7 @@ export default function RoleFormItem({ isVisible }: Props) {
         </div>
         <div className="row-center">
           <HoveredItem scale={1.05}>
-            <Link href="/log-in" className={classes['link']}>
+            <Link href="/sign-in" className={classes['link']}>
               I already have an account
             </Link>
           </HoveredItem>
