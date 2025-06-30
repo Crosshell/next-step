@@ -13,8 +13,12 @@ import {
 
 import classes from './MainHeader.module.css';
 
+import { useAuthStore } from '@/store/authSlice';
+
 export default function MainHeader() {
   const pathname = usePathname();
+
+  const isConfirmed = useAuthStore().isConfirmed;
 
   return (
     <div className={classes['header-box']}>
@@ -68,14 +72,18 @@ export default function MainHeader() {
         >
           <Link href="/sign-in">Sign In</Link>
         </motion.div>
-        <motion.div
-          className={`${classes['border-btn']} ${pathname === '/profile' ? classes['active-link'] : ''} `}
-          whileHover={
-            pathname === '/profile' ? greenBorderBtnHover : whiteBorderBtnHover
-          }
-        >
-          <Link href="/profile">Profile</Link>
-        </motion.div>
+        {isConfirmed && (
+          <motion.div
+            className={`${classes['border-btn']} ${pathname === '/profile' ? classes['active-link'] : ''} `}
+            whileHover={
+              pathname === '/profile'
+                ? greenBorderBtnHover
+                : whiteBorderBtnHover
+            }
+          >
+            <Link href="/profile">Profile</Link>
+          </motion.div>
+        )}
       </div>
     </div>
   );
