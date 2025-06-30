@@ -1,9 +1,10 @@
 'use client';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useMutation } from '@tanstack/react-query';
 
 import { motion } from 'framer-motion';
-
 import classes from './SignUpItems.module.css';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
@@ -12,7 +13,8 @@ import ErrorItem from '../ErrorItem/ErrorItem';
 import { RegistrationFormData } from '@/types/authForm';
 import { validateLogInForm } from '@/utils/validation';
 import { loginUser } from '@/services/userService';
-import { useMutation } from '@tanstack/react-query';
+
+import { useAuthStore } from '@/store/authSlice';
 
 export default function SignInForm() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -23,6 +25,8 @@ export default function SignInForm() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
+  const setIsLogged = useAuthStore((state) => state.setIsLogged);
+
   const { mutate } = useMutation({
     mutationFn: loginUser,
     onSuccess: (result) => {
@@ -31,6 +35,7 @@ export default function SignInForm() {
         console.log('Error:', result.error);
         return;
       }
+      setIsLogged(true);
       router.push('/profile');
     },
   });
@@ -101,8 +106,12 @@ export default function SignInForm() {
           </div>
         )}
 
-        <div className="row-center">
-          <div className="align-center"></div>
+        <div className="row-space-between">
+          <div className="align-center">
+            <Link href="" className={classes['link']}>
+              I have forgot my password
+            </Link>
+          </div>
           <HoveredItem scale={1.05}>
             <button
               type="submit"

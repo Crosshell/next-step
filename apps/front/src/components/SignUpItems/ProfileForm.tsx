@@ -7,11 +7,11 @@ import ErrorItem from '../ErrorItem/ErrorItem';
 
 import classes from './SignUpItems.module.css';
 
-import { ProfileFormData, ValidationError } from '@/types/authForm';
+import { ProfileFormData } from '@/types/authForm';
 import { validateProfileForm } from '@/utils/validation';
 
 export default function ProfileForm() {
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -27,7 +27,7 @@ export default function ProfileForm() {
     const validationErrors = validateProfileForm(profileData);
 
     if (Object.keys(validationErrors).length > 0) {
-      setErrors([...validationErrors]);
+      setErrors(validationErrors);
       return;
     } else {
       setErrors([]);
@@ -109,7 +109,7 @@ export default function ProfileForm() {
         {errors.length > 0 && (
           <div className={classes['error-container']}>
             {errors.map((error) => {
-              return <ErrorItem key={error.message} message={error.message} />;
+              return <ErrorItem key={error} message={error} />;
             })}
           </div>
         )}

@@ -26,7 +26,7 @@ export default function ConfirmPage() {
 
   useEffect(() => {
     if (isSuccess) {
-      setIsConfirmed();
+      setIsConfirmed(true);
     }
   }, [isSuccess, setIsConfirmed]);
 
