@@ -8,6 +8,7 @@ import { checkUserConfirmed } from '@/services/userService';
 
 import { motion } from 'framer-motion';
 import classes from './page.module.css';
+import Link from 'next/link';
 
 export default function ConfirmPage() {
   const searchParams = useSearchParams();
@@ -20,33 +21,49 @@ export default function ConfirmPage() {
   });
 
   let message;
-  if (isSuccess)
-    message =
-      'Your email was successfully verified! You can continue to your account';
+  let imageUrl = '/images/';
+  if (isSuccess) {
+    imageUrl += 'check-arrow.png';
+    message = 'Your email was successfully verified!';
+  }
 
-  if (isLoading) message = 'Wait while we verifying your email...';
+  if (isLoading) {
+    imageUrl += 'loading-spin.gif';
 
-  if (isError) message = 'Sorry! We were unable to verify your account';
+    message = 'Wait while we verifying your email...';
+  }
+
+  if (isError) {
+    imageUrl += 'black-on-white-cross.png';
+    message = 'Sorry! We were unable to verify your account';
+  }
 
   return (
-    <motion.div
-      className={classes['check-box']}
-      initial={{ opacity: 0, x: 30 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 30 }}
-      transition={{ duration: 0.4 }}
-    >
-      <div className={classes['image-container']}>
-        <Image
-          src="/images/check-arrow.png"
-          alt="stairs-image"
-          width={300}
-          height={200}
-          priority
-        />
-      </div>
+    <div className={classes['check-box-container']}>
+      <motion.div
+        className={classes['check-box']}
+        initial={{ opacity: 0, x: 30 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 30 }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className={classes['image-container']}>
+          <Image
+            src={imageUrl}
+            alt="stairs-image"
+            width={300}
+            height={200}
+            priority
+          />
+        </div>
 
-      <h2>{message}</h2>
-    </motion.div>
+        <h2>{message}</h2>
+        {isSuccess && (
+          <h3>
+            You can continue to <Link href="/profile">your account</Link>
+          </h3>
+        )}
+      </motion.div>
+    </div>
   );
 }
