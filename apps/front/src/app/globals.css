@@ -89,3 +89,7 @@ h5 {
 .font-size-1-5 {
   font-size: 1.5rem;
 }
+
+.underline-link {
+  text-decoration: underline;
+}

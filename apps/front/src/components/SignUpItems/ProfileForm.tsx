@@ -109,7 +109,7 @@ export default function ProfileForm() {
         {errors.length > 0 && (
           <div className={classes['error-container']}>
             {errors.map((error) => {
-              return <ErrorItem key={error} message={error} />;
+              return <ErrorItem key={error}>{error}</ErrorItem>;
             })}
           </div>
         )}

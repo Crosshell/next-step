@@ -63,7 +63,7 @@ export default function CreateAccountItem({ errors }: Props) {
       {errors.length > 0 && (
         <div className={classes['error-container']}>
           {errors.map((error) => {
-            return <ErrorItem key={error} message={error} />;
+            return <ErrorItem key={error}>{error}</ErrorItem>;
           })}
         </div>
       )}

@@ -152,7 +152,8 @@
 
 /* Sign In */
 
-.sign-in-btn {
+.sign-in-btn,
+.forgot-pass-btn {
   padding: 15px 50px;
   background-color: white;
   border: 0;
@@ -163,3 +164,16 @@
 }
 
 /* Sign In */
+
+/* Reset Pass */
+
+.info-container {
+  margin-bottom: 20px;
+}
+
+.forgot-pass-btn {
+  padding: 15px 50px;
+  font-size: 1.5rem;
+}
+
+/* Reset Pass */

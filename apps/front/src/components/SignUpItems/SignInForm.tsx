@@ -1,7 +1,6 @@
 'use client';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { useMutation } from '@tanstack/react-query';
 
 import { motion } from 'framer-motion';
@@ -11,14 +10,16 @@ import HoveredItem from '../HoveredItem/HoveredItem';
 import ErrorItem from '../ErrorItem/ErrorItem';
 
 import { RegistrationFormData } from '@/types/authForm';
-import { validateLogInForm } from '@/utils/validation';
-import { loginUser } from '@/services/userService';
+import { validateEmail, validateLogInForm } from '@/utils/validation';
+import { forgetPass, loginUser } from '@/services/userService';
 
 import { useAuthStore } from '@/store/authSlice';
 
 export default function SignInForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [forgetPassIsClicked, setForgetPassIsClicked] =
+    useState<boolean>(false);
 
   const router = useRouter();
 
@@ -27,7 +28,7 @@ export default function SignInForm() {
 
   const setIsLogged = useAuthStore((state) => state.setIsLogged);
 
-  const { mutate } = useMutation({
+  const { mutate: loginMutate } = useMutation({
     mutationFn: loginUser,
     onSuccess: (result) => {
       if (result.error) {
@@ -37,6 +38,19 @@ export default function SignInForm() {
       }
       setIsLogged(true);
       router.push('/profile');
+    },
+  });
+
+  const { mutate: forgotPassMutate } = useMutation({
+    mutationFn: forgetPass,
+    onSuccess: (result) => {
+      if (result.error) {
+        setErrors(result.error);
+        console.log('Error:', result.error);
+        return;
+      }
+      setErrors([]);
+      setForgetPassIsClicked(true);
     },
   });
 
@@ -56,13 +70,24 @@ export default function SignInForm() {
       return;
     } else {
       setErrors([]);
-      mutate({
+      loginMutate({
         email: registrationData.email,
         password: registrationData.password,
       });
     }
 
     console.log(JSON.stringify(registrationData, null, 2));
+  };
+
+  const handleForgotPassword = () => {
+    const emailValue = emailRef.current?.value;
+    if (emailValue) {
+      if (!validateEmail(emailRef.current?.value)) {
+        setErrors(['Enter correct email to reset password']);
+        return;
+      }
+      forgotPassMutate({ email: emailValue });
+    }
   };
 
   return (
@@ -101,16 +126,26 @@ export default function SignInForm() {
         {errors.length > 0 && (
           <div className={classes['error-container']}>
             {errors.map((error) => {
-              return <ErrorItem key={error} message={error} />;
+              return <ErrorItem key={error}>{error}</ErrorItem>;
             })}
           </div>
         )}
 
+        {forgetPassIsClicked && (
+          <ErrorItem type="info">
+            Check your email to reset the password
+          </ErrorItem>
+        )}
+
         <div className="row-space-between">
           <div className="align-center">
-            <Link href="" className={classes['link']}>
+            <button
+              type="button"
+              className={classes['link']}
+              onClick={handleForgotPassword}
+            >
               I have forgot my password
-            </Link>
+            </button>
           </div>
           <HoveredItem scale={1.05}>
             <button
