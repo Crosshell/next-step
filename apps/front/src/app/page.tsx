@@ -2,7 +2,6 @@
 
 import { Suspense } from 'react';
 import Image from 'next/image';
-import { useSelector } from 'react-redux';
 
 import {
   motion,
@@ -17,10 +16,10 @@ import LoadingPage from './loading-out';
 
 import classes from './page.module.css';
 
-import { RootState } from '@/store/store';
+import { useModalStore } from '@/store/modalSlice';
 
 export default function Home() {
-  const isModal = useSelector((state: RootState) => state.modal.isOpen);
+  const isModal = useModalStore((state) => state.isOpen);
 
   const { scrollY } = useScroll();
   const yValue = useTransform(scrollY, [0, 300, 600], [0, -50, -100]);
