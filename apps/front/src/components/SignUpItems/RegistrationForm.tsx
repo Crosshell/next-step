@@ -19,6 +19,7 @@ export default function RegistrationForm() {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [email, setEmail] = useState<string | null>(null);
 
   const searchParams = useSearchParams();
   const step = searchParams.get('step');
@@ -51,6 +52,7 @@ export default function RegistrationForm() {
       return;
     } else {
       setErrors([]);
+      setEmail(registrationData.email);
       mutate({
         email: registrationData.email,
         password: registrationData.password,
@@ -70,7 +72,7 @@ export default function RegistrationForm() {
             {step === 'account' && <CreateAccountItem errors={errors} />}
           </form>
         )}
-        {step === 'confirm' && <ConfirmBoxItem />}
+        {step === 'confirm' && <ConfirmBoxItem email={email ?? ''} />}
       </AnimatePresence>
     </div>
   );

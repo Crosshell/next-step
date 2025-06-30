@@ -70,7 +70,7 @@ export default function ConfirmPage() {
         <h2>{message}</h2>
         {isSuccess && (
           <h3>
-            You can continue to <Link href="/profile">your account</Link>
+            You can now <Link href="/sign-in">sign in</Link> to your account
           </h3>
         )}
       </motion.div>

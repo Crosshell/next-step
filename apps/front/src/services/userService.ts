@@ -123,3 +123,21 @@ export async function resetPass(data: {
 
   return !!result.confirmed;
 }
+
+export async function resendEmail(data: { email: string }) {
+  const response = await fetch(`http://localhost:8020/api/auth/verify/resend`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to check confirmation status');
+  }
+
+  const result = await response.json();
+
+  return !!result.confirmed;
+}
