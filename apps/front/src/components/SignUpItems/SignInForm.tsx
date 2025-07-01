@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import classes from './SignUpItems.module.css';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
-import ErrorItem from '../ErrorItem/ErrorItem';
+import MessageBox from '../MessageBox/MessageBox';
 
 import { RegistrationFormData } from '@/types/authForm';
 import { validateEmail, validateLogInForm } from '@/utils/validation';
@@ -126,15 +126,15 @@ export default function SignInForm() {
         {errors.length > 0 && (
           <div className={classes['error-container']}>
             {errors.map((error) => {
-              return <ErrorItem key={error}>{error}</ErrorItem>;
+              return <MessageBox key={error}>{error}</MessageBox>;
             })}
           </div>
         )}
 
         {forgetPassIsClicked && (
-          <ErrorItem type="info">
+          <MessageBox type="info">
             Check your email to reset the password
-          </ErrorItem>
+          </MessageBox>
         )}
 
         <div className="row-space-between">

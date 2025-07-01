@@ -1,4 +1,4 @@
-import classes from './ErrorItem.module.css';
+import classes from './MessageBox.module.css';
 import { ReactNode } from 'react';
 
 interface Props {

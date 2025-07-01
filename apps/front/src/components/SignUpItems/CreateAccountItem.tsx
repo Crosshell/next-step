@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
-import ErrorItem from '../ErrorItem/ErrorItem';
+import MessageBox from '../MessageBox/MessageBox';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -63,7 +63,7 @@ export default function CreateAccountItem({ errors }: Props) {
       {errors.length > 0 && (
         <div className={classes['error-container']}>
           {errors.map((error) => {
-            return <ErrorItem key={error}>{error}</ErrorItem>;
+            return <MessageBox key={error}>{error}</MessageBox>;
           })}
         </div>
       )}

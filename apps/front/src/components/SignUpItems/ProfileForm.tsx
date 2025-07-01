@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
-import ErrorItem from '../ErrorItem/ErrorItem';
+import MessageBox from '../MessageBox/MessageBox';
 
 import classes from './SignUpItems.module.css';
 
@@ -109,7 +109,7 @@ export default function ProfileForm() {
         {errors.length > 0 && (
           <div className={classes['error-container']}>
             {errors.map((error) => {
-              return <ErrorItem key={error}>{error}</ErrorItem>;
+              return <MessageBox key={error}>{error}</MessageBox>;
             })}
           </div>
         )}

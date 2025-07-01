@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import classes from './SignUpItems.module.css';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
-import MessageBox from '../ErrorItem/ErrorItem';
+import MessageBox from '../MessageBox/MessageBox';
 
 import { checkPasswords } from '@/utils/validation';
 import { resetPass } from '@/services/userService';
