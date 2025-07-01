@@ -23,9 +23,12 @@ interface LogInFormData {
 }
 
 interface ValidationError {
-  field: string;
   message: string;
 }
+
+type ApiResponse =
+  | { status: 'ok'; error: null }
+  | { status: 'error'; error: string };
 
 export {
   type RegistrationFormData,
@@ -33,4 +36,5 @@ export {
   type LogInFormData,
   type ProfileFormData,
   type ValidationError,
+  type ApiResponse,
 };

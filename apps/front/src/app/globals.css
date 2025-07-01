@@ -73,6 +73,11 @@ h5 {
   justify-content: center;
 }
 
+.row-end {
+  display: flex;
+  justify-content: end;
+}
+
 .align-center {
   display: flex;
   align-items: center;
@@ -88,4 +93,8 @@ h5 {
 
 .font-size-1-5 {
   font-size: 1.5rem;
+}
+
+.underline-link {
+  text-decoration: underline;
 }

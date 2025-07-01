@@ -1,0 +1,51 @@
+.check-box-container {
+  display: flex;
+  align-items: center;
+  height: 80vh;
+}
+
+.check-box {
+  margin: auto;
+  width: 30%;
+  padding: 25px 30px;
+  background-color: #1f1f21;
+  border: 3px solid #37aa9c;
+  border-radius: 20px;
+}
+
+.check-box h2 {
+  margin-bottom: 15px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.check-box h3 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+}
+
+.check-box a {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.continue-btn {
+  padding: 15px 20px;
+  background-color: transparent;
+  border: 3px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.image-container {
+  margin: auto;
+  margin-bottom: 20px;
+  width: 40%;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+}

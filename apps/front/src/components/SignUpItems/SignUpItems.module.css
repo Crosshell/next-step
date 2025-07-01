@@ -152,14 +152,28 @@
 
 /* Sign In */
 
-.sign-in-btn {
-  padding: 15px 75px;
+.sign-in-btn,
+.forgot-pass-btn {
+  padding: 15px 50px;
   background-color: white;
   border: 0;
   border-radius: 10px;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #1f1f21;
 }
 
 /* Sign In */
+
+/* Reset Pass */
+
+.info-container {
+  margin-bottom: 20px;
+}
+
+.forgot-pass-btn {
+  padding: 15px 50px;
+  font-size: 1.5rem;
+}
+
+/* Reset Pass */

@@ -1,23 +1,20 @@
-import { useDispatch } from 'react-redux';
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-
 import { motion } from 'framer-motion';
-
-import VacancyItem from './VacancyItem';
-
-import { AppDispatch } from '@/store/store';
-import { closeModal } from '@/store/slices/modalSlice';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
+import VacancyItem from './VacancyItem';
+import { useModalStore } from '@/store/modalSlice';
 import classes from './CompanyInfos.module.css';
 
 export default function CompanyInfoModal() {
-  const dispatch = useDispatch<AppDispatch>();
+  const closeModal = useModalStore((state) => state.closeModal);
 
   const closeModalHandler = () => {
-    dispatch(closeModal());
+    closeModal();
   };
 
   return (

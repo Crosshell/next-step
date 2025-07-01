@@ -2,62 +2,72 @@ import {
   PartialRegistrationFormData,
   ProfileFormData,
   LogInFormData,
-  ValidationError,
 } from '@/types/authForm';
 
-export const validateRegistrationForm = (data: PartialRegistrationFormData) => {
-  const errors: ValidationError[] = [];
-
-  if (!data.email || data.email.length < 6 || !data.email.includes('@')) {
-    errors.push({ field: 'email', message: 'Invalid email address' });
+export const validateEmail = (email?: string): string | null => {
+  if (!email || email.length < 6 || !email.includes('@')) {
+    return 'Invalid email address';
   }
+  return null;
+};
 
-  if (!data.password || data.password.length < 6) {
-    errors.push({
-      field: 'password',
-      message: 'Password must be at least 6 characters',
-    });
+export const validatePassword = (password?: string): string | null => {
+  if (!password || password.length < 6) {
+    return 'Password must be at least 6 characters';
   }
+  return null;
+};
 
-  if (data.password !== data.confirm) {
-    errors.push({ field: 'confirm', message: 'Passwords do not match' });
+export const checkPasswords = (
+  password?: string,
+  confirm?: string
+): string[] => {
+  const errors: string[] = [];
+
+  const passwordError = validatePassword(password);
+  if (passwordError) errors.push(passwordError);
+
+  if (password !== confirm) {
+    errors.push('Passwords do not match');
   }
 
   return errors;
 };
 
-export const validateProfileForm = (data: ProfileFormData) => {
-  const errors: ValidationError[] = [];
+export const validateRegistrationForm = (
+  data: PartialRegistrationFormData
+): string[] => {
+  const errors: string[] = [];
+
+  const emailError = validateEmail(data.email);
+  if (emailError) errors.push(emailError);
+
+  errors.push(...checkPasswords(data.password, data.confirm));
+
+  return errors;
+};
+
+export const validateLogInForm = (data: LogInFormData): string[] => {
+  const errors: string[] = [];
+
+  const emailError = validateEmail(data.email);
+  if (emailError) errors.push(emailError);
+
+  const passwordError = validatePassword(data.password);
+  if (passwordError) errors.push(passwordError);
+
+  return errors;
+};
+
+export const validateProfileForm = (data: ProfileFormData): string[] => {
+  const errors: string[] = [];
 
   if (!data['first-name']) {
-    errors.push({
-      field: 'first-name',
-      message: 'Fill the First Name field, please',
-    });
+    errors.push('Fill the First Name field, please');
   }
 
   if (!data['last-name']) {
-    errors.push({
-      field: 'last-name',
-      message: 'Fill the Last Name field, please',
-    });
-  }
-
-  return errors;
-};
-
-export const validateLogInForm = (data: LogInFormData) => {
-  const errors: ValidationError[] = [];
-
-  if (!data.email || data.email.length < 6 || !data.email.includes('@')) {
-    errors.push({ field: 'email', message: 'Invalid email address' });
-  }
-
-  if (!data.password || data.password.length < 6) {
-    errors.push({
-      field: 'password',
-      message: 'Password must be at least 6 characters',
-    });
+    errors.push('Fill the Last Name field, please');
   }
 
   return errors;

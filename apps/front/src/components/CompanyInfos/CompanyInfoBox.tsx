@@ -1,51 +1,46 @@
 'use client';
 
-import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-
-import { AppDispatch, RootState } from '@/store/store';
-import { openModal } from '@/store/slices/modalSlice';
-
-import classes from './CompanyInfos.module.css';
 import { useState } from 'react';
 
+import { useModalStore } from '@/store/modalSlice';
+import classes from './CompanyInfos.module.css';
+
 export default function CompanyInfoBox() {
-  const dispatch = useDispatch<AppDispatch>();
-  const isModalOpen = useSelector((state: RootState) => state.modal.isOpen);
+  const isModalOpen = useModalStore((state) => state.isOpen);
+  const openModal = useModalStore((state) => state.openModal);
 
   const [renderKey, setRenderKey] = useState<number>(0);
 
   const handleClick = () => {
-    dispatch(openModal());
+    openModal();
     setRenderKey((prev) => prev + 1);
   };
 
   return (
-    <>
-      <motion.div
-        key={renderKey}
-        className={classes['company-info-container']}
-        onClick={handleClick}
-        whileHover={{ scale: isModalOpen ? 1 : 1.1 }}
-      >
-        <div className={classes['header-row']}>
-          <h3>A company</h3>
-          <Image
-            src="/images/organization.png"
-            alt="organization-logo"
-            width={50}
-            height={50}
-            priority
-          />
-        </div>
-        <p className={classes['company-details']}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
-          ratione a sequi reprehenderit eligendi possimus, aspernatur deleniti
-          minima blanditiis laborum, dolores illo temporibus deserunt! Nihil at
-          cum qui deserunt! Officia.
-        </p>
-      </motion.div>
-    </>
+    <motion.div
+      key={renderKey}
+      className={classes['company-info-container']}
+      onClick={handleClick}
+      whileHover={{ scale: isModalOpen ? 1 : 1.1 }}
+    >
+      <div className={classes['header-row']}>
+        <h3>A company</h3>
+        <Image
+          src="/images/organization.png"
+          alt="organization-logo"
+          width={50}
+          height={50}
+          priority
+        />
+      </div>
+      <p className={classes['company-details']}>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum
+        ratione a sequi reprehenderit eligendi possimus, aspernatur deleniti
+        minima blanditiis laborum, dolores illo temporibus deserunt! Nihil at
+        cum qui deserunt! Officia.
+      </p>
+    </motion.div>
   );
 }

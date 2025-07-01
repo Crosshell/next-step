@@ -3,15 +3,15 @@ import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import HoveredItem from '../HoveredItem/HoveredItem';
-import ErrorItem from '../ErrorItem/ErrorItem';
+import MessageBox from '../MessageBox/MessageBox';
 
 import classes from './SignUpItems.module.css';
 
-import { ProfileFormData, ValidationError } from '@/types/authForm';
+import { ProfileFormData } from '@/types/authForm';
 import { validateProfileForm } from '@/utils/validation';
 
 export default function ProfileForm() {
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -27,7 +27,7 @@ export default function ProfileForm() {
     const validationErrors = validateProfileForm(profileData);
 
     if (Object.keys(validationErrors).length > 0) {
-      setErrors([...validationErrors]);
+      setErrors(validationErrors);
       return;
     } else {
       setErrors([]);
@@ -108,8 +108,8 @@ export default function ProfileForm() {
 
         {errors.length > 0 && (
           <div className={classes['error-container']}>
-            {errors.map((error, index) => {
-              return <ErrorItem key={index} message={error.message} />;
+            {errors.map((error) => {
+              return <MessageBox key={error}>{error}</MessageBox>;
             })}
           </div>
         )}
