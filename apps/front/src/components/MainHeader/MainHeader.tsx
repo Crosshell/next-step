@@ -14,6 +14,7 @@ import {
 import classes from './MainHeader.module.css';
 
 import { useAuthStore } from '@/store/authSlice';
+import { logoutUser } from '@/services/userService';
 
 export default function MainHeader() {
   const pathname = usePathname();
@@ -21,14 +22,20 @@ export default function MainHeader() {
 
   const { isLogged, setIsLogged, setIsConfirmed, setRole } = useAuthStore();
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     const confirmLogout = window.confirm('Are you sure you want to log out?');
     if (!confirmLogout) return;
 
-    setIsLogged(false);
-    setIsConfirmed(false);
-    setRole(undefined);
-    router.push('/');
+    try {
+      await logoutUser();
+      setIsLogged(false);
+      setIsConfirmed(false);
+      setRole(undefined);
+      router.push('/');
+    } catch (err) {
+      console.error('Logout error:', err);
+      alert('Something went wrong while logging out.');
+    }
   };
 
   return (

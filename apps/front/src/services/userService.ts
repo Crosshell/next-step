@@ -50,6 +50,7 @@ export async function loginUser(data: { email: string; password: string }) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
+    credentials: 'include', // <- ВАЖЛИВО!
   });
 
   if (!response.ok) {
@@ -140,4 +141,17 @@ export async function resendEmail(data: { email: string }) {
   const result = await response.json();
 
   return !!result.confirmed;
+}
+
+export async function logoutUser() {
+  const response = await fetch('http://localhost:8020/api/auth/logout', {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error('Logout failed');
+  }
+
+  return response.json();
 }
