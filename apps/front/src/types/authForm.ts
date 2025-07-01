@@ -26,10 +26,15 @@ interface ValidationError {
   message: string;
 }
 
+type ApiResponse =
+  | { status: 'ok'; error: null }
+  | { status: 'error'; error: string };
+
 export {
   type RegistrationFormData,
   type PartialRegistrationFormData,
   type LogInFormData,
   type ProfileFormData,
   type ValidationError,
+  type ApiResponse,
 };

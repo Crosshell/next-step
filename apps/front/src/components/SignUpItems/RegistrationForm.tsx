@@ -27,8 +27,8 @@ export default function RegistrationForm() {
   const { mutate } = useMutation({
     mutationFn: registerUser,
     onSuccess: (result) => {
-      if (result.error) {
-        setErrors(result.error);
+      if (result.status === 'error') {
+        setErrors([result.error]);
         console.log('Error:', result.error);
         return;
       }

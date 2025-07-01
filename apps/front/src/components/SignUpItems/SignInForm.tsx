@@ -31,8 +31,8 @@ export default function SignInForm() {
   const { mutate: loginMutate } = useMutation({
     mutationFn: loginUser,
     onSuccess: (result) => {
-      if (result.error) {
-        setErrors(result.error);
+      if (result.status === 'error') {
+        setErrors([result.error]);
         console.log('Error:', result.error);
         return;
       }
@@ -44,8 +44,8 @@ export default function SignInForm() {
   const { mutate: forgotPassMutate } = useMutation({
     mutationFn: forgetPass,
     onSuccess: (result) => {
-      if (result.error) {
-        setErrors(result.error);
+      if (result.status === 'error') {
+        setErrors([result.error]);
         console.log('Error:', result.error);
         return;
       }
@@ -82,7 +82,7 @@ export default function SignInForm() {
   const handleForgotPassword = () => {
     const emailValue = emailRef.current?.value;
     if (emailValue) {
-      if (!validateEmail(emailRef.current?.value)) {
+      if (validateEmail(emailRef.current?.value)) {
         setErrors(['Enter correct email to reset password']);
         return;
       }
