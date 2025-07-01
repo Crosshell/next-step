@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
@@ -11,8 +10,8 @@ export class EmailService {
   ) {}
 
   async sendVerificationEmail(email: string, token: string): Promise<void> {
-    const baseUrl = this.configService.getOrThrow<string>('baseUrl');
-    const verifyLink = `http://localhost:3000/confirm-page?token=${token}`;
+    const clientUrl = this.configService.getOrThrow<string>('client.url');
+    const verifyLink = `${clientUrl}/confirm-page?token=${token}`;
 
     await this.mailerService.sendMail({
       to: email,
@@ -25,8 +24,8 @@ export class EmailService {
   }
 
   async sendResetPasswordEmail(email: string, token: string): Promise<void> {
-    const baseUrl = this.configService.getOrThrow<string>('baseUrl');
-    const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+    const clientUrl = this.configService.getOrThrow<string>('client.url');
+    const resetLink = `${clientUrl}/reset-password?token=${token}`;
 
     await this.mailerService.sendMail({
       to: email,
