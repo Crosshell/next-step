@@ -70,3 +70,12 @@
   display: inline;
   font-size: 1.5rem;
 }
+
+.logout-btn {
+  padding: 10px 20px;
+  background-color: transparent;
+  border: 3px solid #f37199;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  color: #f37199;
+}

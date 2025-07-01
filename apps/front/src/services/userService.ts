@@ -155,3 +155,16 @@ export async function logoutUser() {
 
   return response.json();
 }
+
+export async function logoutAll() {
+  const response = await fetch('http://localhost:8020/api/auth/logout-all', {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    throw new Error('Logout failed');
+  }
+
+  return response.json();
+}

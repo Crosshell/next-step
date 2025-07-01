@@ -22,7 +22,7 @@ export default function MainHeader() {
 
   const { isLogged, setIsLogged, setIsConfirmed, setRole } = useAuthStore();
 
-  const handleLogOut = async () => {
+  const handleLogout = async () => {
     const confirmLogout = window.confirm('Are you sure you want to log out?');
     if (!confirmLogout) return;
 
@@ -103,7 +103,7 @@ export default function MainHeader() {
                 scale: 1.1,
                 borderColor: 'white',
               }}
-              onClick={handleLogOut}
+              onClick={handleLogout}
             >
               Log Out
             </motion.button>

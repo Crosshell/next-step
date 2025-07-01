@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -9,8 +11,37 @@ import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import classes from './page.module.css';
 import itemClasses from '../../components/ProfileItems/Profile.module.css';
+import { useMutation } from '@tanstack/react-query';
+import { logoutUser } from '@/services/userService';
+import { useAuthStore } from '@/store/authSlice';
+import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
+  const router = useRouter();
+  const { setIsLogged, setIsConfirmed, setRole } = useAuthStore();
+
+  const { mutate: logoutMutate } = useMutation({
+    mutationFn: logoutUser,
+    onSuccess: () => {
+      setIsLogged(false);
+      setIsConfirmed(false);
+      setRole(undefined);
+      router.push('/sign-in');
+    },
+    onError: (err) => {
+      console.error('Logout failed:', err);
+    },
+  });
+
+  const handleLogoutAll = () => {
+    const confirmLogout = window.confirm(
+      'Are you sure you want to log out from all devices?'
+    );
+    if (!confirmLogout) return;
+
+    logoutMutate();
+  };
+
   return (
     <div className="container">
       <h1 className={classes['page-header']}>Your Next Level Profile</h1>
@@ -94,6 +125,11 @@ export default function ProfilePage() {
           <span>Upper-Intermediate (B2)</span>
         </p>
       </InfoBox>
+      <div className="row-end">
+        <button className={classes['logout-btn']} onClick={handleLogoutAll}>
+          Log out from all devices
+        </button>
+      </div>
     </div>
   );
 }
