@@ -10,6 +10,8 @@ import { TokenModule } from './token/token.module';
 import { SchedulerModule } from './scheduler/scheduler.module';
 import { JobSeekerModule } from './job-seeker/job-seeker.module';
 import { CompanyModule } from './company/company.module';
+import { SkillModule } from './skill/skill.module';
+import { LanguageModule } from './language/language.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { CompanyModule } from './company/company.module';
     SchedulerModule,
     JobSeekerModule,
     CompanyModule,
+    SkillModule,
+    LanguageModule,
   ],
   controllers: [],
   providers: [],

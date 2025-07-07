@@ -6,6 +6,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -19,6 +20,7 @@ import { UpdateJobSeekerDto } from './dto/update-job-seeker.dto';
 import { JobSeeker } from '@prisma/client';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { SearchJobSeekerDto } from './dto/search-job-seeker.dto';
+import { SetSkillsDto } from './dto/set-skills.dto';
 
 @Controller('job-seekers')
 export class JobSeekerController {
@@ -49,12 +51,31 @@ export class JobSeekerController {
     return this.jobSeekerService.findOne({ id });
   }
 
+  @Get()
+  @UseGuards(SessionAuthGuard, CompanyGuard)
+  async search(
+    @Query() searchJobSeekerDto: SearchJobSeekerDto,
+  ): Promise<JobSeeker[]> {
+    return this.jobSeekerService.findMany(searchJobSeekerDto);
+  }
+
   @Patch('me')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   async update(
     @Body() updateJobSeekerDto: UpdateJobSeekerDto,
     @CurrentUser() user: UserWithoutPassword,
   ): Promise<JobSeeker> {
-    return this.jobSeekerService.update(updateJobSeekerDto, user.id);
+    return this.jobSeekerService.update(updateJobSeekerDto, {
+      userId: user.id,
+    });
+  }
+
+  @Put('me/skills')
+  @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  async updateSkills(
+    @Body() setSkillsDto: SetSkillsDto,
+    @CurrentUser() user: UserWithoutPassword,
+  ): Promise<JobSeeker> {
+    return this.jobSeekerService.setSkills(setSkillsDto, user.id);
   }
 }

@@ -5,9 +5,11 @@ import { JobSeekerGuard } from './guards/job-seeker.guard';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AuthModule } from '../auth/auth.module';
 import { CompanyGuard } from '../company/guards/company.guard';
+import { SkillModule } from '../skill/skill.module';
+import { LanguageModule } from '../language/language.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule],
+  imports: [AuthModule, PrismaModule, SkillModule, LanguageModule],
   controllers: [JobSeekerController],
   providers: [JobSeekerService, JobSeekerGuard, CompanyGuard],
 })
