@@ -8,6 +8,8 @@ import { SessionModule } from './session/session.module';
 import { EmailModule } from './email/email.module';
 import { TokenModule } from './token/token.module';
 import { SchedulerModule } from './scheduler/scheduler.module';
+import { JobSeekerModule } from './job-seeker/job-seeker.module';
+import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { SchedulerModule } from './scheduler/scheduler.module';
     EmailModule,
     TokenModule,
     SchedulerModule,
+    JobSeekerModule,
+    CompanyModule,
   ],
   controllers: [],
   providers: [],

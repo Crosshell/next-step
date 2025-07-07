@@ -13,9 +13,6 @@ CREATE TYPE "WorkFormat" AS ENUM ('OFFICE', 'REMOTE', 'HYBRID');
 -- CreateEnum
 CREATE TYPE "EmploymentType" AS ENUM ('FULL_TIME', 'PART_TIME', 'INTERNSHIP', 'CONTRACT');
 
--- CreateEnum
-CREATE TYPE "TokenType" AS ENUM ('REFRESH');
-
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
@@ -23,18 +20,11 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "avatar_url" TEXT,
     "type" "UserType" NOT NULL,
+    "is_email_verified" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "tokens" (
-    "user_id" TEXT NOT NULL,
-    "hash" TEXT NOT NULL,
-    "type" "TokenType" NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateTable
@@ -45,7 +35,9 @@ CREATE TABLE "job_seekers" (
     "last_name" TEXT NOT NULL,
     "location" TEXT,
     "bio" TEXT,
+    "date_of_birth" TIMESTAMP(3),
     "expected_salary" INTEGER,
+    "is_open_to_work" BOOLEAN NOT NULL DEFAULT false,
     "seniority_level" "SeniorityLevel",
 
     CONSTRAINT "job_seekers_pkey" PRIMARY KEY ("id")
@@ -142,12 +134,6 @@ CREATE TABLE "vacancies_skills" (
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "tokens_hash_key" ON "tokens"("hash");
-
--- CreateIndex
-CREATE UNIQUE INDEX "tokens_user_id_type_key" ON "tokens"("user_id", "type");
-
--- CreateIndex
 CREATE UNIQUE INDEX "job_seekers_user_id_key" ON "job_seekers"("user_id");
 
 -- CreateIndex
@@ -161,9 +147,6 @@ CREATE UNIQUE INDEX "skills_name_key" ON "skills"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "companies_user_id_key" ON "companies"("user_id");
-
--- AddForeignKey
-ALTER TABLE "tokens" ADD CONSTRAINT "tokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "job_seekers" ADD CONSTRAINT "job_seekers_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

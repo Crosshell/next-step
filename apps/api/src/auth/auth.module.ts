@@ -6,12 +6,11 @@ import { SessionModule } from '../session/session.module';
 import { SessionAuthGuard } from './guards/session-auth.guard';
 import { TokenModule } from '../token/token.module';
 import { EmailModule } from '../email/email.module';
-import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [UserModule, SessionModule, TokenModule, EmailModule],
   controllers: [AuthController],
-  providers: [AuthService, SessionAuthGuard, RolesGuard],
-  exports: [SessionAuthGuard, RolesGuard],
+  providers: [AuthService, SessionAuthGuard],
+  exports: [SessionAuthGuard, SessionModule, UserModule],
 })
 export class AuthModule {}

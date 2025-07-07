@@ -59,13 +59,15 @@ model User {
 }
 
 model JobSeeker {
-  id             String  @id @default(uuid())
-  userId         String  @unique @map("user_id")
-  firstName      String  @map("first_name")
-  lastName       String  @map("last_name")
+  id             String    @id @default(uuid())
+  userId         String    @unique @map("user_id")
+  firstName      String    @map("first_name")
+  lastName       String    @map("last_name")
   location       String?
   bio            String?
-  expectedSalary Int?    @map("expected_salary")
+  dateOfBirth    DateTime? @map("date_of_birth")
+  expectedSalary Int?      @map("expected_salary")
+  isOpenToWork   Boolean   @default(false) @map("is_open_to_work")
 
   seniorityLevel SeniorityLevel? @map("seniority_level")
 
