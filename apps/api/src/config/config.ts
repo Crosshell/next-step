@@ -7,10 +7,6 @@ export default () => ({
     url: process.env.CLIENT_URL,
   },
 
-  client: {
-    url: process.env.CLIENT_URL,
-  },
-
   cookie: {
     secure: process.env.COOKIE_SECURE === 'true',
     httpOnly: process.env.COOKIE_HTTP_ONLY === 'true',
