@@ -1,6 +1,5 @@
 'use client';
 import { useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 
 import { motion } from 'framer-motion';
@@ -21,8 +20,6 @@ export default function SignInForm() {
   const [forgetPassIsClicked, setForgetPassIsClicked] =
     useState<boolean>(false);
 
-  const router = useRouter();
-
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -37,7 +34,6 @@ export default function SignInForm() {
         return;
       }
       setIsLogged(true);
-      router.push('/profile');
     },
   });
 

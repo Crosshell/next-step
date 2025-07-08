@@ -108,14 +108,14 @@ export default function MainHeader() {
               Log Out
             </motion.button>
             <motion.div
-              className={`${classes['border-btn']} ${pathname === '/profile' ? classes['active-link'] : ''} `}
+              className={`${classes['border-btn']} ${pathname === '/my-profile' ? classes['active-link'] : ''} `}
               whileHover={
-                pathname === '/profile'
+                pathname === '/my-profile'
                   ? greenBorderBtnHover
                   : whiteBorderBtnHover
               }
             >
-              <Link href="/profile">Profile</Link>
+              <Link href="/my-profile">Profile</Link>
             </motion.div>
           </>
         )}
