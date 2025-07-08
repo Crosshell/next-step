@@ -58,3 +58,15 @@
   font-weight: 500;
   color: #1f1f21;
 }
+
+.edit-info-btn {
+  background-color: transparent;
+  border: 0;
+}
+
+.edit-info-btn div {
+  padding: 5px 8px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  color: white;
+}

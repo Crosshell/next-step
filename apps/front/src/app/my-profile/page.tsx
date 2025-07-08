@@ -8,7 +8,7 @@ import InfoBox from '@/components/ProfileItems/InfoBox';
 import InfoItem from '@/components/ProfileItems/InfoItem';
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
-import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faPencil } from '@fortawesome/free-solid-svg-icons';
 import classes from './page.module.css';
 import itemClasses from '../../components/ProfileItems/Profile.module.css';
 import { useMutation } from '@tanstack/react-query';
@@ -48,7 +48,7 @@ export default function ProfilePage() {
       <div className={classes['main-info']}>
         <Image
           src="/images/no-avatar.png"
-          alt="stairs-image"
+          alt="avatar-image"
           width={250}
           height={250}
           priority
@@ -58,15 +58,18 @@ export default function ProfilePage() {
             <span>Skill</span>
             <span>Skill</span>
             <span>Skill</span>
+            <button className={classes['edit-skills-btn']}>
+              <AnimatedIcon iconType={faPlus} />
+            </button>
           </div>
           <div className={classes['personal-info']}>
             <h2>John Doe</h2>
             <p>20.02.2002</p>
             <p>Kyiv, Maidan Nezalezhnosti, 32</p>
           </div>
-          <Link href="/profile" className={classes['edit-link']}>
+          <button className={classes['edit-info-btn']}>
             <AnimatedIcon iconType={faPencil} />
-          </Link>
+          </button>
         </div>
       </div>
       <div className={classes.contacts}>
@@ -74,6 +77,9 @@ export default function ProfilePage() {
         <ContactLink />
         <ContactLink />
         <ContactLink />
+        <button className={classes['edit-contacts-btn']}>
+          <AnimatedIcon iconType={faPlus} />
+        </button>
       </div>
       <InfoBox title="Your info">
         <p>
