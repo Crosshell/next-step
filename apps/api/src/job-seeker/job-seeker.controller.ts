@@ -7,7 +7,6 @@ import {
   Patch,
   Post,
   Put,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
