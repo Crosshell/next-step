@@ -16,6 +16,7 @@ import { UserWithoutPassword } from '../user/types/user-without-password.type';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { CompanyGuard } from './guards/company.guard';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { SearchCompanyDto } from './dto/search-company.dto';
 
 @Controller('companies')
 export class CompanyController {
@@ -28,6 +29,11 @@ export class CompanyController {
     @CurrentUser() user: UserWithoutPassword,
   ): Promise<Company> {
     return this.companyService.create(createCompanyDto, user.id);
+  }
+
+  @Post('search')
+  async search(@Body() searchCompanyDto: SearchCompanyDto): Promise<Company[]> {
+    return this.companyService.findMany(searchCompanyDto);
   }
 
   @Get('me')
