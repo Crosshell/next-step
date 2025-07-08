@@ -10,12 +10,15 @@ import {
 import { SearchJobSeekerDto } from './dto/search-job-seeker.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
 import { SkillService } from '../skill/skill.service';
+import { SetLanguagesDto } from './dto/set-languages.dto';
+import { LanguageService } from '../language/language.service';
 
 @Injectable()
 export class JobSeekerService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly skillService: SkillService,
+    private readonly languageService: LanguageService,
   ) {}
 
   async create(
@@ -23,7 +26,6 @@ export class JobSeekerService {
     userId: string,
   ): Promise<JobSeeker> {
     const existingJobSeeker = await this.findOne({ userId });
-
     if (existingJobSeeker) {
       throw new SubjectExistsException('Job seeker');
     }
@@ -62,6 +64,22 @@ export class JobSeekerService {
     const where: Prisma.JobSeekerWhereInput = {
       isOpenToWork: true,
     };
+
+    if (searchJobSeekerDto.languageItems?.length) {
+      const ids = searchJobSeekerDto.languageItems.map((i) => i.languageId);
+      const levels = searchJobSeekerDto.languageItems.map((i) => i.level);
+
+      where.languages = {
+        some: {
+          languageId: {
+            in: ids,
+          },
+          languageLevel: {
+            in: levels,
+          },
+        },
+      };
+    }
 
     if (searchJobSeekerDto.skillIds?.length) {
       where.skills = {
@@ -109,7 +127,6 @@ export class JobSeekerService {
     userId: string,
   ): Promise<JobSeeker> {
     const jobSeeker = await this.findOne({ userId });
-
     if (!jobSeeker) {
       throw new SubjectNotFoundException('Job seeker');
     }
@@ -127,6 +144,49 @@ export class JobSeekerService {
       });
 
       await tx.jobSeekerSkill.createMany({
+        data,
+        skipDuplicates: true,
+      });
+
+      const result = await tx.jobSeeker.findUnique({
+        where: { id: jobSeeker.id },
+        include: {
+          languages: true,
+          skills: true,
+          contacts: true,
+        },
+      });
+
+      return result!;
+    });
+  }
+
+  async setLanguages(
+    setLanguagesDto: SetLanguagesDto,
+    userId: string,
+  ): Promise<JobSeeker> {
+    const jobSeeker = await this.findOne({ userId });
+    if (!jobSeeker) {
+      throw new SubjectNotFoundException('Job seeker');
+    }
+
+    const languageIds = setLanguagesDto.languageItems.map(
+      (item) => item.languageId,
+    );
+    await this.languageService.assertExists(languageIds);
+
+    const data = setLanguagesDto.languageItems.map((i) => ({
+      languageId: i.languageId,
+      languageLevel: i.level,
+      jobSeekerId: jobSeeker.id,
+    }));
+
+    return this.prismaService.$transaction(async (tx) => {
+      await tx.jobSeekerLanguage.deleteMany({
+        where: { jobSeekerId: jobSeeker.id },
+      });
+
+      await tx.jobSeekerLanguage.createMany({
         data,
         skipDuplicates: true,
       });

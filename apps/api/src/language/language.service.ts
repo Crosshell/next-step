@@ -11,6 +11,17 @@ import {
 export class LanguageService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async assertExists(languageIds: string[]): Promise<void> {
+    console.log(languageIds);
+    const found = await this.prismaService.language.count({
+      where: { id: { in: languageIds } },
+    });
+
+    if (found !== languageIds.length) {
+      throw new SubjectNotFoundException('Language');
+    }
+  }
+
   async findAll(): Promise<Language[]> {
     return this.prismaService.language.findMany();
   }

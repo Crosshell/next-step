@@ -21,6 +21,7 @@ import { JobSeeker } from '@prisma/client';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { SearchJobSeekerDto } from './dto/search-job-seeker.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
+import { SetLanguagesDto } from './dto/set-languages.dto';
 
 @Controller('job-seekers')
 export class JobSeekerController {
@@ -51,10 +52,10 @@ export class JobSeekerController {
     return this.jobSeekerService.findOne({ id });
   }
 
-  @Get()
+  @Post('search')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   async search(
-    @Query() searchJobSeekerDto: SearchJobSeekerDto,
+    @Body() searchJobSeekerDto: SearchJobSeekerDto,
   ): Promise<JobSeeker[]> {
     return this.jobSeekerService.findMany(searchJobSeekerDto);
   }
@@ -77,5 +78,14 @@ export class JobSeekerController {
     @CurrentUser() user: UserWithoutPassword,
   ): Promise<JobSeeker> {
     return this.jobSeekerService.setSkills(setSkillsDto, user.id);
+  }
+
+  @Put('me/languages')
+  @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  async updateLanguages(
+    @Body() setLanguagesDto: SetLanguagesDto,
+    @CurrentUser() user: UserWithoutPassword,
+  ): Promise<JobSeeker> {
+    return this.jobSeekerService.setLanguages(setLanguagesDto, user.id);
   }
 }
