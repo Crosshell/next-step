@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import HoveredItem from '../HoveredItem/HoveredItem';
 
 import classes from './SignUpItems.module.css';
+import { useAuthStore } from '@/store/authSlice';
 
 interface Props {
   isVisible: boolean;
@@ -13,8 +14,10 @@ interface Props {
 
 export default function RoleFormItem({ isVisible }: Props) {
   const router = useRouter();
+  const setRole = useAuthStore((state) => state.setRole);
 
-  const stepUpHandler = () => {
+  const stepUpHandler = (role: string) => {
+    setRole(role);
     router.push('/sign-up?step=account');
   };
 
@@ -36,7 +39,7 @@ export default function RoleFormItem({ isVisible }: Props) {
                 type="radio"
                 name="role"
                 value="JOB_SEEKER"
-                onChange={() => stepUpHandler()}
+                onChange={() => stepUpHandler('JOB_SEEKER')}
               />
               <span> Job Seeker</span>
             </label>
@@ -47,7 +50,7 @@ export default function RoleFormItem({ isVisible }: Props) {
                 type="radio"
                 name="role"
                 value="COMPANY"
-                onChange={() => stepUpHandler()}
+                onChange={() => stepUpHandler('COMPANY')}
               />
               <span>Company</span>
             </label>
