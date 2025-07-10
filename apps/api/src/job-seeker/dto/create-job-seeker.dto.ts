@@ -3,6 +3,7 @@ import {
   IsEnum,
   IsOptional,
   IsString,
+  IsUrl,
   Length,
   Max,
   Min,
@@ -27,6 +28,10 @@ export class CreateJobSeekerDto {
   @IsOptional()
   @Length(0, 2000)
   bio?: string;
+
+  @IsOptional()
+  @IsUrl()
+  avatarUrl?: string;
 
   @IsOptional()
   @Type(() => Number)

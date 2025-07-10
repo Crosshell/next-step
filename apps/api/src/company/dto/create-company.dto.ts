@@ -13,4 +13,8 @@ export class CreateCompanyDto {
   @IsOptional()
   @IsUrl()
   url?: string;
+
+  @IsOptional()
+  @IsUrl()
+  logoUrl?: string;
 }
