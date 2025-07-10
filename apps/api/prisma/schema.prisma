@@ -46,7 +46,6 @@ model User {
   id              String   @id @default(uuid())
   email           String   @unique
   password        String
-  avatarUrl       String?  @map("avatar_url")
   type            UserType
   isEmailVerified Boolean  @default(false) @map("is_email_verified")
   createdAt       DateTime @default(now()) @map("created_at")
@@ -65,13 +64,14 @@ model JobSeeker {
   lastName       String    @map("last_name")
   location       String?
   bio            String?
+  avatarUrl      String?   @map("avatar_url")
   dateOfBirth    DateTime? @map("date_of_birth")
   expectedSalary Int?      @map("expected_salary")
   isOpenToWork   Boolean   @default(false) @map("is_open_to_work")
 
   seniorityLevel SeniorityLevel? @map("seniority_level")
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   contacts  JobSeekerContacts?
   languages JobSeekerLanguage[]
@@ -89,7 +89,7 @@ model JobSeekerContacts {
   publicEmail String? @map("public_email")
   phoneNumber String? @map("phone_number")
 
-  jobSeeker JobSeeker @relation(fields: [jobSeekerId], references: [id])
+  jobSeeker JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
 
   @@map("job_seeker_contacts")
 }
@@ -98,9 +98,9 @@ model JobSeekerLanguage {
   languageLevel LanguageLevel @map("language_level")
 
   jobSeekerId String    @map("job_seeker_id")
-  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id])
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
   languageId  String    @map("language_id")
-  language    Language  @relation(fields: [languageId], references: [id])
+  language    Language  @relation(fields: [languageId], references: [id], onDelete: Cascade)
 
   @@id([jobSeekerId, languageId])
   @@map("job_seekers_languages")
@@ -117,9 +117,9 @@ model Language {
 
 model JobSeekerSkill {
   jobSeekerId String    @map("job_seeker_id")
-  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id])
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
   skillId     String    @map("skill_id")
-  skill       Skill     @relation(fields: [skillId], references: [id])
+  skill       Skill     @relation(fields: [skillId], references: [id], onDelete: Cascade)
 
   @@id([jobSeekerId, skillId])
   @@map("job_seekers_skills")
@@ -141,9 +141,10 @@ model Company {
   name        String
   description String?
   url         String?
+  logoUrl     String? @map("logo_url")
   isVerified  Boolean @default(false) @map("is_verified")
 
-  user      User      @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   vacancies Vacancy[]
 
   @@map("companies")
@@ -166,7 +167,7 @@ model Vacancy {
   employmentType     EmploymentType[] @map("employment_type")
   seniorityLevel     SeniorityLevel   @map("seniority_level")
 
-  company        Company        @relation(fields: [companyId], references: [id])
+  company        Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
   requiredSkills VacancySkill[]
 
   @@map("vacancies")
@@ -174,9 +175,9 @@ model Vacancy {
 
 model VacancySkill {
   vacancyId String  @map("vacancy_id")
-  vacancy   Vacancy @relation(fields: [vacancyId], references: [id])
+  vacancy   Vacancy @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
   skillId   String  @map("skill_id")
-  skill     Skill   @relation(fields: [skillId], references: [id])
+  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
 
   @@id([vacancyId, skillId])
   @@map("vacancies_skills")
