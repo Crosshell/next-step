@@ -54,7 +54,7 @@ export class JobSeekerService {
       where,
       skip,
       take: this.pageSize,
-      orderBy: { updatedAt: 'desc' },
+      orderBy: dto.orderBy ?? { updatedAt: 'desc' },
     });
   }
 
