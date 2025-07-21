@@ -28,8 +28,8 @@ export class SkillController {
 
   // ADMIN GUARD
   @Post()
-  async create(@Body() createSkillDto: CreateSkillDto): Promise<Skill> {
-    return this.service.create(createSkillDto);
+  async create(@Body() dto: CreateSkillDto): Promise<Skill> {
+    return this.service.create(dto);
   }
 
   // ADMIN GUARD

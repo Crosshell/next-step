@@ -1,28 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Skill } from '@prisma/client';
-import { CreateSkillDto } from './dto/create-skill.dto';
 
 @Injectable()
 export class SkillRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async count(where: Prisma.SkillWhereInput): Promise<number> {
-    return this.prisma.skill.count({
-      where,
-    });
+    return this.prisma.skill.count({ where });
   }
 
-  async create(dto: CreateSkillDto): Promise<Skill> {
-    return this.prisma.skill.create({
-      data: dto,
-    });
+  async create(data: Prisma.SkillCreateInput): Promise<Skill> {
+    return this.prisma.skill.create({ data });
   }
 
   async findOne(where: Prisma.SkillWhereUniqueInput): Promise<Skill | null> {
-    return this.prisma.skill.findUnique({
-      where,
-    });
+    return this.prisma.skill.findUnique({ where });
   }
 
   async findAll(): Promise<Skill[]> {
@@ -30,8 +23,6 @@ export class SkillRepository {
   }
 
   async delete(where: Prisma.SkillWhereUniqueInput): Promise<Skill> {
-    return this.prisma.skill.delete({
-      where,
-    });
+    return this.prisma.skill.delete({ where });
   }
 }

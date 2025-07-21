@@ -14,26 +14,22 @@ import { MessageResponse } from '@common/responses';
 
 @Controller('languages')
 export class LanguageController {
-  constructor(private readonly languageService: LanguageService) {}
+  constructor(private readonly service: LanguageService) {}
 
   @Get()
   async findAll(): Promise<Language[]> {
-    return this.languageService.findAll();
+    return this.service.findAll();
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<Language | null> {
-    return this.languageService.findOne({ id });
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Language> {
+    return this.service.findOneOrThrow({ id });
   }
 
   // ADMIN GUARD
   @Post()
-  async create(
-    @Body() createLanguageDto: CreateLanguageDto,
-  ): Promise<Language> {
-    return this.languageService.create(createLanguageDto);
+  async create(@Body() dto: CreateLanguageDto): Promise<Language> {
+    return this.service.create(dto);
   }
 
   // ADMIN GUARD
@@ -41,7 +37,7 @@ export class LanguageController {
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<MessageResponse> {
-    await this.languageService.delete({ id });
+    await this.service.delete({ id });
     return { message: 'Language deleted successfully' };
   }
 }
