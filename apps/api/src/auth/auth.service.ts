@@ -12,12 +12,12 @@ import {
   EmailVerifiedException,
   InvalidCredentialsException,
   InvalidOrExpiredSubjectException,
-  SubjectNotFoundException,
 } from '@common/exceptions';
 import { TokenType } from '../token/enums/token-type.enum';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -29,13 +29,15 @@ export class AuthService {
   ) {}
 
   async validateCredentials(loginDto: LoginDto): Promise<UserWithoutPassword> {
-    const user = await this.userService.findOne(
-      { email: loginDto.email },
+    const user = (await this.userService.findOneOrThrow(
+      {
+        email: loginDto.email,
+      },
       false,
-    );
+    )) as User;
 
     const isValid =
-      user && (await argon2.verify(user.password, loginDto.password));
+      user.password && (await argon2.verify(user.password, loginDto.password));
     if (!isValid) {
       throw new InvalidCredentialsException();
     }
@@ -88,13 +90,9 @@ export class AuthService {
   async resendVerification(
     resendVerificationDto: ResendVerificationDto,
   ): Promise<void> {
-    const user = await this.userService.findOne({
+    const user = await this.userService.findOneOrThrow({
       email: resendVerificationDto.email,
     });
-
-    if (!user) {
-      throw new SubjectNotFoundException('User');
-    }
 
     if (user.isEmailVerified) {
       throw new EmailVerifiedException();
@@ -111,12 +109,9 @@ export class AuthService {
   }
 
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
-    const user = await this.userService.findOne({
+    await this.userService.findOneOrThrow({
       email: forgotPasswordDto.email,
     });
-    if (!user) {
-      throw new SubjectNotFoundException('User');
-    }
 
     const resetToken = await this.tokenService.createToken(
       TokenType.RESET,
