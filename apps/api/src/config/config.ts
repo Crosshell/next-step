@@ -58,4 +58,10 @@ export default () => ({
       process.env.JOB_SEEKER_PAGE_SIZE &&
       parseInt(process.env.JOB_SEEKER_PAGE_SIZE, 10),
   },
+
+  company: {
+    pageSize:
+      process.env.COMPANY_PAGE_SIZE &&
+      parseInt(process.env.COMPANY_PAGE_SIZE, 10),
+  },
 });

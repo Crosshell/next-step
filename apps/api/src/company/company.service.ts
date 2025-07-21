@@ -8,10 +8,18 @@ import {
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { SearchCompanyDto } from './dto/search-company.dto';
 import { CompanyRepository } from './company.repository';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CompanyService {
-  constructor(private readonly repository: CompanyRepository) {}
+  private readonly pageSize: number;
+
+  constructor(
+    private readonly repository: CompanyRepository,
+    private readonly config: ConfigService,
+  ) {
+    this.pageSize = this.config.getOrThrow<number>('company.pageSize');
+  }
 
   async create(userId: string, dto: CreateCompanyDto): Promise<Company> {
     await this.assertNotExists({ userId });
@@ -31,8 +39,10 @@ export class CompanyService {
     if (company) throw new SubjectExistsException('Company');
   }
 
-  async findMany(dto: SearchCompanyDto): Promise<Company[]> {
+  async search(dto: SearchCompanyDto): Promise<Company[]> {
     const where: Prisma.CompanyWhereInput = {};
+    const skip = (dto.page - 1) * this.pageSize;
+
     if (dto.name) {
       where.name = {
         contains: dto.name,
@@ -40,7 +50,7 @@ export class CompanyService {
       };
     }
 
-    return this.repository.findMany({ where });
+    return this.repository.findMany({ where, skip, take: this.pageSize });
   }
 
   async update(userId: string, dto: UpdateCompanyDto): Promise<Company> {

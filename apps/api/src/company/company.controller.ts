@@ -33,7 +33,7 @@ export class CompanyController {
 
   @Post('search')
   async search(@Body() dto: SearchCompanyDto): Promise<Company[]> {
-    return this.service.findMany(dto);
+    return this.service.search(dto);
   }
 
   @Get('me')
