@@ -1,20 +1,23 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { RequestWithUser } from '../../auth/types/request-with-user.type';
 import { UserType } from '@prisma/client';
-import { JobSeekerService } from '../services/job-seeker.service';
+import { JobSeekerService } from '../job-seeker.service';
+import { RequestWithJobSeeker } from '../types/request-with-job-seeker.type';
+import { RequestWithUser } from '../../auth/types/request-with-user.type';
 
 @Injectable()
 export class JobSeekerGuard implements CanActivate {
-  constructor(private readonly jobSeekerService: JobSeekerService) {}
+  constructor(private readonly service: JobSeekerService) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
-    const req = ctx.switchToHttp().getRequest<RequestWithUser>();
+    const req = ctx
+      .switchToHttp()
+      .getRequest<RequestWithUser & RequestWithJobSeeker>();
 
     if (req.user.type !== UserType.JOB_SEEKER) {
       return false;
     }
 
-    await this.jobSeekerService.findOrThrow({ userId: req.user.id });
+    req.jobSeeker = await this.service.findOneOrThrow({ userId: req.user.id });
 
     return true;
   }
