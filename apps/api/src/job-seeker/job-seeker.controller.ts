@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -30,6 +32,7 @@ export class JobSeekerController {
 
   @Post()
   @UseGuards(SessionAuthGuard, CreateJobSeekerGuard)
+  @HttpCode(HttpStatus.CREATED)
   async create(
     @CurrentUser() user: UserWithoutPassword,
     @Body() dto: CreateJobSeekerDto,
@@ -39,6 +42,7 @@ export class JobSeekerController {
 
   @Get('me')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @HttpCode(HttpStatus.OK)
   async getMyProfile(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
   ): Promise<JobSeeker> {
@@ -47,18 +51,21 @@ export class JobSeekerController {
 
   @Get(':id')
   @UseGuards(SessionAuthGuard, CompanyGuard)
+  @HttpCode(HttpStatus.OK)
   async getProfile(@Param('id', ParseUUIDPipe) id: string): Promise<JobSeeker> {
     return this.service.findOneOrThrow({ id });
   }
 
   @Post('search')
   @UseGuards(SessionAuthGuard, CompanyGuard)
+  @HttpCode(HttpStatus.OK)
   async search(@Body() dto: SearchJobSeekerDto): Promise<JobSeeker[]> {
     return this.service.search(dto);
   }
 
   @Patch('me')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @HttpCode(HttpStatus.OK)
   async update(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
     @Body() dto: UpdateJobSeekerDto,
@@ -68,6 +75,7 @@ export class JobSeekerController {
 
   @Put('me/skills')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @HttpCode(HttpStatus.OK)
   async updateSkills(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
     @Body() dto: SetSkillsDto,
@@ -77,6 +85,7 @@ export class JobSeekerController {
 
   @Put('me/languages')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @HttpCode(HttpStatus.OK)
   async updateLanguages(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
     @Body() dto: SetLanguagesDto,
