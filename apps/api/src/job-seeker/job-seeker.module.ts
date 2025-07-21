@@ -4,19 +4,24 @@ import { JobSeekerService } from './job-seeker.service';
 import { JobSeekerGuard } from './guards/job-seeker.guard';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AuthModule } from '../auth/auth.module';
-import { CompanyGuard } from '../company/guards/company.guard';
 import { SkillModule } from '../skill/skill.module';
 import { LanguageModule } from '../language/language.module';
 import { CreateJobSeekerGuard } from './guards/create-job-seeker.guard';
 import { JobSeekerRepository } from './job-seeker.repository';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, SkillModule, LanguageModule],
+  imports: [
+    AuthModule,
+    PrismaModule,
+    SkillModule,
+    LanguageModule,
+    CompanyModule,
+  ],
   controllers: [JobSeekerController],
   providers: [
     JobSeekerService,
     JobSeekerGuard,
-    CompanyGuard,
     CreateJobSeekerGuard,
     JobSeekerRepository,
   ],
