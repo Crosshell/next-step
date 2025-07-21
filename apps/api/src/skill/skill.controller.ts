@@ -14,22 +14,22 @@ import { MessageResponse } from '@common/responses';
 
 @Controller('skills')
 export class SkillController {
-  constructor(private readonly skillService: SkillService) {}
+  constructor(private readonly service: SkillService) {}
 
   @Get()
   async findAll(): Promise<Skill[]> {
-    return this.skillService.findAll();
+    return this.service.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Skill | null> {
-    return this.skillService.findOne({ id });
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Skill> {
+    return this.service.findOneOrThrow({ id });
   }
 
   // ADMIN GUARD
   @Post()
   async create(@Body() createSkillDto: CreateSkillDto): Promise<Skill> {
-    return this.skillService.create(createSkillDto);
+    return this.service.create(createSkillDto);
   }
 
   // ADMIN GUARD
@@ -37,7 +37,7 @@ export class SkillController {
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<MessageResponse> {
-    await this.skillService.delete({ id });
+    await this.service.delete({ id });
     return { message: 'Skill deleted successfully' };
   }
 }
