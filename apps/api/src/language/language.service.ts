@@ -1,55 +1,46 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
-import { Language, Prisma } from '@prisma/client';
+import { Language, Prisma, Skill } from '@prisma/client';
 import {
   SubjectExistsException,
   SubjectNotFoundException,
 } from '@common/exceptions';
+import { LanguageRepository } from './language.repository';
 
 @Injectable()
 export class LanguageService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly repository: LanguageRepository) {}
 
   async assertExists(languageIds: string[]): Promise<void> {
-    const found = await this.prismaService.language.count({
-      where: { id: { in: languageIds } },
-    });
+    const found = await this.repository.count({ id: { in: languageIds } });
 
     if (found !== languageIds.length) {
       throw new SubjectNotFoundException('Language');
     }
   }
 
+  async create(dto: CreateLanguageDto): Promise<Language> {
+    await this.assertNotExists({ name: dto.name });
+    return this.repository.create(dto);
+  }
+
   async findAll(): Promise<Language[]> {
-    return this.prismaService.language.findMany();
+    return this.repository.findAll();
   }
 
-  async findOne(
-    where: Prisma.LanguageWhereUniqueInput,
-  ): Promise<Language | null> {
-    return this.prismaService.language.findUnique({ where });
+  async findOneOrThrow(where: Prisma.LanguageWhereUniqueInput): Promise<Skill> {
+    const language = await this.repository.findOne(where);
+    if (!language) throw new SubjectNotFoundException('Language');
+    return language;
   }
 
-  async create(createLanguageDto: CreateLanguageDto): Promise<Language> {
-    const existingLanguage = await this.findOne({
-      name: createLanguageDto.name,
-    });
-    if (existingLanguage) {
-      throw new SubjectExistsException('Language');
-    }
-
-    return this.prismaService.language.create({
-      data: createLanguageDto,
-    });
+  async assertNotExists(where: Prisma.LanguageWhereUniqueInput): Promise<void> {
+    const language = await this.repository.findOne(where);
+    if (language) throw new SubjectExistsException('Language');
   }
 
   async delete(where: Prisma.LanguageWhereUniqueInput): Promise<Language> {
-    const existingLanguage = await this.findOne(where);
-    if (!existingLanguage) {
-      throw new SubjectNotFoundException('Language');
-    }
-
-    return this.prismaService.language.delete({ where });
+    await this.findOneOrThrow(where);
+    return this.repository.delete(where);
   }
 }
