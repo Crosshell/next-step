@@ -24,10 +24,7 @@ export class SessionAuthGuard implements CanActivate {
       throw new InvalidOrExpiredSubjectException('session');
     }
 
-    const user = await this.userService.findOne({ id: session.userId });
-    if (!user) {
-      throw new SubjectNotFoundException('User');
-    }
+    const user = await this.userService.findOneOrThrow({ id: session.userId });
 
     await this.sessionService.refreshSessionTTL(session.userId, sessionId);
 
