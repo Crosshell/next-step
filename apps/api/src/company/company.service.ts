@@ -53,8 +53,7 @@ export class CompanyService {
     return this.repository.findMany({ where, skip, take: this.pageSize });
   }
 
-  async update(userId: string, dto: UpdateCompanyDto): Promise<Company> {
-    await this.findOneOrThrow({ userId });
-    return this.repository.update({ userId }, dto);
+  async update(id: string, dto: UpdateCompanyDto): Promise<Company> {
+    return this.repository.update({ id }, dto);
   }
 }
