@@ -12,6 +12,7 @@ import { JobSeekerModule } from './job-seeker/job-seeker.module';
 import { CompanyModule } from './company/company.module';
 import { SkillModule } from './skill/skill.module';
 import { LanguageModule } from './language/language.module';
+import { VacancyModule } from './vacancy/vacancy.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { LanguageModule } from './language/language.module';
     CompanyModule,
     SkillModule,
     LanguageModule,
+    VacancyModule,
   ],
   controllers: [],
   providers: [],
