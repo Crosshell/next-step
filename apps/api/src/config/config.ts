@@ -52,4 +52,10 @@ export default () => ({
       process.env.USER_UNVERIFIED_TTL_MS &&
       parseInt(process.env.USER_UNVERIFIED_TTL_MS, 10),
   },
+
+  jobSeeker: {
+    pageSize:
+      process.env.JOB_SEEKER_PAGE_SIZE &&
+      parseInt(process.env.JOB_SEEKER_PAGE_SIZE, 10),
+  },
 });

@@ -5,6 +5,7 @@ import {
   IsEnum,
   IsOptional,
   IsUUID,
+  Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -29,4 +30,9 @@ export class SearchJobSeekerDto {
   @ArrayUnique()
   @IsEnum(SeniorityLevel, { each: true })
   seniorityLevels?: SeniorityLevel[];
+
+  @IsOptional()
+  @Type(() => Number)
+  @Min(1)
+  page: number = 1;
 }

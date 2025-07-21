@@ -10,6 +10,7 @@ datasource db {
 enum UserType {
   JOB_SEEKER
   COMPANY
+  ADMIN
 }
 
 enum SeniorityLevel {
@@ -68,6 +69,8 @@ model JobSeeker {
   dateOfBirth    DateTime? @map("date_of_birth")
   expectedSalary Int?      @map("expected_salary")
   isOpenToWork   Boolean   @default(false) @map("is_open_to_work")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
 
   seniorityLevel SeniorityLevel? @map("seniority_level")
 
@@ -77,6 +80,7 @@ model JobSeeker {
   languages JobSeekerLanguage[]
   skills    JobSeekerSkill[]
 
+  @@index([isOpenToWork])
   @@map("job_seekers")
 }
 
@@ -136,13 +140,15 @@ model Skill {
 }
 
 model Company {
-  id          String  @id @default(uuid())
-  userId      String  @unique @map("user_id")
+  id          String   @id @default(uuid())
+  userId      String   @unique @map("user_id")
   name        String
   description String?
   url         String?
-  logoUrl     String? @map("logo_url")
-  isVerified  Boolean @default(false) @map("is_verified")
+  logoUrl     String?  @map("logo_url")
+  isVerified  Boolean  @default(false) @map("is_verified")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
 
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   vacancies Vacancy[]

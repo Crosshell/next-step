@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "UserType" AS ENUM ('JOB_SEEKER', 'COMPANY');
+CREATE TYPE "UserType" AS ENUM ('JOB_SEEKER', 'COMPANY', 'ADMIN');
 
 -- CreateEnum
 CREATE TYPE "SeniorityLevel" AS ENUM ('TRAINEE', 'JUNIOR', 'MIDDLE', 'SENIOR', 'LEAD');
@@ -38,6 +38,8 @@ CREATE TABLE "job_seekers" (
     "date_of_birth" TIMESTAMP(3),
     "expected_salary" INTEGER,
     "is_open_to_work" BOOLEAN NOT NULL DEFAULT false,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
     "seniority_level" "SeniorityLevel",
 
     CONSTRAINT "job_seekers_pkey" PRIMARY KEY ("id")
@@ -98,6 +100,8 @@ CREATE TABLE "companies" (
     "url" TEXT,
     "logo_url" TEXT,
     "is_verified" BOOLEAN NOT NULL DEFAULT false,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "companies_pkey" PRIMARY KEY ("id")
 );
@@ -136,6 +140,9 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "job_seekers_user_id_key" ON "job_seekers"("user_id");
+
+-- CreateIndex
+CREATE INDEX "job_seekers_is_open_to_work_idx" ON "job_seekers"("is_open_to_work");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "job_seeker_contacts_job_seeker_id_key" ON "job_seeker_contacts"("job_seeker_id");
