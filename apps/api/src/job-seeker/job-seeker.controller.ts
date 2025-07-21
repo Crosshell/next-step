@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { JobSeekerGuard } from './guards/job-seeker.guard';
-import { JobSeekerService } from './job-seeker.service';
+import { JobSeekerService } from './services/job-seeker.service';
 import { CreateJobSeekerDto } from './dto/create-job-seeker.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
@@ -21,13 +21,14 @@ import { CompanyGuard } from '../company/guards/company.guard';
 import { SearchJobSeekerDto } from './dto/search-job-seeker.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
 import { SetLanguagesDto } from './dto/set-languages.dto';
+import { CreateJobSeekerGuard } from './guards/create-job-seeker.guard';
 
 @Controller('job-seekers')
 export class JobSeekerController {
   constructor(private readonly jobSeekerService: JobSeekerService) {}
 
   @Post()
-  @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @UseGuards(SessionAuthGuard, CreateJobSeekerGuard)
   async create(
     @Body() createJobSeekerDto: CreateJobSeekerDto,
     @CurrentUser() user: UserWithoutPassword,
@@ -39,16 +40,14 @@ export class JobSeekerController {
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   async getMyProfile(
     @CurrentUser() user: UserWithoutPassword,
-  ): Promise<JobSeeker | null> {
-    return this.jobSeekerService.findOne({ userId: user.id });
+  ): Promise<JobSeeker> {
+    return this.jobSeekerService.findOrThrow({ userId: user.id });
   }
 
   @Get(':id')
   @UseGuards(SessionAuthGuard, CompanyGuard)
-  async getProfile(
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<JobSeeker | null> {
-    return this.jobSeekerService.findOne({ id });
+  async getProfile(@Param('id', ParseUUIDPipe) id: string): Promise<JobSeeker> {
+    return this.jobSeekerService.findOrThrow({ id });
   }
 
   @Post('search')
