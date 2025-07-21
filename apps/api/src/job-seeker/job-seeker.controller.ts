@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -11,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { JobSeekerGuard } from './guards/job-seeker.guard';
-import { JobSeekerService } from './services/job-seeker.service';
+import { JobSeekerService } from './job-seeker.service';
 import { CreateJobSeekerDto } from './dto/create-job-seeker.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
@@ -22,68 +24,72 @@ import { SearchJobSeekerDto } from './dto/search-job-seeker.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
 import { SetLanguagesDto } from './dto/set-languages.dto';
 import { CreateJobSeekerGuard } from './guards/create-job-seeker.guard';
+import { CurrentJobSeeker } from './decorators/current-job-seeker.decorator';
 
 @Controller('job-seekers')
 export class JobSeekerController {
-  constructor(private readonly jobSeekerService: JobSeekerService) {}
+  constructor(private readonly service: JobSeekerService) {}
 
   @Post()
   @UseGuards(SessionAuthGuard, CreateJobSeekerGuard)
+  @HttpCode(HttpStatus.CREATED)
   async create(
-    @Body() createJobSeekerDto: CreateJobSeekerDto,
     @CurrentUser() user: UserWithoutPassword,
+    @Body() dto: CreateJobSeekerDto,
   ): Promise<JobSeeker> {
-    return this.jobSeekerService.create(createJobSeekerDto, user.id);
+    return this.service.create(user.id, dto);
   }
 
   @Get('me')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @HttpCode(HttpStatus.OK)
   async getMyProfile(
-    @CurrentUser() user: UserWithoutPassword,
+    @CurrentJobSeeker() jobSeeker: JobSeeker,
   ): Promise<JobSeeker> {
-    return this.jobSeekerService.findOrThrow({ userId: user.id });
+    return jobSeeker;
   }
 
   @Get(':id')
   @UseGuards(SessionAuthGuard, CompanyGuard)
+  @HttpCode(HttpStatus.OK)
   async getProfile(@Param('id', ParseUUIDPipe) id: string): Promise<JobSeeker> {
-    return this.jobSeekerService.findOrThrow({ id });
+    return this.service.findOneOrThrow({ id });
   }
 
   @Post('search')
   @UseGuards(SessionAuthGuard, CompanyGuard)
-  async search(
-    @Body() searchJobSeekerDto: SearchJobSeekerDto,
-  ): Promise<JobSeeker[]> {
-    return this.jobSeekerService.findMany(searchJobSeekerDto);
+  @HttpCode(HttpStatus.OK)
+  async search(@Body() dto: SearchJobSeekerDto): Promise<JobSeeker[]> {
+    return this.service.search(dto);
   }
 
   @Patch('me')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @HttpCode(HttpStatus.OK)
   async update(
-    @Body() updateJobSeekerDto: UpdateJobSeekerDto,
-    @CurrentUser() user: UserWithoutPassword,
+    @CurrentJobSeeker() jobSeeker: JobSeeker,
+    @Body() dto: UpdateJobSeekerDto,
   ): Promise<JobSeeker> {
-    return this.jobSeekerService.update(updateJobSeekerDto, {
-      userId: user.id,
-    });
+    return this.service.update(jobSeeker.id, dto);
   }
 
   @Put('me/skills')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @HttpCode(HttpStatus.OK)
   async updateSkills(
-    @Body() setSkillsDto: SetSkillsDto,
-    @CurrentUser() user: UserWithoutPassword,
+    @CurrentJobSeeker() jobSeeker: JobSeeker,
+    @Body() dto: SetSkillsDto,
   ): Promise<JobSeeker> {
-    return this.jobSeekerService.setSkills(setSkillsDto, user.id);
+    return this.service.setSkills(jobSeeker.id, dto);
   }
 
   @Put('me/languages')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @HttpCode(HttpStatus.OK)
   async updateLanguages(
-    @Body() setLanguagesDto: SetLanguagesDto,
-    @CurrentUser() user: UserWithoutPassword,
+    @CurrentJobSeeker() jobSeeker: JobSeeker,
+    @Body() dto: SetLanguagesDto,
   ): Promise<JobSeeker> {
-    return this.jobSeekerService.setLanguages(setLanguagesDto, user.id);
+    return this.service.setLanguages(jobSeeker.id, dto);
   }
 }

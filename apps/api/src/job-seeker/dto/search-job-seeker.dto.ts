@@ -1,4 +1,4 @@
-import { SeniorityLevel } from '@prisma/client';
+import { Prisma, SeniorityLevel } from '@prisma/client';
 import {
   ArrayUnique,
   IsArray,
@@ -10,6 +10,16 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { LanguageItem } from './language-item.dto';
+
+class OrderBy {
+  @IsOptional()
+  @IsEnum(Prisma.SortOrder)
+  expectedSalary?: Prisma.SortOrder;
+
+  @IsOptional()
+  @IsEnum(Prisma.SortOrder)
+  updatedAt?: Prisma.SortOrder;
+}
 
 export class SearchJobSeekerDto {
   @IsOptional()
@@ -30,6 +40,11 @@ export class SearchJobSeekerDto {
   @ArrayUnique()
   @IsEnum(SeniorityLevel, { each: true })
   seniorityLevels?: SeniorityLevel[];
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => OrderBy)
+  orderBy?: OrderBy;
 
   @IsOptional()
   @Type(() => Number)
