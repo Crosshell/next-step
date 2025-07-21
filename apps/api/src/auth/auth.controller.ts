@@ -31,23 +31,23 @@ export class AuthController {
   private readonly cookieOptions: CookieOptions;
 
   constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
+    private readonly service: AuthService,
+    private readonly config: ConfigService,
   ) {
-    this.cookieOptions = this.configService.getOrThrow('cookie');
+    this.cookieOptions = this.config.getOrThrow('cookie');
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @AuthSwagger.login()
   async login(
-    @Body() loginDto: LoginDto,
+    @Body() dto: LoginDto,
     @Res({ passthrough: true }) res: Response,
     @UserAgent() ua: string,
     @Ip() ip: string,
   ): Promise<MessageResponse> {
-    const user = await this.authService.validateCredentials(loginDto);
-    const sid = await this.authService.login(user, ua, ip);
+    const user = await this.service.validateCredentials(dto);
+    const sid = await this.service.login(user, ua, ip);
     res.cookie('sid', sid, this.cookieOptions);
     return { message: 'Login successful' };
   }
@@ -55,8 +55,8 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @AuthSwagger.register()
-  async register(@Body() registerDto: RegisterDto): Promise<MessageResponse> {
-    await this.authService.register(registerDto);
+  async register(@Body() dto: RegisterDto): Promise<MessageResponse> {
+    await this.service.register(dto);
     return {
       message: 'Registration successful. Verify your email address',
     };
@@ -71,7 +71,7 @@ export class AuthController {
     @Res({ passthrough: true })
     res: Response,
   ): Promise<MessageResponse> {
-    await this.authService.logout(sid);
+    await this.service.logout(sid);
     res.clearCookie('sid');
     return { message: 'Logged out successfully' };
   }
@@ -84,7 +84,7 @@ export class AuthController {
     @CurrentUser() user: UserWithoutPassword,
     @Res({ passthrough: true }) res: Response,
   ): Promise<MessageResponse> {
-    await this.authService.logoutAll(user.id);
+    await this.service.logoutAll(user.id);
     res.clearCookie('sid');
     return { message: 'Logged out from all devices successfully' };
   }
@@ -93,7 +93,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @AuthSwagger.verify()
   async verifyEmail(@Query('token') token: string): Promise<MessageResponse> {
-    await this.authService.verifyEmail(token);
+    await this.service.verifyEmail(token);
     return { message: 'Email verified successfully' };
   }
 
@@ -101,9 +101,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @AuthSwagger.verifyResend()
   async resendVerification(
-    @Body() resendVerificationDto: ResendVerificationDto,
+    @Body() dto: ResendVerificationDto,
   ): Promise<MessageResponse> {
-    await this.authService.resendVerification(resendVerificationDto);
+    await this.service.resendVerification(dto);
     return { message: 'Verification link sent' };
   }
 
@@ -111,9 +111,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @AuthSwagger.forgotPassword()
   async forgotPassword(
-    @Body() forgotPasswordDto: ForgotPasswordDto,
+    @Body() dto: ForgotPasswordDto,
   ): Promise<MessageResponse> {
-    await this.authService.forgotPassword(forgotPasswordDto);
+    await this.service.forgotPassword(dto);
     return { message: 'Password reset link sent' };
   }
 
@@ -122,9 +122,9 @@ export class AuthController {
   @AuthSwagger.resetPassword()
   async resetPassword(
     @Query('token') token: string,
-    @Body() resetPasswordDto: ResetPasswordDto,
+    @Body() dto: ResetPasswordDto,
   ): Promise<MessageResponse> {
-    await this.authService.resetPassword(token, resetPasswordDto);
+    await this.service.resetPassword(token, dto);
     return { message: 'Password reset successfully' };
   }
 }

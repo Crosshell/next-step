@@ -20,43 +20,41 @@ import { SearchCompanyDto } from './dto/search-company.dto';
 
 @Controller('companies')
 export class CompanyController {
-  constructor(private readonly companyService: CompanyService) {}
+  constructor(private readonly service: CompanyService) {}
 
   @Post()
   @UseGuards(SessionAuthGuard, CompanyGuard)
   async create(
-    @Body() createCompanyDto: CreateCompanyDto,
+    @Body() dto: CreateCompanyDto,
     @CurrentUser() user: UserWithoutPassword,
   ): Promise<Company> {
-    return this.companyService.create(createCompanyDto, user.id);
+    return this.service.create(user.id, dto);
   }
 
   @Post('search')
-  async search(@Body() searchCompanyDto: SearchCompanyDto): Promise<Company[]> {
-    return this.companyService.findMany(searchCompanyDto);
+  async search(@Body() dto: SearchCompanyDto): Promise<Company[]> {
+    return this.service.findMany(dto);
   }
 
   @Get('me')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   async getMyProfile(
     @CurrentUser() user: UserWithoutPassword,
-  ): Promise<Company | null> {
-    return this.companyService.findOne({ userId: user.id });
+  ): Promise<Company> {
+    return this.service.findOneOrThrow({ userId: user.id });
   }
 
   @Get(':id')
-  async getProfile(
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<Company | null> {
-    return this.companyService.findOne({ id });
+  async getProfile(@Param('id', ParseUUIDPipe) id: string): Promise<Company> {
+    return this.service.findOneOrThrow({ id });
   }
 
   @Patch('me')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   async update(
-    @Body() updateCompanyDto: UpdateCompanyDto,
+    @Body() dto: UpdateCompanyDto,
     @CurrentUser() user: UserWithoutPassword,
   ): Promise<Company> {
-    return this.companyService.update(updateCompanyDto, user.id);
+    return this.service.update(user.id, dto);
   }
 }

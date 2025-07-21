@@ -28,16 +28,16 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async validateCredentials(loginDto: LoginDto): Promise<UserWithoutPassword> {
+  async validateCredentials(dto: LoginDto): Promise<UserWithoutPassword> {
     const user = (await this.userService.findOneOrThrow(
       {
-        email: loginDto.email,
+        email: dto.email,
       },
       false,
     )) as User;
 
     const isValid =
-      user.password && (await argon2.verify(user.password, loginDto.password));
+      user.password && (await argon2.verify(user.password, dto.password));
     if (!isValid) {
       throw new InvalidCredentialsException();
     }
@@ -57,17 +57,14 @@ export class AuthService {
     return this.sessionService.createSession(user.id, ua, ip);
   }
 
-  async register(registerDto: RegisterDto): Promise<void> {
-    await this.userService.create(registerDto);
+  async register(dto: RegisterDto): Promise<void> {
+    await this.userService.create(dto);
 
     const verifyToken = await this.tokenService.createToken(
       TokenType.VERIFY,
-      registerDto.email,
+      dto.email,
     );
-    await this.emailService.sendVerificationEmail(
-      registerDto.email,
-      verifyToken,
-    );
+    await this.emailService.sendVerificationEmail(dto.email, verifyToken);
   }
 
   async logout(sid: string): Promise<void> {
@@ -87,11 +84,9 @@ export class AuthService {
     await this.userService.update({ email }, { isEmailVerified: true });
   }
 
-  async resendVerification(
-    resendVerificationDto: ResendVerificationDto,
-  ): Promise<void> {
+  async resendVerification(dto: ResendVerificationDto): Promise<void> {
     const user = await this.userService.findOneOrThrow({
-      email: resendVerificationDto.email,
+      email: dto.email,
     });
 
     if (user.isEmailVerified) {
@@ -100,41 +95,29 @@ export class AuthService {
 
     const verifyToken = await this.tokenService.createToken(
       TokenType.VERIFY,
-      resendVerificationDto.email,
+      dto.email,
     );
-    await this.emailService.sendVerificationEmail(
-      resendVerificationDto.email,
-      verifyToken,
-    );
+    await this.emailService.sendVerificationEmail(dto.email, verifyToken);
   }
 
-  async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
+  async forgotPassword(dto: ForgotPasswordDto): Promise<void> {
     await this.userService.findOneOrThrow({
-      email: forgotPasswordDto.email,
+      email: dto.email,
     });
 
     const resetToken = await this.tokenService.createToken(
       TokenType.RESET,
-      forgotPasswordDto.email,
+      dto.email,
     );
-    await this.emailService.sendResetPasswordEmail(
-      forgotPasswordDto.email,
-      resetToken,
-    );
+    await this.emailService.sendResetPasswordEmail(dto.email, resetToken);
   }
 
-  async resetPassword(
-    token: string,
-    resetPasswordDto: ResetPasswordDto,
-  ): Promise<void> {
+  async resetPassword(token: string, dto: ResetPasswordDto): Promise<void> {
     const email = await this.tokenService.consumeToken(TokenType.RESET, token);
     if (!email) {
       throw new InvalidOrExpiredSubjectException('reset token');
     }
 
-    await this.userService.update(
-      { email },
-      { password: resetPasswordDto.password },
-    );
+    await this.userService.update({ email }, { password: dto.password });
   }
 }

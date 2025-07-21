@@ -6,11 +6,11 @@ import { ConfigService } from '@nestjs/config';
 export class EmailService {
   constructor(
     private readonly mailerService: MailerService,
-    private readonly configService: ConfigService,
+    private readonly config: ConfigService,
   ) {}
 
   async sendVerificationEmail(email: string, token: string): Promise<void> {
-    const clientUrl = this.configService.getOrThrow<string>('client.url');
+    const clientUrl = this.config.getOrThrow<string>('client.url');
     const verifyLink = `${clientUrl}/confirm-page?token=${token}`;
 
     await this.mailerService.sendMail({
@@ -24,7 +24,7 @@ export class EmailService {
   }
 
   async sendResetPasswordEmail(email: string, token: string): Promise<void> {
-    const clientUrl = this.configService.getOrThrow<string>('client.url');
+    const clientUrl = this.config.getOrThrow<string>('client.url');
     const resetLink = `${clientUrl}/reset-password?token=${token}`;
 
     await this.mailerService.sendMail({
