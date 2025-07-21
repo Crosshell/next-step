@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { Company, Prisma } from '@prisma/client';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import {
@@ -8,64 +7,54 @@ import {
 } from '@common/exceptions';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { SearchCompanyDto } from './dto/search-company.dto';
+import { CompanyRepository } from './company.repository';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CompanyService {
-  constructor(private readonly prismaService: PrismaService) {}
+  private readonly pageSize: number;
 
-  async create(
-    createCompanyDto: CreateCompanyDto,
-    userId: string,
-  ): Promise<Company> {
-    const existingCompany = await this.findOne({ userId });
-    if (existingCompany) {
-      throw new SubjectExistsException('Company');
-    }
-
-    return this.prismaService.company.create({
-      data: {
-        ...createCompanyDto,
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
-      },
-    });
+  constructor(
+    private readonly repository: CompanyRepository,
+    private readonly config: ConfigService,
+  ) {
+    this.pageSize = this.config.getOrThrow<number>('company.pageSize');
   }
 
-  async findOne(
+  async create(userId: string, dto: CreateCompanyDto): Promise<Company> {
+    await this.assertNotExists({ userId });
+    return this.repository.create(userId, dto);
+  }
+
+  async findOneOrThrow(
     where: Prisma.CompanyWhereUniqueInput,
-  ): Promise<Company | null> {
-    return this.prismaService.company.findUnique({ where });
+  ): Promise<Company> {
+    const company = await this.repository.findOne(where);
+    if (!company) throw new SubjectNotFoundException('Company');
+    return company;
   }
 
-  async findMany(searchCompanyDto: SearchCompanyDto): Promise<Company[]> {
+  async assertNotExists(where: Prisma.CompanyWhereUniqueInput): Promise<void> {
+    const company = await this.repository.findOne(where);
+    if (company) throw new SubjectExistsException('Company');
+  }
+
+  async search(dto: SearchCompanyDto): Promise<Company[]> {
     const where: Prisma.CompanyWhereInput = {};
-    if (searchCompanyDto.name) {
+    const skip = (dto.page - 1) * this.pageSize;
+
+    if (dto.name) {
       where.name = {
-        contains: searchCompanyDto.name,
+        contains: dto.name,
         mode: 'insensitive',
       };
     }
 
-    return this.prismaService.company.findMany({ where });
+    return this.repository.findMany({ where, skip, take: this.pageSize });
   }
 
-  async update(
-    updateCompanyDto: UpdateCompanyDto,
-    userId: string,
-  ): Promise<Company> {
-    const existingCompany = await this.findOne({ userId });
-    if (!existingCompany) {
-      throw new SubjectNotFoundException('Company');
-    }
-
-    return this.prismaService.company.update({
-      where: {
-        userId,
-      },
-      data: updateCompanyDto,
-    });
+  async update(userId: string, dto: UpdateCompanyDto): Promise<Company> {
+    await this.findOneOrThrow({ userId });
+    return this.repository.update({ userId }, dto);
   }
 }
