@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Vacancy } from '@prisma/client';
+import { Prisma, Vacancy } from '@prisma/client';
 import { CreateVacancyDto } from './dto/create-vacancy.dto';
 
 @Injectable()
@@ -11,5 +11,19 @@ export class VacancyRepository {
     return this.prisma.vacancy.create({
       data: { ...dto, company: { connect: { id: companyId } } },
     });
+  }
+
+  async findOne(
+    where: Prisma.VacancyWhereUniqueInput,
+  ): Promise<Vacancy | null> {
+    return this.prisma.vacancy.findUnique({ where });
+  }
+
+  async findMany(where: Prisma.VacancyWhereInput): Promise<Vacancy[]> {
+    return this.prisma.vacancy.findMany({ where });
+  }
+
+  async delete(where: Prisma.VacancyWhereUniqueInput): Promise<Vacancy> {
+    return this.prisma.vacancy.delete({ where });
   }
 }
