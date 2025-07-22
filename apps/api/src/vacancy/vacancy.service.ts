@@ -3,6 +3,7 @@ import { VacancyRepository } from './vacancy.repository';
 import { CreateVacancyDto } from './dto/create-vacancy.dto';
 import { Prisma, Vacancy } from '@prisma/client';
 import { SubjectNotFoundException } from '@common/exceptions';
+import { UpdateVacancyDto } from './dto/update-vacancy.dto';
 
 @Injectable()
 export class VacancyService {
@@ -22,6 +23,20 @@ export class VacancyService {
 
   async findMany(where: Prisma.VacancyWhereInput): Promise<Vacancy[]> {
     return this.repository.findMany(where);
+  }
+
+  async update(
+    where: Prisma.VacancyWhereUniqueInput,
+    companyId: string,
+    dto: UpdateVacancyDto,
+  ): Promise<Vacancy> {
+    const vacancy = await this.findOneOrThrow(where);
+    if (vacancy.companyId !== companyId) {
+      throw new ForbiddenException(
+        'You are not allowed to update this vacancy',
+      );
+    }
+    return this.repository.update(where, dto);
   }
 
   async delete(

@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -17,6 +18,7 @@ import { CurrentCompany } from '../company/decorators/current-company.decorator'
 import { CompanyGuard } from '../company/guards/company.guard';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { MessageResponse } from '@common/responses';
+import { UpdateVacancyDto } from './dto/update-vacancy.dto';
 
 @Controller('vacancies')
 export class VacancyController {
@@ -51,6 +53,17 @@ export class VacancyController {
   @HttpCode(HttpStatus.OK)
   async getMyVacancies(@CurrentCompany() company: Company): Promise<Vacancy[]> {
     return this.service.findMany({ companyId: company.id });
+  }
+
+  @Patch(':id')
+  @UseGuards(SessionAuthGuard, CompanyGuard)
+  @HttpCode(HttpStatus.OK)
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentCompany() company: Company,
+    @Body() dto: UpdateVacancyDto,
+  ): Promise<Vacancy> {
+    return this.service.update({ id }, company.id, dto);
   }
 
   @Delete(':id')

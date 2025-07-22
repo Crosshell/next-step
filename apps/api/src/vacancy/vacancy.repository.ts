@@ -23,6 +23,13 @@ export class VacancyRepository {
     return this.prisma.vacancy.findMany({ where });
   }
 
+  async update(
+    where: Prisma.VacancyWhereUniqueInput,
+    data: Prisma.VacancyUpdateInput,
+  ): Promise<Vacancy> {
+    return this.prisma.vacancy.update({ where, data });
+  }
+
   async delete(where: Prisma.VacancyWhereUniqueInput): Promise<Vacancy> {
     return this.prisma.vacancy.delete({ where });
   }
