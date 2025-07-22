@@ -70,3 +70,89 @@
   font-size: 1.5rem;
   color: white;
 }
+
+/* Skills */
+
+.skills {
+  display: flex;
+  gap: 30px;
+}
+
+.skills span {
+  display: block;
+  padding: 10px 30px;
+  background-color: white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #1f1f21;
+}
+
+.skills input {
+  display: block;
+  padding: 10px 15px;
+  width: 25%;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}
+
+.btn-container {
+  display: flex;
+  gap: 15px;
+}
+
+.edit-skills-btn,
+.skills-check-btn,
+.skills-cross-btn,
+.del-skill-btn {
+  background-color: transparent;
+  border: 0;
+}
+
+.edit-skills-btn div {
+  padding: 5px 8px;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.skills-check-btn div,
+.skills-cross-btn div {
+  padding: 5px 8px;
+  background-color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f1f21;
+}
+
+.skills-cross-btn div {
+  padding: 5px 9px;
+}
+
+.del-btn-box {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.del-skill-btn div {
+  position: absolute;
+  top: -10;
+  right: -10;
+  padding: 3px 5px;
+  background-color: #f37199;
+  border: 2px solid #f37199;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f1f21;
+}
+
+/* Skills */

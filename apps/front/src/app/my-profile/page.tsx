@@ -15,6 +15,8 @@ import { useMutation } from '@tanstack/react-query';
 import { logoutUser } from '@/services/userService';
 import { useAuthStore } from '@/store/authSlice';
 import { useRouter } from 'next/navigation';
+import SkillItems from '@/components/ProfileItems/SkillItems';
+import { skills } from '@/lib/profile-test-data';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -54,14 +56,7 @@ export default function ProfilePage() {
           priority
         />
         <div className={classes['main-info-side']}>
-          <div className={classes.skills}>
-            <span>Skill</span>
-            <span>Skill</span>
-            <span>Skill</span>
-            <button className={classes['edit-skills-btn']}>
-              <AnimatedIcon iconType={faPlus} />
-            </button>
-          </div>
+          <SkillItems skills={skills} />
           <div className={classes['personal-info']}>
             <h2>John Doe</h2>
             <p>20.02.2002</p>

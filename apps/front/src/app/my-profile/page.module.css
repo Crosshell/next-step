@@ -23,33 +23,6 @@
   justify-content: space-between;
 }
 
-.skills {
-  display: flex;
-  gap: 30px;
-}
-
-.skills span {
-  padding: 10px 30px;
-  background-color: white;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: black;
-}
-
-.edit-skills-btn {
-  background-color: transparent;
-  border: 0;
-}
-
-.edit-skills-btn div {
-  padding: 5px 8px;
-  border: 2px solid white;
-  border-radius: 10px;
-  font-size: 1.5rem;
-  color: white;
-}
-
 .personal-info h2 {
   margin-bottom: 20px;
   font-size: 2.5rem;
