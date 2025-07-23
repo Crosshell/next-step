@@ -1,9 +1,11 @@
-import { useRef, useState } from 'react';
-import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
+'use client';
 
-import classes from './Profile.module.css';
+import { useState } from 'react';
+import { Formik, Form, Field } from 'formik';
+import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import { faPencil, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 
+import classes from './Profile.module.css';
 import { PersonalData } from '@/types/profile';
 
 export default function PersonalInfo({
@@ -11,28 +13,21 @@ export default function PersonalInfo({
   birthdate,
   address,
 }: PersonalData) {
-  const [isChanging, setIsChanging] = useState<boolean>(false);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [isChanging, setIsChanging] = useState(false);
+  const [formData, setFormData] = useState<PersonalData>({
+    name,
+    birthdate,
+    address,
+  });
 
-  const handleChangeInfo = () => {
-    setIsChanging(true);
+  const handleCancel = () => {
+    setIsChanging(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (formRef.current) {
-      const form = formRef.current;
-      const formData = new FormData(form);
-
-      const updatedName = formData.get('name') as string;
-      const updatedBirthdate = formData.get('birthdate') as string;
-      const updatedAddress = formData.get('address') as string;
-
-      console.log('Updated:', updatedName, updatedBirthdate, updatedAddress);
-
-      setIsChanging(false);
-    }
+  const handleSubmit = (values: PersonalData) => {
+    console.log('Updated:', values);
+    setFormData(values);
+    setIsChanging(false);
   };
 
   return (
@@ -40,49 +35,45 @@ export default function PersonalInfo({
       {!isChanging ? (
         <>
           <div className={classes['personal-info']}>
-            <h2>{name}</h2>
-            <p>{birthdate}</p>
-            <p>{address}</p>
+            <h2>{formData.name}</h2>
+            <p>{formData.birthdate}</p>
+            <p>{formData.address}</p>
           </div>
           <button
             className={classes['edit-personal-info-btn']}
-            onClick={handleChangeInfo}
+            onClick={() => setIsChanging(true)}
           >
             <AnimatedIcon iconType={faPencil} />
           </button>
         </>
       ) : (
-        <form
-          ref={formRef}
-          className={classes['info-form']}
-          onSubmit={handleSubmit}
-        >
-          <div className={classes['personal-info']}>
-            <input
-              className={classes['name-input']}
-              name="name"
-              defaultValue={name}
-            />
-            <input name="birthdate" defaultValue={birthdate} />
-            <input name="address" defaultValue={address} />
-          </div>
-          <div className={classes['personal-info-btn-container']}>
-            <button
-              className={classes['personal-info-btn-cross']}
-              onClick={handleChangeInfo}
-              type="submit"
-            >
-              <AnimatedIcon iconType={faXmark} />
-            </button>
-            <button
-              className={classes['personal-info-btn']}
-              onClick={handleChangeInfo}
-              type="submit"
-            >
-              <AnimatedIcon iconType={faCheck} />
-            </button>
-          </div>
-        </form>
+        <Formik initialValues={formData} onSubmit={handleSubmit}>
+          {() => (
+            <Form className={classes['info-form']}>
+              <div className={classes['personal-info']}>
+                <Field
+                  className={classes['name-input']}
+                  name="name"
+                  type="text"
+                />
+                <Field name="birthdate" type="date" />
+                <Field name="address" type="text" />
+              </div>
+              <div className={classes['personal-info-btn-container']}>
+                <button
+                  className={classes['personal-info-btn-cross']}
+                  type="button"
+                  onClick={handleCancel}
+                >
+                  <AnimatedIcon iconType={faXmark} />
+                </button>
+                <button className={classes['personal-info-btn']} type="submit">
+                  <AnimatedIcon iconType={faCheck} />
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       )}
     </>
   );
