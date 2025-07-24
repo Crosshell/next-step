@@ -1,11 +1,15 @@
+'use client';
+
+import { AnimatePresence } from 'framer-motion';
+
 import ContactLink from './ContactLink';
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
+import ContactsModal from './ContactsModal';
 
 import classes from './Profile.module.css';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { useModalStore } from '@/store/modalSlice';
-import ContactsModal from './ContactsModal';
 import { contactData } from '@/lib/profile-test-data';
 
 export default function Contacts() {
@@ -24,7 +28,13 @@ export default function Contacts() {
 
       <button
         className={classes['edit-contacts-btn']}
-        onClick={() => openModal(<ContactsModal data={contactData} />)}
+        onClick={() =>
+          openModal(
+            <AnimatePresence>
+              <ContactsModal data={contactData} />
+            </AnimatePresence>
+          )
+        }
       >
         <AnimatedIcon iconType={faPlus} />
       </button>

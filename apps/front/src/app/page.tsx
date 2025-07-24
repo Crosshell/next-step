@@ -3,15 +3,9 @@
 import { Suspense } from 'react';
 import Image from 'next/image';
 
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-} from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 import CompanyInfos from '@/components/CompanyInfos/CompanyInfos';
-import CompanyInfoModal from '@/components/CompanyInfos/CompanyInfoModal';
 import LoadingPage from './loading-out';
 
 import classes from './page.module.css';
@@ -27,7 +21,6 @@ export default function Home() {
 
   return (
     <>
-      <AnimatePresence>{isModal && <CompanyInfoModal />}</AnimatePresence>
       <div className="container">
         <motion.div
           className={classes['image-row']}
