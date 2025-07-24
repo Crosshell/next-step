@@ -3,12 +3,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import ContactLink from '@/components/ProfileItems/ContactLink';
 import InfoBox from '@/components/ProfileItems/InfoBox';
 import InfoItem from '@/components/ProfileItems/InfoItem';
-import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import classes from './page.module.css';
 import itemClasses from '../../components/ProfileItems/Profile.module.css';
 import { useMutation } from '@tanstack/react-query';
@@ -18,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import SkillItems from '@/components/ProfileItems/SkillItems';
 import { personalInfo, skills } from '@/lib/profile-test-data';
 import PersonalInfo from '@/components/ProfileItems/PersonalInfo';
+import Contacts from '@/components/ProfileItems/Contacts';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -62,15 +60,7 @@ export default function ProfilePage() {
             <PersonalInfo {...personalInfo} />
           </div>
         </div>
-        <div className={classes.contacts}>
-          <h3>Contacts:</h3>
-          <ContactLink />
-          <ContactLink />
-          <ContactLink />
-          <button className={classes['edit-contacts-btn']}>
-            <AnimatedIcon iconType={faPlus} />
-          </button>
-        </div>
+        <Contacts />
         <InfoBox title="Your info">
           <p>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt,

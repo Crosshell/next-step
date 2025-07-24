@@ -4,4 +4,12 @@ interface PersonalData {
   address: string;
 }
 
-export { type PersonalData };
+interface ContactsData {
+  linkedinURL: string;
+  githubURL: string;
+  codewarsURL: string;
+  telegramURL: string;
+  facebookURL: string;
+}
+
+export { type PersonalData, type ContactsData };
