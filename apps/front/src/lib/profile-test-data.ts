@@ -12,4 +12,8 @@ const contactData = {
   facebookURL: 'https://www.facebook.com',
 };
 
-export { skills, personalInfo, contactData };
+const bioData = {
+  bio: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt,non. Consectetur, laborum nesciunt facere atque hic vero. Impedit           animi in, aperiam, asperiores odio quis excepturi ipsum quas  voluptatum incidunt quos!',
+};
+
+export { skills, personalInfo, contactData, bioData };

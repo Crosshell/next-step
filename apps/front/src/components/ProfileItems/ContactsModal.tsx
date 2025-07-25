@@ -46,7 +46,6 @@ export default function ContactsModal({ data }: Props) {
             <Field name="telegramURL" type="text" />
             <p>Facebook URL</p>
             <Field name="facebookURL" type="text" />
-            <p></p>
             <div className="row-space-between">
               <button
                 className={classes['contacts-form-btn-link']}

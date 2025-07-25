@@ -7,6 +7,7 @@
 }
 
 .info-box {
+  position: relative;
   padding: 25px 30px;
   margin-bottom: 30px;
   background-color: #1f1f21;
@@ -57,11 +58,6 @@
   font-size: 1.5rem;
   font-weight: 500;
   color: #1f1f21;
-}
-
-.edit-info-btn {
-  background-color: transparent;
-  border: 0;
 }
 
 .edit-info-btn div {
@@ -285,3 +281,34 @@
 }
 
 /* Contacts */
+
+/* Bio */
+
+.bio-form textarea {
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+}
+
+.bio-btn-container {
+  display: flex;
+  justify-content: end;
+  gap: 20px;
+}
+
+.bio-btn-container button div {
+  padding: 8px 12px;
+  font-size: 1.5rem;
+}
+
+.bio-btn div {
+  background-color: white;
+  border: 2px solid white;
+  color: #1f1f21;
+}
+
+/* Bio */

@@ -2,20 +2,23 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
 
 import InfoBox from '@/components/ProfileItems/InfoBox';
 import InfoItem from '@/components/ProfileItems/InfoItem';
+import SkillItems from '@/components/ProfileItems/SkillItems';
+import PersonalInfo from '@/components/ProfileItems/PersonalInfo';
+import Contacts from '@/components/ProfileItems/Contacts';
 
 import classes from './page.module.css';
 import itemClasses from '../../components/ProfileItems/Profile.module.css';
-import { useMutation } from '@tanstack/react-query';
-import { logoutUser } from '@/services/userService';
+
 import { useAuthStore } from '@/store/authSlice';
-import { useRouter } from 'next/navigation';
-import SkillItems from '@/components/ProfileItems/SkillItems';
-import { personalInfo, skills } from '@/lib/profile-test-data';
-import PersonalInfo from '@/components/ProfileItems/PersonalInfo';
-import Contacts from '@/components/ProfileItems/Contacts';
+import { logoutUser } from '@/services/userService';
+
+import { bioData, personalInfo, skills } from '@/lib/profile-test-data';
+import Bio from '@/components/ProfileItems/Bio';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -61,15 +64,8 @@ export default function ProfilePage() {
           </div>
         </div>
         <Contacts />
-        <InfoBox title="Your info">
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt,
-            non. Consectetur, laborum nesciunt facere atque hic vero. Impedit
-            animi in, aperiam, asperiores odio quis excepturi ipsum quas
-            voluptatum incidunt quos!
-          </p>
-        </InfoBox>
-        <InfoBox title="Work Experience">
+        <Bio isEditable={true} bio={bioData.bio} />
+        <InfoBox title="Work Experience" isEditable>
           <InfoItem title="Company Name" date="02.02.2002 - 03.03.2003">
             <p>
               Some information Some information Some information Some
@@ -80,7 +76,7 @@ export default function ProfilePage() {
             <span className={itemClasses['is-current']}>is current</span>
           </InfoItem>
         </InfoBox>
-        <InfoBox title="High Education">
+        <InfoBox title="High Education" isEditable>
           <InfoItem title="University Name" date="02.02.2002 - 03.03.2003">
             <p className="row-space-between">
               <span className="font-weight-500 font-size-1-5">
@@ -96,14 +92,14 @@ export default function ProfilePage() {
             </p>
           </InfoItem>
         </InfoBox>
-        <InfoBox title="Certificates">
+        <InfoBox title="Certificates" isEditable>
           <InfoItem title="Certificate Name" date="02.02.2002">
             <p>
               Url: <Link href="/">http://fsfdsfs/fsd/f/sd/fs/df/s/df</Link>
             </p>
           </InfoItem>
         </InfoBox>
-        <InfoBox title="Languages">
+        <InfoBox title="Languages" isEditable>
           <p className="row-space-between">
             <span>English</span>
             <span>Upper-Intermediate (B2)</span>
