@@ -12,4 +12,9 @@ interface ContactsData {
   facebookURL: string;
 }
 
-export { type PersonalData, type ContactsData };
+interface LanguageData {
+  language: string;
+  level: string;
+}
+
+export { type PersonalData, type ContactsData, type LanguageData };

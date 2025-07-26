@@ -16,4 +16,50 @@ const bioData = {
   bio: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt,non. Consectetur, laborum nesciunt facere atque hic vero. Impedit           animi in, aperiam, asperiores odio quis excepturi ipsum quas  voluptatum incidunt quos!',
 };
 
-export { skills, personalInfo, contactData, bioData };
+const languageLevel = [
+  'A1 (Beginner)',
+  'A2 (Elementary)',
+  'B1 (Intermediate)',
+  'B2 (Upper-Intermediate)',
+  'C1 (Advanced)',
+  'C2 (Proficient)',
+  'Native',
+];
+
+const languages = [
+  'English',
+  'Mandarin Chinese',
+  'Hindi',
+  'Spanish',
+  'French',
+  'Arabic',
+  'Bengali',
+  'Russian',
+  'Portuguese',
+  'Urdu',
+  'Indonesian',
+  'German',
+  'Japanese',
+  'Swahili',
+  'Turkish',
+  'Korean',
+  'Italian',
+  'Vietnamese',
+  'Polish',
+  'Persian',
+];
+
+const userLanguages = [
+  { language: 'English', level: 'B1 (Intermediate)' },
+  { language: 'Korean', level: 'B2 (Upper-Intermediate)' },
+];
+
+export {
+  skills,
+  personalInfo,
+  contactData,
+  bioData,
+  languageLevel,
+  languages,
+  userLanguages,
+};

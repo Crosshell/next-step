@@ -109,14 +109,14 @@ export default function SkillItems({ skills }: Props) {
             </button>
             <button
               className={classes['skills-cross-btn']}
-              type="submit"
+              type="button"
               onClick={() => setIsChanging(false)}
             >
               <AnimatedIcon iconType={faXmark} />
             </button>
             <button className={classes['skills-check-btn']} type="submit">
               <AnimatedIcon iconType={faCheck} />
-            </button>{' '}
+            </button>
           </div>
         </form>
       )}

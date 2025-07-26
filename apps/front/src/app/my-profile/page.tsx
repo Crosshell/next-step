@@ -17,8 +17,14 @@ import itemClasses from '../../components/ProfileItems/Profile.module.css';
 import { useAuthStore } from '@/store/authSlice';
 import { logoutUser } from '@/services/userService';
 
-import { bioData, personalInfo, skills } from '@/lib/profile-test-data';
+import {
+  bioData,
+  personalInfo,
+  skills,
+  userLanguages,
+} from '@/lib/profile-test-data';
 import Bio from '@/components/ProfileItems/Bio';
+import Languages from '@/components/ProfileItems/Languages';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -64,7 +70,7 @@ export default function ProfilePage() {
           </div>
         </div>
         <Contacts />
-        <Bio isEditable={true} bio={bioData.bio} />
+        <Bio isEditable bio={bioData.bio} />
         <InfoBox title="Work Experience" isEditable>
           <InfoItem title="Company Name" date="02.02.2002 - 03.03.2003">
             <p>
@@ -99,16 +105,8 @@ export default function ProfilePage() {
             </p>
           </InfoItem>
         </InfoBox>
-        <InfoBox title="Languages" isEditable>
-          <p className="row-space-between">
-            <span>English</span>
-            <span>Upper-Intermediate (B2)</span>
-          </p>
-          <p className="row-space-between">
-            <span>Spanish</span>
-            <span>Upper-Intermediate (B2)</span>
-          </p>
-        </InfoBox>
+        <Languages isEditable data={userLanguages} />
+
         <div className="row-end">
           <button className={classes['logout-btn']} onClick={handleLogoutAll}>
             Log out from all devices

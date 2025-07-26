@@ -302,7 +302,8 @@
 
 .bio-btn-container button div {
   padding: 8px 12px;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
 .bio-btn div {
@@ -312,3 +313,53 @@
 }
 
 /* Bio */
+
+/* Languages */
+
+.language-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.language-row select {
+  padding: 10px 15px;
+  width: 30%;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}
+
+.language-row .language-level-input {
+  width: 37%;
+}
+
+.lang-del-btn div {
+  padding: 8px 10px;
+  background-color: #f37199;
+  border: 2px solid #f37199;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.lang-btn-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 35px;
+}
+
+.lang-btn-container button div {
+  padding: 8px 12px;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.lang-save-btn-container {
+  display: flex;
+  gap: 1.5rem;
+}
+/* Languages */
