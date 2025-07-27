@@ -9,6 +9,7 @@ import { LanguageModule } from '../language/language.module';
 import { CreateJobSeekerGuard } from './guards/create-job-seeker.guard';
 import { JobSeekerRepository } from './job-seeker.repository';
 import { CompanyModule } from '../company/company.module';
+import { JobSeekerSearchService } from './job-seeker-search.service';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CompanyModule } from '../company/company.module';
     JobSeekerGuard,
     CreateJobSeekerGuard,
     JobSeekerRepository,
+    JobSeekerSearchService,
   ],
 })
 export class JobSeekerModule {}
