@@ -4,22 +4,20 @@ import {
   ArrayUnique,
   IsArray,
   IsEnum,
-  IsNotEmpty,
   IsOptional,
   IsString,
   Length,
   Max,
   Min,
+  Validate,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateVacancyDto {
-  @IsNotEmpty()
   @IsString()
   @Length(10, 100)
   title: string;
 
-  @IsNotEmpty()
   @IsString()
   @Length(50, 2000)
   description: string;
@@ -34,11 +32,15 @@ export class CreateVacancyDto {
   @Type(() => Number)
   @Min(0)
   @Max(1000000)
+  @Validate((value: number, obj: CreateVacancyDto) => {
+    if (value === undefined || obj.salaryMin === undefined) return true;
+    return value >= obj.salaryMin;
+  })
   salaryMax?: number;
 
   @IsOptional()
   @IsString()
-  @Length(0, 100)
+  @Length(3, 100)
   officeLocation?: string;
 
   @IsOptional()
@@ -51,21 +53,18 @@ export class CreateVacancyDto {
   @Type(() => Boolean)
   isActive?: boolean;
 
-  @IsNotEmpty()
   @IsArray()
   @ArrayNotEmpty()
   @ArrayUnique()
   @IsEnum(WorkFormat, { each: true })
   workFormat: WorkFormat[];
 
-  @IsNotEmpty()
   @IsArray()
   @ArrayNotEmpty()
   @ArrayUnique()
   @IsEnum(EmploymentType, { each: true })
   employmentType: EmploymentType[];
 
-  @IsNotEmpty()
   @IsEnum(SeniorityLevel)
   seniorityLevel: SeniorityLevel;
 }

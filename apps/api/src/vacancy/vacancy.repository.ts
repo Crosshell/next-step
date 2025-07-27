@@ -5,32 +5,100 @@ import { CreateVacancyDto } from './dto/create-vacancy.dto';
 
 @Injectable()
 export class VacancyRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly vacancyRelations: Prisma.VacancyInclude;
 
-  async create(companyId: string, dto: CreateVacancyDto): Promise<Vacancy> {
+  constructor(private readonly prisma: PrismaService) {
+    this.vacancyRelations = {
+      company: true,
+      requiredSkills: { include: { skill: true } },
+      requiredLanguages: { include: { language: true } },
+    };
+  }
+
+  async create(
+    companyId: string,
+    dto: CreateVacancyDto,
+    includeRelations?: boolean,
+  ): Promise<Vacancy> {
     return this.prisma.vacancy.create({
       data: { ...dto, company: { connect: { id: companyId } } },
+      include: includeRelations ? this.vacancyRelations : null,
     });
   }
 
   async findOne(
     where: Prisma.VacancyWhereUniqueInput,
+    includeRelations?: boolean,
   ): Promise<Vacancy | null> {
-    return this.prisma.vacancy.findUnique({ where });
+    return this.prisma.vacancy.findUnique({
+      where,
+      include: includeRelations ? this.vacancyRelations : null,
+    });
   }
 
-  async findMany(where: Prisma.VacancyWhereInput): Promise<Vacancy[]> {
-    return this.prisma.vacancy.findMany({ where });
+  async findMany(
+    params: Prisma.VacancyFindManyArgs,
+    includeRelations?: boolean,
+  ): Promise<Vacancy[]> {
+    return this.prisma.vacancy.findMany({
+      ...params,
+      include: includeRelations ? this.vacancyRelations : null,
+    });
   }
 
   async update(
     where: Prisma.VacancyWhereUniqueInput,
     data: Prisma.VacancyUpdateInput,
+    includeRelations?: boolean,
   ): Promise<Vacancy> {
-    return this.prisma.vacancy.update({ where, data });
+    return this.prisma.vacancy.update({
+      where,
+      data,
+      include: includeRelations ? this.vacancyRelations : null,
+    });
   }
 
   async delete(where: Prisma.VacancyWhereUniqueInput): Promise<Vacancy> {
     return this.prisma.vacancy.delete({ where });
+  }
+
+  async setRequiredSkills(
+    id: string,
+    data: Prisma.VacancySkillCreateManyVacancyInput[],
+    includeRelations?: boolean,
+  ): Promise<Vacancy> {
+    return this.prisma.vacancy.update({
+      where: { id },
+      data: {
+        requiredSkills: {
+          deleteMany: {},
+          createMany: {
+            data,
+            skipDuplicates: true,
+          },
+        },
+      },
+      include: includeRelations ? this.vacancyRelations : null,
+    });
+  }
+
+  async setRequiredLanguages(
+    id: string,
+    data: Prisma.VacancyLanguageCreateManyVacancyInput[],
+    includeRelations?: boolean,
+  ): Promise<Vacancy> {
+    return this.prisma.vacancy.update({
+      where: { id },
+      data: {
+        requiredLanguages: {
+          deleteMany: {},
+          createMany: {
+            data,
+            skipDuplicates: true,
+          },
+        },
+      },
+      include: includeRelations ? this.vacancyRelations : null,
+    });
   }
 }

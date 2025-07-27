@@ -64,4 +64,10 @@ export default () => ({
       process.env.COMPANY_PAGE_SIZE &&
       parseInt(process.env.COMPANY_PAGE_SIZE, 10),
   },
+
+  vacancy: {
+    pageSize:
+      process.env.VACANCY_PAGE_SIZE &&
+      parseInt(process.env.VACANCY_PAGE_SIZE, 10),
+  },
 });

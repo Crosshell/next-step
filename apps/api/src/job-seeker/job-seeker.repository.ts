@@ -56,7 +56,7 @@ export class JobSeekerRepository {
     });
   }
 
-  async putSkills(
+  async setSkills(
     id: string,
     data: Prisma.JobSeekerSkillCreateManyJobSeekerInput[],
     includeRelations?: boolean,
@@ -76,7 +76,7 @@ export class JobSeekerRepository {
     });
   }
 
-  async putLanguages(
+  async setLanguages(
     id: string,
     data: Prisma.JobSeekerLanguageCreateManyJobSeekerInput[],
     includeRelations?: boolean,

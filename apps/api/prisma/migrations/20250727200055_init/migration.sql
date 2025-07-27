@@ -1,24 +1,24 @@
 -- CreateEnum
-CREATE TYPE "UserType" AS ENUM ('JOB_SEEKER', 'COMPANY', 'ADMIN');
+CREATE TYPE "user_type" AS ENUM ('JOB_SEEKER', 'COMPANY', 'ADMIN');
 
 -- CreateEnum
-CREATE TYPE "SeniorityLevel" AS ENUM ('TRAINEE', 'JUNIOR', 'MIDDLE', 'SENIOR', 'LEAD');
+CREATE TYPE "seniority_level" AS ENUM ('TRAINEE', 'JUNIOR', 'MIDDLE', 'SENIOR', 'LEAD');
 
 -- CreateEnum
-CREATE TYPE "LanguageLevel" AS ENUM ('ELEMENTARY', 'PRE_INTERMEDIATE', 'INTERMEDIATE', 'UPPER_INTERMEDIATE', 'ADVANCED', 'PROFICIENT');
+CREATE TYPE "language_level" AS ENUM ('ELEMENTARY', 'PRE_INTERMEDIATE', 'INTERMEDIATE', 'UPPER_INTERMEDIATE', 'ADVANCED', 'NATIVE');
 
 -- CreateEnum
-CREATE TYPE "WorkFormat" AS ENUM ('OFFICE', 'REMOTE', 'HYBRID');
+CREATE TYPE "work_format" AS ENUM ('OFFICE', 'REMOTE', 'HYBRID');
 
 -- CreateEnum
-CREATE TYPE "EmploymentType" AS ENUM ('FULL_TIME', 'PART_TIME', 'INTERNSHIP', 'CONTRACT');
+CREATE TYPE "employment_type" AS ENUM ('FULL_TIME', 'PART_TIME', 'INTERNSHIP', 'CONTRACT');
 
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "type" "UserType" NOT NULL,
+    "type" "user_type" NOT NULL,
     "is_email_verified" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -40,14 +40,13 @@ CREATE TABLE "job_seekers" (
     "is_open_to_work" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "seniority_level" "SeniorityLevel",
+    "seniority_level" "seniority_level",
 
     CONSTRAINT "job_seekers_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "job_seeker_contacts" (
-    "id" TEXT NOT NULL,
     "job_seeker_id" TEXT NOT NULL,
     "github_url" TEXT,
     "linkedin_url" TEXT,
@@ -55,24 +54,16 @@ CREATE TABLE "job_seeker_contacts" (
     "public_email" TEXT,
     "phone_number" TEXT,
 
-    CONSTRAINT "job_seeker_contacts_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "job_seeker_contacts_pkey" PRIMARY KEY ("job_seeker_id")
 );
 
 -- CreateTable
 CREATE TABLE "job_seekers_languages" (
-    "language_level" "LanguageLevel" NOT NULL,
+    "level" "language_level" NOT NULL,
     "job_seeker_id" TEXT NOT NULL,
     "language_id" TEXT NOT NULL,
 
     CONSTRAINT "job_seekers_languages_pkey" PRIMARY KEY ("job_seeker_id","language_id")
-);
-
--- CreateTable
-CREATE TABLE "languages" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "languages_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -81,6 +72,14 @@ CREATE TABLE "job_seekers_skills" (
     "skill_id" TEXT NOT NULL,
 
     CONSTRAINT "job_seekers_skills_pkey" PRIMARY KEY ("job_seeker_id","skill_id")
+);
+
+-- CreateTable
+CREATE TABLE "languages" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "languages_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -117,14 +116,22 @@ CREATE TABLE "vacancies" (
     "office_location" TEXT,
     "experience_required" INTEGER DEFAULT 0,
     "is_active" BOOLEAN DEFAULT true,
-    "archived_at" TIMESTAMP(3),
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
-    "work_format" "WorkFormat"[],
-    "employment_type" "EmploymentType"[],
-    "seniority_level" "SeniorityLevel" NOT NULL,
+    "workFormat" "work_format"[],
+    "employmentType" "employment_type"[],
+    "seniority_level" "seniority_level" NOT NULL,
 
     CONSTRAINT "vacancies_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "vacancies_languages" (
+    "level" "language_level" NOT NULL,
+    "vacancy_id" TEXT NOT NULL,
+    "language_id" TEXT NOT NULL,
+
+    CONSTRAINT "vacancies_languages_pkey" PRIMARY KEY ("vacancy_id","language_id")
 );
 
 -- CreateTable
@@ -179,6 +186,12 @@ ALTER TABLE "companies" ADD CONSTRAINT "companies_user_id_fkey" FOREIGN KEY ("us
 
 -- AddForeignKey
 ALTER TABLE "vacancies" ADD CONSTRAINT "vacancies_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "vacancies_languages" ADD CONSTRAINT "vacancies_languages_vacancy_id_fkey" FOREIGN KEY ("vacancy_id") REFERENCES "vacancies"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "vacancies_languages" ADD CONSTRAINT "vacancies_languages_language_id_fkey" FOREIGN KEY ("language_id") REFERENCES "languages"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "vacancies_skills" ADD CONSTRAINT "vacancies_skills_vacancy_id_fkey" FOREIGN KEY ("vacancy_id") REFERENCES "vacancies"("id") ON DELETE CASCADE ON UPDATE CASCADE;

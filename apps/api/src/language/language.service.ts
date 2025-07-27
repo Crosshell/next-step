@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLanguageDto } from './dto/create-language.dto';
-import { Language, Prisma, Skill } from '@prisma/client';
+import { Language, LanguageLevel, Prisma, Skill } from '@prisma/client';
 import {
   SubjectExistsException,
   SubjectNotFoundException,
@@ -42,5 +42,18 @@ export class LanguageService {
   async delete(where: Prisma.LanguageWhereUniqueInput): Promise<Language> {
     await this.findOneOrThrow(where);
     return this.repository.delete(where);
+  }
+
+  getLanguageLevelsFromLevel({
+    minLevel = LanguageLevel.ELEMENTARY,
+    maxLevel = LanguageLevel.NATIVE,
+  }: {
+    minLevel?: LanguageLevel;
+    maxLevel?: LanguageLevel;
+  }): LanguageLevel[] {
+    const allLevels = Object.values(LanguageLevel);
+    const startIndex = allLevels.indexOf(minLevel);
+    const endIndex = allLevels.indexOf(maxLevel);
+    return allLevels.slice(startIndex, endIndex + 1);
   }
 }

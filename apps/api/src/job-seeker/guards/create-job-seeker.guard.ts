@@ -4,7 +4,7 @@ import { UserType } from '@prisma/client';
 
 @Injectable()
 export class CreateJobSeekerGuard implements CanActivate {
-  async canActivate(ctx: ExecutionContext): Promise<boolean> {
+  canActivate(ctx: ExecutionContext): boolean {
     const req = ctx.switchToHttp().getRequest<RequestWithUser>();
     return req.user.type === UserType.JOB_SEEKER;
   }

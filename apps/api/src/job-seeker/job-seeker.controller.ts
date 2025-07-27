@@ -43,9 +43,7 @@ export class JobSeekerController {
   @Get('me')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   @HttpCode(HttpStatus.OK)
-  async getMyProfile(
-    @CurrentJobSeeker() jobSeeker: JobSeeker,
-  ): Promise<JobSeeker> {
+  getMyProfile(@CurrentJobSeeker() jobSeeker: JobSeeker): JobSeeker {
     return jobSeeker;
   }
 
@@ -76,7 +74,7 @@ export class JobSeekerController {
   @Put('me/skills')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   @HttpCode(HttpStatus.OK)
-  async updateSkills(
+  async setSkills(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
     @Body() dto: SetSkillsDto,
   ): Promise<JobSeeker> {
@@ -86,7 +84,7 @@ export class JobSeekerController {
   @Put('me/languages')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   @HttpCode(HttpStatus.OK)
-  async updateLanguages(
+  async setLanguages(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
     @Body() dto: SetLanguagesDto,
   ): Promise<JobSeeker> {
