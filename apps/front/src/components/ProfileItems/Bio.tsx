@@ -38,7 +38,7 @@ export default function Bio({ isEditable, bio }: Props) {
             <Form className={classes['bio-form']}>
               <Field name="bio" as="textarea" rows={10} />
 
-              <div className={classes['bio-btn-container']}>
+              <div className={classes['info-form-btn-container']}>
                 <button
                   className="underline-link"
                   type="button"
@@ -46,7 +46,7 @@ export default function Bio({ isEditable, bio }: Props) {
                 >
                   <AnimatedIcon scale={1.07}>Go Back</AnimatedIcon>
                 </button>
-                <button className={classes['bio-btn']} type="submit">
+                <button className={classes['info-form-btn']} type="submit">
                   <AnimatedIcon scale={1.07}>Save changes</AnimatedIcon>
                 </button>
               </div>

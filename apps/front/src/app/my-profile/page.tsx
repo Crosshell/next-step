@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
@@ -19,12 +18,14 @@ import { logoutUser } from '@/services/userService';
 
 import {
   bioData,
+  certificatesData,
   personalInfo,
   skills,
   userLanguages,
 } from '@/lib/profile-test-data';
 import Bio from '@/components/ProfileItems/Bio';
 import Languages from '@/components/ProfileItems/Languages';
+import Certificates from '@/components/ProfileItems/Certificates';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -98,13 +99,8 @@ export default function ProfilePage() {
             </p>
           </InfoItem>
         </InfoBox>
-        <InfoBox title="Certificates" isEditable>
-          <InfoItem title="Certificate Name" date="02.02.2002">
-            <p>
-              Url: <Link href="/">http://fsfdsfs/fsd/f/sd/fs/df/s/df</Link>
-            </p>
-          </InfoItem>
-        </InfoBox>
+        <Certificates isEditable data={certificatesData} />
+
         <Languages isEditable data={userLanguages} />
 
         <div className="row-end">

@@ -17,4 +17,15 @@ interface LanguageData {
   level: string;
 }
 
-export { type PersonalData, type ContactsData, type LanguageData };
+interface CertificateData {
+  name: string;
+  url: string;
+  date: string;
+}
+
+export {
+  type PersonalData,
+  type ContactsData,
+  type LanguageData,
+  type CertificateData,
+};

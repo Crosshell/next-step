@@ -54,6 +54,12 @@ const userLanguages = [
   { language: 'Korean', level: 'B2 (Upper-Intermediate)' },
 ];
 
+const certificatesData = [
+  { name: 'HTML Course', url: 'https://www.google.com/', date: '2020-02-25' },
+  { name: 'CSS Course', url: 'https://www.google.com/', date: '2020-02-26' },
+  { name: 'JS Course', url: 'https://www.google.com/', date: '2020-02-27' },
+];
+
 export {
   skills,
   personalInfo,
@@ -62,4 +68,5 @@ export {
   languageLevel,
   languages,
   userLanguages,
+  certificatesData,
 };
