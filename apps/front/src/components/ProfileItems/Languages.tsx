@@ -8,6 +8,7 @@ import classes from './Profile.module.css';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { LanguageData } from '@/types/profile';
 import { languageLevel, languages } from '@/lib/profile-test-data';
+import { handleLanguagesSubmit } from '@/utils/profileValidation';
 
 interface Props {
   isEditable: boolean;
@@ -40,31 +41,12 @@ export default function Languages({ isEditable, data }: Props) {
       ) : (
         <Formik
           initialValues={{ languages: tempLanguages }}
-          onSubmit={(values, { setErrors }) => {
-            const seen = new Set();
-            const duplicates = values.languages.some((lang) => {
-              if (seen.has(lang.language)) return true;
-              seen.add(lang.language);
-              return false;
-            });
-
-            const hasEmptyFields = values.languages.some(
-              (lang) => !lang.language || !lang.level
-            );
-
-            if (duplicates) {
-              setErrors({ languages: 'Languages must be unique' });
-              return;
-            }
-
-            if (hasEmptyFields) {
-              setErrors({ languages: 'All language fields must be filled' });
-              return;
-            }
-
-            setLanguages(values.languages);
-            setIsChanging(false);
-          }}
+          onSubmit={(values, helpers) =>
+            handleLanguagesSubmit(values, helpers, (updatedLanguages) => {
+              setLanguages(updatedLanguages);
+              setIsChanging(false);
+            })
+          }
         >
           {({ errors, values }) => (
             <Form>
@@ -103,7 +85,7 @@ export default function Languages({ isEditable, data }: Props) {
                         </Field>
 
                         <button
-                          className={classes['lang-del-btn']}
+                          className={classes['form-del-btn']}
                           type="button"
                           onClick={() => remove(index)}
                         >
@@ -117,16 +99,16 @@ export default function Languages({ isEditable, data }: Props) {
                         <div>{errors.languages}</div>
                       )}
 
-                    <div className={classes['lang-btn-container']}>
+                    <div className={classes['add-save-btn-container']}>
                       <button
-                        className={classes['bio-btn']}
+                        className={classes['info-form-btn']}
                         type="button"
                         onClick={() => push({ language: '', level: '' })}
                       >
                         <AnimatedIcon>Add +</AnimatedIcon>
                       </button>
 
-                      <div className={classes['lang-save-btn-container']}>
+                      <div className={classes['save-btns-container']}>
                         <button
                           className="underline-link"
                           type="button"
@@ -134,7 +116,10 @@ export default function Languages({ isEditable, data }: Props) {
                         >
                           <AnimatedIcon>Go Back</AnimatedIcon>
                         </button>
-                        <button className={classes['bio-btn']} type="submit">
+                        <button
+                          className={classes['info-form-btn']}
+                          type="submit"
+                        >
                           <AnimatedIcon>Save changes</AnimatedIcon>
                         </button>
                       </div>

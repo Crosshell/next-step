@@ -9,6 +9,7 @@ import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
 import classes from './Profile.module.css';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { handleCertificatesSubmit } from '@/utils/profileValidation';
 
 interface Props {
   isEditable: boolean;
@@ -40,49 +41,12 @@ export default function Certificates({ isEditable, data }: Props) {
       ) : (
         <Formik
           initialValues={{ certs: tempCerts }}
-          onSubmit={(values, { setErrors }) => {
-            const hasEmpty = values.certs.some(
-              (cert) => !cert.name || !cert.url || !cert.date
-            );
-
-            if (hasEmpty) {
-              setErrors({ certs: 'All certificate fields must be filled' });
-              return;
-            }
-
-            const nameSet = new Set<string>();
-            const urlSet = new Set<string>();
-            let hasDuplicateName = false;
-            let hasDuplicateUrl = false;
-
-            for (const cert of values.certs) {
-              if (nameSet.has(cert.name)) {
-                hasDuplicateName = true;
-              } else {
-                nameSet.add(cert.name);
-              }
-
-              if (urlSet.has(cert.url)) {
-                hasDuplicateUrl = true;
-              } else {
-                urlSet.add(cert.url);
-              }
-            }
-
-            const errorParts: string[] = [];
-            if (hasDuplicateName) errorParts.push('names');
-            if (hasDuplicateUrl) errorParts.push('URLs');
-
-            if (errorParts.length > 0) {
-              setErrors({
-                certs: `Certificate ${errorParts.join(' and ')} must be unique`,
-              });
-              return;
-            }
-
-            setCertificates(values.certs);
-            setIsChanging(false);
-          }}
+          onSubmit={(values, helpers) =>
+            handleCertificatesSubmit(values, helpers, (updatedCerts) => {
+              setCertificates(updatedCerts);
+              setIsChanging(false);
+            })
+          }
         >
           {({ values, errors }) => (
             <Form>

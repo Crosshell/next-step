@@ -55,9 +55,9 @@ const userLanguages = [
 ];
 
 const certificatesData = [
-  { name: 'HTML Course', url: 'https://www.google.com/', date: '2020-02-25' },
-  { name: 'CSS Course', url: 'https://www.google.com/', date: '2020-02-26' },
-  { name: 'JS Course', url: 'https://www.google.com/', date: '2020-02-27' },
+  { name: 'HTML Course', url: 'https://www.google.com/1', date: '2020-02-25' },
+  { name: 'CSS Course', url: 'https://www.google.com/2', date: '2020-02-26' },
+  { name: 'JS Course', url: 'https://www.google.com/3', date: '2020-02-27' },
 ];
 
 export {
