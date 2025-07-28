@@ -1,10 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Company, Prisma } from '@prisma/client';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import {
-  SubjectExistsException,
-  SubjectNotFoundException,
-} from '@common/exceptions';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { SearchCompanyDto } from './dto/search-company.dto';
 import { CompanyRepository } from './company.repository';
@@ -29,17 +25,23 @@ export class CompanyService {
     return this.repository.create(userId, dto);
   }
 
+  async findOne(
+    where: Prisma.CompanyWhereUniqueInput,
+  ): Promise<Company | null> {
+    return this.repository.findOne(where);
+  }
+
   async findOneOrThrow(
     where: Prisma.CompanyWhereUniqueInput,
   ): Promise<Company> {
     const company = await this.repository.findOne(where);
-    if (!company) throw new SubjectNotFoundException('Company');
+    if (!company) throw new BadRequestException('Company not found');
     return company;
   }
 
   async assertNotExists(where: Prisma.CompanyWhereUniqueInput): Promise<void> {
     const company = await this.repository.findOne(where);
-    if (company) throw new SubjectExistsException('Company');
+    if (company) throw new BadRequestException('Company already exists');
   }
 
   async search(dto: SearchCompanyDto): Promise<Company[]> {
