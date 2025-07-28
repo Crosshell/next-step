@@ -30,6 +30,13 @@ export class UserService {
     return this.repository.update(where, { ...data, password: hashedPassword });
   }
 
+  async findOne(
+    where: Prisma.UserWhereUniqueInput,
+    excludePassword = true,
+  ): Promise<UserWithoutPassword | User | null> {
+    return this.repository.findOne(where, excludePassword);
+  }
+
   async findOneOrThrow(
     where: Prisma.UserWhereUniqueInput,
     excludePassword = true,
