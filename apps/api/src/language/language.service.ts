@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLanguageDto } from './dto/create-language.dto';
-import { Language, LanguageLevel, Prisma, Skill } from '@prisma/client';
+import { Language, Prisma, Skill } from '@prisma/client';
 import {
   SubjectExistsException,
   SubjectNotFoundException,
