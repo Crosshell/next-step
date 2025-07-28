@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { UserType } from '@prisma/client';
 import { JobSeekerService } from '../job-seeker.service';
 import { RequestWithJobSeeker } from '../types/request-with-job-seeker.type';
@@ -14,11 +19,16 @@ export class JobSeekerGuard implements CanActivate {
       .getRequest<RequestWithUser & RequestWithJobSeeker>();
 
     if (req.user.type !== UserType.JOB_SEEKER) {
-      return false;
+      throw new ForbiddenException('User is not a job seeker');
     }
 
-    req.jobSeeker = await this.service.findOneOrThrow({ userId: req.user.id });
+    const jobSeeker = await this.service.findOne({ userId: req.user.id });
 
+    if (!jobSeeker) {
+      throw new ForbiddenException('Job seeker profile not found');
+    }
+
+    req.jobSeeker = jobSeeker;
     return true;
   }
 }

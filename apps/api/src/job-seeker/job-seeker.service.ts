@@ -1,11 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateJobSeekerDto } from './dto/create-job-seeker.dto';
 import { JobSeeker, Prisma } from '@prisma/client';
 import { UpdateJobSeekerDto } from './dto/update-job-seeker.dto';
-import {
-  SubjectExistsException,
-  SubjectNotFoundException,
-} from '@common/exceptions';
 import { SearchJobSeekerDto } from './dto/search-job-seeker.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
 import { SetLanguagesDto } from './dto/set-languages.dto';
@@ -28,11 +24,17 @@ export class JobSeekerService {
     return this.repository.create(userId, dto, true);
   }
 
+  async findOne(
+    where: Prisma.JobSeekerWhereUniqueInput,
+  ): Promise<JobSeeker | null> {
+    return this.repository.findOne(where, true);
+  }
+
   async findOneOrThrow(
     where: Prisma.JobSeekerWhereUniqueInput,
   ): Promise<JobSeeker> {
     const jobSeeker = await this.repository.findOne(where, true);
-    if (!jobSeeker) throw new SubjectNotFoundException('Job seeker');
+    if (!jobSeeker) throw new BadRequestException('Job seeker not found');
     return jobSeeker;
   }
 
@@ -40,7 +42,7 @@ export class JobSeekerService {
     where: Prisma.JobSeekerWhereUniqueInput,
   ): Promise<void> {
     const jobSeeker = await this.repository.findOne(where);
-    if (jobSeeker) throw new SubjectExistsException('Job seeker');
+    if (jobSeeker) throw new BadRequestException('Job seeker already exists`');
   }
 
   async search(dto: SearchJobSeekerDto): Promise<JobSeeker[]> {
