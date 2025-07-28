@@ -20,8 +20,10 @@ export class LanguageRepository {
     return this.prisma.language.findUnique({ where });
   }
 
-  async findAll(): Promise<Language[]> {
-    return this.prisma.language.findMany();
+  async findAll(
+    orderBy: Prisma.LanguageOrderByWithRelationInput,
+  ): Promise<Language[]> {
+    return this.prisma.language.findMany({ orderBy });
   }
 
   async delete(where: Prisma.LanguageWhereUniqueInput): Promise<Language> {

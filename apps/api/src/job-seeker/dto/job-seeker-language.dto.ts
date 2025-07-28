@@ -1,8 +1,8 @@
 import { IsEnum, IsUUID } from 'class-validator';
 import { LanguageLevel } from '@prisma/client';
 
-export class LanguageItem {
-  @IsUUID('4')
+export class JobSeekerLanguageDto {
+  @IsUUID()
   languageId: string;
 
   @IsEnum(LanguageLevel)

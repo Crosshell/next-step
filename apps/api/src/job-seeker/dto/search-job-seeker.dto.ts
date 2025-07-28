@@ -3,13 +3,14 @@ import {
   ArrayUnique,
   IsArray,
   IsEnum,
+  IsInt,
   IsOptional,
   IsUUID,
   Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { LanguageItem } from './language-item.dto';
+import { JobSeekerLanguageDto } from './job-seeker-language.dto';
 
 class OrderBy {
   @IsOptional()
@@ -26,8 +27,8 @@ export class SearchJobSeekerDto {
   @IsArray()
   @ArrayUnique()
   @ValidateNested({ each: true })
-  @Type(() => LanguageItem)
-  languageItems?: LanguageItem[];
+  @Type(() => JobSeekerLanguageDto)
+  languages?: JobSeekerLanguageDto[];
 
   @IsOptional()
   @IsArray()
@@ -48,6 +49,7 @@ export class SearchJobSeekerDto {
 
   @IsOptional()
   @Type(() => Number)
+  @IsInt()
   @Min(1)
   page: number = 1;
 }

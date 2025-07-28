@@ -11,6 +11,8 @@ enum UserType {
   JOB_SEEKER
   COMPANY
   ADMIN
+
+  @@map("user_type")
 }
 
 enum SeniorityLevel {
@@ -19,6 +21,8 @@ enum SeniorityLevel {
   MIDDLE
   SENIOR
   LEAD
+
+  @@map("seniority_level")
 }
 
 enum LanguageLevel {
@@ -27,13 +31,17 @@ enum LanguageLevel {
   INTERMEDIATE
   UPPER_INTERMEDIATE
   ADVANCED
-  PROFICIENT
+  NATIVE
+
+  @@map("language_level")
 }
 
 enum WorkFormat {
   OFFICE
   REMOTE
   HYBRID
+
+  @@map("work_format")
 }
 
 enum EmploymentType {
@@ -41,6 +49,8 @@ enum EmploymentType {
   PART_TIME
   INTERNSHIP
   CONTRACT
+
+  @@map("employment_type")
 }
 
 model User {
@@ -74,7 +84,7 @@ model JobSeeker {
 
   seniorityLevel SeniorityLevel? @map("seniority_level")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   contacts  JobSeekerContacts?
   languages JobSeekerLanguage[]
@@ -85,7 +95,6 @@ model JobSeeker {
 }
 
 model JobSeekerContacts {
-  id          String  @id @default(uuid())
   jobSeekerId String  @unique @map("job_seeker_id")
   githubUrl   String? @map("github_url")
   linkedinUrl String? @map("linkedin_url")
@@ -93,21 +102,32 @@ model JobSeekerContacts {
   publicEmail String? @map("public_email")
   phoneNumber String? @map("phone_number")
 
-  jobSeeker JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
+  jobSeeker JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
+  @@id([jobSeekerId])
   @@map("job_seeker_contacts")
 }
 
 model JobSeekerLanguage {
-  languageLevel LanguageLevel @map("language_level")
+  level LanguageLevel
 
   jobSeekerId String    @map("job_seeker_id")
-  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   languageId  String    @map("language_id")
-  language    Language  @relation(fields: [languageId], references: [id], onDelete: Cascade)
+  language    Language  @relation(fields: [languageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([jobSeekerId, languageId])
   @@map("job_seekers_languages")
+}
+
+model JobSeekerSkill {
+  jobSeekerId String    @map("job_seeker_id")
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  skillId     String    @map("skill_id")
+  skill       Skill     @relation(fields: [skillId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([jobSeekerId, skillId])
+  @@map("job_seekers_skills")
 }
 
 model Language {
@@ -115,18 +135,9 @@ model Language {
   name String @unique
 
   jobSeekers JobSeekerLanguage[]
+  vacancies  VacancyLanguage[]
 
   @@map("languages")
-}
-
-model JobSeekerSkill {
-  jobSeekerId String    @map("job_seeker_id")
-  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
-  skillId     String    @map("skill_id")
-  skill       Skill     @relation(fields: [skillId], references: [id], onDelete: Cascade)
-
-  @@id([jobSeekerId, skillId])
-  @@map("job_seekers_skills")
 }
 
 model Skill {
@@ -150,40 +161,54 @@ model Company {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   vacancies Vacancy[]
 
   @@map("companies")
 }
 
 model Vacancy {
-  id                 String           @id @default(uuid())
-  companyId          String           @map("company_id")
+  id                 String   @id @default(uuid())
+  companyId          String   @map("company_id")
   title              String
   description        String
-  salaryMin          Int?             @map("salary_min")
-  salaryMax          Int?             @map("salary_max")
-  officeLocation     String?          @map("office_location")
-  experienceRequired Int?             @default(0) @map("experience_required")
-  isActive           Boolean?         @default(true) @map("is_active")
-  archivedAt         DateTime?        @map("archived_at")
-  createdAt          DateTime         @default(now()) @map("created_at")
-  updatedAt          DateTime         @updatedAt @map("updated_at")
-  workFormat         WorkFormat[]     @map("work_format")
-  employmentType     EmploymentType[] @map("employment_type")
-  seniorityLevel     SeniorityLevel   @map("seniority_level")
+  salaryMin          Int?     @map("salary_min")
+  salaryMax          Int?     @map("salary_max")
+  officeLocation     String?  @map("office_location")
+  experienceRequired Int?     @default(0) @map("experience_required")
+  isActive           Boolean? @default(false) @map("is_active")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
 
-  company        Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  requiredSkills VacancySkill[]
+  workFormat        WorkFormat[]
+  employmentType    EmploymentType[]
+  requiredSkills    VacancySkill[]
+  requiredLanguages VacancyLanguage[]
+
+  seniorityLevel SeniorityLevel @map("seniority_level")
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("vacancies")
 }
 
+model VacancyLanguage {
+  level LanguageLevel
+
+  vacancyId  String   @map("vacancy_id")
+  vacancy    Vacancy  @relation(fields: [vacancyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  languageId String   @map("language_id")
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([vacancyId, languageId])
+  @@map("vacancies_languages")
+}
+
 model VacancySkill {
   vacancyId String  @map("vacancy_id")
-  vacancy   Vacancy @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+  vacancy   Vacancy @relation(fields: [vacancyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   skillId   String  @map("skill_id")
-  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  skill     Skill   @relation(fields: [skillId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([vacancyId, skillId])
   @@map("vacancies_skills")

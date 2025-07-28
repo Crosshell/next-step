@@ -9,16 +9,19 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 import { SearchCompanyDto } from './dto/search-company.dto';
 import { CompanyRepository } from './company.repository';
 import { ConfigService } from '@nestjs/config';
+import { getPaginationByPage } from '@common/utils';
 
 @Injectable()
 export class CompanyService {
-  private readonly pageSize: number;
+  private readonly searchPageSize: number;
 
   constructor(
     private readonly repository: CompanyRepository,
     private readonly config: ConfigService,
   ) {
-    this.pageSize = this.config.getOrThrow<number>('company.pageSize');
+    this.searchPageSize = this.config.getOrThrow<number>(
+      'search.company.pageSize',
+    );
   }
 
   async create(userId: string, dto: CreateCompanyDto): Promise<Company> {
@@ -41,7 +44,7 @@ export class CompanyService {
 
   async search(dto: SearchCompanyDto): Promise<Company[]> {
     const where: Prisma.CompanyWhereInput = {};
-    const skip = (dto.page - 1) * this.pageSize;
+    const pagination = getPaginationByPage(dto.page, this.searchPageSize);
 
     if (dto.name) {
       where.name = {
@@ -50,7 +53,7 @@ export class CompanyService {
       };
     }
 
-    return this.repository.findMany({ where, skip, take: this.pageSize });
+    return this.repository.findMany({ where, ...pagination });
   }
 
   async update(id: string, dto: UpdateCompanyDto): Promise<Company> {

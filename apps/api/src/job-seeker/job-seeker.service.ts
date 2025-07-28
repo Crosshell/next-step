@@ -9,23 +9,19 @@ import {
 import { SearchJobSeekerDto } from './dto/search-job-seeker.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
 import { SetLanguagesDto } from './dto/set-languages.dto';
-import { ConfigService } from '@nestjs/config';
 import { JobSeekerRepository } from './job-seeker.repository';
 import { SkillService } from '../skill/skill.service';
 import { LanguageService } from '../language/language.service';
+import { JobSeekerSearchService } from './job-seeker-search.service';
 
 @Injectable()
 export class JobSeekerService {
-  private readonly pageSize: number;
-
   constructor(
-    private readonly config: ConfigService,
     private readonly repository: JobSeekerRepository,
     private readonly skillService: SkillService,
     private readonly languageService: LanguageService,
-  ) {
-    this.pageSize = this.config.getOrThrow<number>('jobSeeker.pageSize');
-  }
+    private readonly searchService: JobSeekerSearchService,
+  ) {}
 
   async create(userId: string, dto: CreateJobSeekerDto): Promise<JobSeeker> {
     await this.assertNotExists({ userId });
@@ -48,14 +44,7 @@ export class JobSeekerService {
   }
 
   async search(dto: SearchJobSeekerDto): Promise<JobSeeker[]> {
-    const where = this.buildSearchFilter(dto);
-    const skip = (dto.page - 1) * this.pageSize;
-    return this.repository.findMany({
-      where,
-      skip,
-      take: this.pageSize,
-      orderBy: dto.orderBy ?? { updatedAt: 'desc' },
-    });
+    return this.searchService.search(dto);
   }
 
   async update(id: string, dto: UpdateJobSeekerDto): Promise<JobSeeker> {
@@ -64,50 +53,13 @@ export class JobSeekerService {
 
   async setSkills(id: string, dto: SetSkillsDto): Promise<JobSeeker> {
     await this.skillService.assertExists(dto.skillIds);
-
     const skillIds = dto.skillIds.map((skillId) => ({ skillId }));
-
-    return this.repository.putSkills(id, skillIds, true);
+    return this.repository.setSkills(id, skillIds, true);
   }
 
   async setLanguages(id: string, dto: SetLanguagesDto): Promise<JobSeeker> {
-    const languageIds = dto.languageItems.map((item) => item.languageId);
+    const languageIds = dto.languages.map((language) => language.languageId);
     await this.languageService.assertExists(languageIds);
-
-    const data = dto.languageItems.map((i) => ({
-      languageId: i.languageId,
-      languageLevel: i.level,
-    }));
-
-    return this.repository.putLanguages(id, data, true);
-  }
-
-  private buildSearchFilter(
-    dto: SearchJobSeekerDto,
-  ): Prisma.JobSeekerWhereInput {
-    const filter: Prisma.JobSeekerWhereInput = { isOpenToWork: true };
-
-    if (dto.languageItems?.length) {
-      filter.languages = {
-        some: {
-          OR: dto.languageItems.map((item) => ({
-            languageId: item.languageId,
-            languageLevel: item.level,
-          })),
-        },
-      };
-    }
-
-    if (dto.skillIds?.length) {
-      filter.skills = {
-        some: { skillId: { in: dto.skillIds } },
-      };
-    }
-
-    if (dto.seniorityLevels?.length) {
-      filter.seniorityLevel = { in: dto.seniorityLevels };
-    }
-
-    return filter;
+    return this.repository.setLanguages(id, dto.languages, true);
   }
 }
