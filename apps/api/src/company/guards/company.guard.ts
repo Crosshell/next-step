@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { RequestWithUser } from '../../auth/types/request-with-user.type';
 import { UserType } from '@prisma/client';
 import { CompanyService } from '../company.service';
@@ -14,11 +19,16 @@ export class CompanyGuard implements CanActivate {
       .getRequest<RequestWithUser & RequestWithCompany>();
 
     if (req.user.type !== UserType.COMPANY) {
-      return false;
+      throw new ForbiddenException('User is not a company');
     }
 
-    req.company = await this.service.findOneOrThrow({ userId: req.user.id });
+    const company = await this.service.findOne({ userId: req.user.id });
 
+    if (!company) {
+      throw new ForbiddenException('Company profile not found');
+    }
+
+    req.company = company;
     return true;
   }
 }
