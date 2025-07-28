@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { LanguageService } from '../language/language.service';
 import { SkillService } from '../skill/skill.service';
 import { VacancyLanguageDto } from './dto/vacancy-language.dto';
-import { getPaginationByPage } from '@common/utils';
+import { getPaginationByPage, getLanguageLevelsFromLevel } from '@common/utils';
 
 @Injectable()
 export class VacancySearchService {
@@ -101,9 +101,7 @@ export class VacancySearchService {
         some: {
           languageId: dto.languageId,
           level: {
-            in: this.languageService.getLanguageLevelsFromLevel({
-              maxLevel: dto.level,
-            }),
+            in: getLanguageLevelsFromLevel({ maxLevel: dto.level }),
           },
         },
       },

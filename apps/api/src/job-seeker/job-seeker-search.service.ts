@@ -6,7 +6,7 @@ import { JobSeekerRepository } from './job-seeker.repository';
 import { SkillService } from '../skill/skill.service';
 import { LanguageService } from '../language/language.service';
 import { JobSeekerLanguageDto } from './dto/job-seeker-language.dto';
-import { getPaginationByPage } from '@common/utils';
+import { getPaginationByPage, getLanguageLevelsFromLevel } from '@common/utils';
 
 @Injectable()
 export class JobSeekerSearchService {
@@ -64,9 +64,7 @@ export class JobSeekerSearchService {
         some: {
           languageId: dto.languageId,
           level: {
-            in: this.languageService.getLanguageLevelsFromLevel({
-              minLevel: dto.level,
-            }),
+            in: getLanguageLevelsFromLevel({ minLevel: dto.level }),
           },
         },
       },
