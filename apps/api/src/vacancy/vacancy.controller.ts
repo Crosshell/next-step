@@ -39,6 +39,19 @@ export class VacancyController {
     return this.service.create(company.id, dto);
   }
 
+  @Get('my')
+  @UseGuards(SessionAuthGuard, CompanyGuard)
+  @HttpCode(HttpStatus.OK)
+  async getMyVacancies(@CurrentCompany() company: Company): Promise<Vacancy[]> {
+    return this.service.findMany({ companyId: company.id });
+  }
+
+  @Post('search')
+  @HttpCode(HttpStatus.OK)
+  async search(@Body() dto: SearchVacancyDto): Promise<Vacancy[]> {
+    return this.service.search(dto);
+  }
+
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Vacancy> {
@@ -51,19 +64,6 @@ export class VacancyController {
     @Param('companyId') companyId: string,
   ): Promise<Vacancy[]> {
     return this.service.findMany({ companyId });
-  }
-
-  @Get('my')
-  @UseGuards(SessionAuthGuard, CompanyGuard)
-  @HttpCode(HttpStatus.OK)
-  async getMyVacancies(@CurrentCompany() company: Company): Promise<Vacancy[]> {
-    return this.service.findMany({ companyId: company.id });
-  }
-
-  @Get('search')
-  @HttpCode(HttpStatus.OK)
-  async search(@Body() dto: SearchVacancyDto): Promise<Vacancy[]> {
-    return this.service.search(dto);
   }
 
   @Patch(':id')

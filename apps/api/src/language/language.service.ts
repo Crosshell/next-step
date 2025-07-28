@@ -25,7 +25,7 @@ export class LanguageService {
   }
 
   async findAll(): Promise<Language[]> {
-    return this.repository.findAll();
+    return this.repository.findAll({ name: 'asc' });
   }
 
   async findOneOrThrow(where: Prisma.LanguageWhereUniqueInput): Promise<Skill> {

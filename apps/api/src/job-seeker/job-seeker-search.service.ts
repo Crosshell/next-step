@@ -28,25 +28,33 @@ export class JobSeekerSearchService {
     const where = this.buildSearchFilter(dto);
 
     const pagination = getPaginationByPage(dto.page, this.searchPageSize);
+    const orderBy = dto.orderBy ?? { updatedAt: 'desc' };
 
-    return this.repository.findMany({
-      where,
-      ...pagination,
-      orderBy: dto.orderBy ?? { updatedAt: 'desc' },
-    });
+    return this.repository.findMany({ where, ...pagination, orderBy });
   }
 
   private buildSearchFilter(
     dto: SearchJobSeekerDto,
   ): Prisma.JobSeekerWhereInput {
     const filter: Prisma.JobSeekerWhereInput = { isOpenToWork: true };
+    const andConditions: Prisma.JobSeekerWhereInput[] = [];
 
     if (dto.languages?.length) {
-      filter.AND = dto.languages.map((lang) => this.buildLanguageFilter(lang));
+      andConditions.push(
+        ...dto.languages.map((lang) => this.buildLanguageFilter(lang)),
+      );
     }
 
     if (dto.skillIds?.length) {
-      filter.skills = { some: { skillId: { in: dto.skillIds } } };
+      andConditions.push(
+        ...dto.skillIds.map((skillId) => ({
+          skills: { some: { skillId } },
+        })),
+      );
+    }
+
+    if (andConditions.length) {
+      filter.AND = andConditions;
     }
 
     if (dto.seniorityLevels?.length) {

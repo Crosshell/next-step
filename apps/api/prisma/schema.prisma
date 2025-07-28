@@ -176,7 +176,7 @@ model Vacancy {
   salaryMax          Int?     @map("salary_max")
   officeLocation     String?  @map("office_location")
   experienceRequired Int?     @default(0) @map("experience_required")
-  isActive           Boolean? @default(true) @map("is_active")
+  isActive           Boolean? @default(false) @map("is_active")
   createdAt          DateTime @default(now()) @map("created_at")
   updatedAt          DateTime @updatedAt @map("updated_at")
 

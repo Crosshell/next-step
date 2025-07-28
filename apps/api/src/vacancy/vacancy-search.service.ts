@@ -27,14 +27,8 @@ export class VacancySearchService {
     await this.validateSearchFilters(dto);
     const where = this.buildSearchFilter(dto);
     const pagination = getPaginationByPage(dto.page, this.searchPageSize);
-    return this.repository.findMany(
-      {
-        where,
-        ...pagination,
-        orderBy: dto.orderBy ?? { createdAt: 'desc' },
-      },
-      true,
-    );
+    const orderBy = dto.orderBy ?? { createdAt: 'desc' };
+    return this.repository.findMany({ where, ...pagination, orderBy }, true);
   }
 
   private async validateSearchFilters(dto: SearchVacancyDto): Promise<void> {
@@ -95,15 +89,11 @@ export class VacancySearchService {
 
   private buildLanguageFilter(
     dto: VacancyLanguageDto,
-  ): Prisma.VacancyWhereInput {
+  ): Prisma.VacancyLanguageWhereInput {
     return {
-      requiredLanguages: {
-        some: {
-          languageId: dto.languageId,
-          level: {
-            in: getLanguageLevelsFromLevel({ maxLevel: dto.level }),
-          },
-        },
+      languageId: dto.languageId,
+      level: {
+        in: getLanguageLevelsFromLevel({ maxLevel: dto.level }),
       },
     };
   }
