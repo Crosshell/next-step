@@ -4,11 +4,14 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 
-import InfoBox from '@/components/ProfileItems/InfoBox';
-import InfoItem from '@/components/ProfileItems/InfoItem';
 import SkillItems from '@/components/ProfileItems/SkillItems';
 import PersonalInfo from '@/components/ProfileItems/PersonalInfo';
 import Contacts from '@/components/ProfileItems/Contacts';
+import Bio from '@/components/ProfileItems/Bio';
+import Languages from '@/components/ProfileItems/Languages';
+import Certificates from '@/components/ProfileItems/Certificates';
+import WorkExperience from '@/components/ProfileItems/WorkExperience';
+import Education from '@/components/ProfileItems/Education';
 
 import classes from './page.module.css';
 
@@ -18,15 +21,12 @@ import { logoutUser } from '@/services/userService';
 import {
   bioData,
   certificatesData,
+  educationData,
   experienceData,
   personalInfo,
   skills,
   userLanguages,
 } from '@/lib/profile-test-data';
-import Bio from '@/components/ProfileItems/Bio';
-import Languages from '@/components/ProfileItems/Languages';
-import Certificates from '@/components/ProfileItems/Certificates';
-import WorkExperience from '@/components/ProfileItems/WorkExperience';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -75,22 +75,7 @@ export default function ProfilePage() {
         <Bio isEditable bio={bioData.bio} />
         <WorkExperience isEditable data={experienceData} />
 
-        <InfoBox title="High Education" isEditable>
-          <InfoItem title="University Name" date="02.02.2002 - 03.03.2003">
-            <p className="row-space-between">
-              <span className="font-weight-500 font-size-1-5">
-                Field of Study
-              </span>
-              <span className="font-weight-500 font-size-1-5">Degree</span>
-            </p>
-            <p>
-              Some information Some information Some information Some
-              information Some information Some information Some information
-              Some information Some information Some information Some
-              information
-            </p>
-          </InfoItem>
-        </InfoBox>
+        <Education isEditable data={educationData} />
         <Certificates isEditable data={certificatesData} />
 
         <Languages isEditable data={userLanguages} />

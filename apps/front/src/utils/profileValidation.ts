@@ -1,4 +1,9 @@
-import { CertificateData, ExperienceData, LanguageData } from '@/types/profile';
+import {
+  CertificateData,
+  EducationData,
+  ExperienceData,
+  LanguageData,
+} from '@/types/profile';
 import { FormikHelpers } from 'formik';
 
 export function handleCertificatesSubmit(
@@ -126,4 +131,46 @@ export function handleExperienceSubmit(
   }
 
   onSuccess(values.experience);
+}
+
+export function handleEducationSubmit(
+  values: { education: EducationData[] },
+  helpers: FormikHelpers<{ education: EducationData[] }>,
+  onSuccess: (updatedEducation: EducationData[]) => void
+) {
+  const { setErrors } = helpers;
+
+  const hasEmptyFields = values.education.some(
+    (edu) =>
+      !edu.universityName.trim() ||
+      !edu.degree.trim() ||
+      !edu.field.trim() ||
+      !edu.startDate.trim() ||
+      !edu.details.trim()
+  );
+
+  if (hasEmptyFields) {
+    setErrors({
+      education: 'All required fields must be filled.',
+    });
+    return;
+  }
+
+  const invalidDateRange = values.education.some((edu) => {
+    if (!edu.endDate?.trim()) return false;
+
+    const start = new Date(edu.startDate);
+    const end = new Date(edu.endDate);
+
+    return start > end;
+  });
+
+  if (invalidDateRange) {
+    setErrors({
+      education: 'Start Date must be earlier than End Date.',
+    });
+    return;
+  }
+
+  onSuccess(values.education);
 }

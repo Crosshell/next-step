@@ -31,10 +31,20 @@ interface ExperienceData {
   isCurrent: boolean;
 }
 
+interface EducationData {
+  universityName: string;
+  startDate: string;
+  endDate: string;
+  field: string;
+  degree: string;
+  details: string;
+}
+
 export {
   type PersonalData,
   type ContactsData,
   type LanguageData,
   type CertificateData,
   type ExperienceData,
+  type EducationData,
 };

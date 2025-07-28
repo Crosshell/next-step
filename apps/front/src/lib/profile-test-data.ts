@@ -79,6 +79,36 @@ const experienceData = [
   },
 ];
 
+const degreeTypes = [
+  'Bachelor',
+  'Master',
+  'Doctorate',
+  'Associate',
+  'Diploma',
+  'Certificate',
+];
+
+const educationData = [
+  {
+    universityName: 'A cool university',
+    startDate: '2025-02-27',
+    endDate: '',
+    field: 'IT',
+    degree: 'Master',
+    details:
+      'Some information Some information Some information Some information Some information Some information Some information Some information Some information Some information Some information',
+  },
+  {
+    universityName: 'A cool university',
+    startDate: '2020-02-27',
+    endDate: '2024-02-27',
+    field: 'IT',
+    degree: 'Bachelor',
+    details:
+      'Also Some information Also Some information Also Some information Also Some information ',
+  },
+];
+
 export {
   skills,
   personalInfo,
@@ -89,4 +119,6 @@ export {
   userLanguages,
   certificatesData,
   experienceData,
+  degreeTypes,
+  educationData,
 };
