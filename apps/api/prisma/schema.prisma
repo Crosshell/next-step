@@ -172,8 +172,8 @@ model Vacancy {
   companyId          String   @map("company_id")
   title              String
   description        String
-  salaryMin          Int?     @map("salary_min")
-  salaryMax          Int?     @map("salary_max")
+  salaryMin          Int      @map("salary_min")
+  salaryMax          Int      @map("salary_max")
   officeLocation     String?  @map("office_location")
   experienceRequired Int?     @default(0) @map("experience_required")
   isActive           Boolean? @default(false) @map("is_active")

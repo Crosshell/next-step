@@ -49,7 +49,10 @@ export class VacancySearchService {
     }
 
     if (dto.salaryMin) {
-      filter.salaryMin = { gte: dto.salaryMin };
+      filter.OR = [
+        { salaryMax: { gte: dto.salaryMin } },
+        { salaryMin: { gte: dto.salaryMin } },
+      ];
     }
 
     if (dto.experienceRequired) {

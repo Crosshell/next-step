@@ -26,7 +26,7 @@ export class CreateVacancyDto {
   @Type(() => Number)
   @Min(0)
   @Max(1000000)
-  salaryMin?: number;
+  salaryMin: number;
 
   @IsOptional()
   @Type(() => Number)
@@ -36,7 +36,7 @@ export class CreateVacancyDto {
     if (value === undefined || obj.salaryMin === undefined) return true;
     return value >= obj.salaryMin;
   })
-  salaryMax?: number;
+  salaryMax: number;
 
   @IsOptional()
   @IsString()
