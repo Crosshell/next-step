@@ -1,8 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import {
-  SubjectExistsException,
-  SubjectNotFoundException,
-} from '@common/exceptions';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma, Skill } from '@prisma/client';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { SkillRepository } from './skill.repository';
@@ -17,7 +13,7 @@ export class SkillService {
     });
 
     if (found !== skillIds.length) {
-      throw new SubjectNotFoundException('Skill');
+      throw new BadRequestException('Skill not found');
     }
   }
 
@@ -32,13 +28,13 @@ export class SkillService {
 
   async findOneOrThrow(where: Prisma.SkillWhereUniqueInput): Promise<Skill> {
     const skill = await this.repository.findOne(where);
-    if (!skill) throw new SubjectNotFoundException('Skill');
+    if (!skill) throw new BadRequestException('Skill not found');
     return skill;
   }
 
   async assertNotExists(where: Prisma.SkillWhereUniqueInput): Promise<void> {
     const skill = await this.repository.findOne(where);
-    if (skill) throw new SubjectExistsException('Skill');
+    if (skill) throw new BadRequestException('Skill already exists');
   }
 
   async delete(where: Prisma.SkillWhereUniqueInput): Promise<Skill> {

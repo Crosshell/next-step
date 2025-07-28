@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { RegisterDto } from './dto/register.dto';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
@@ -7,12 +12,6 @@ import { LoginDto } from './dto/login.dto';
 import { SessionService } from '../session/session.service';
 import { EmailService } from '../email/email.service';
 import { TokenService } from '../token/token.service';
-import {
-  EmailNotVerifiedException,
-  EmailVerifiedException,
-  InvalidCredentialsException,
-  InvalidOrExpiredSubjectException,
-} from '@common/exceptions';
 import { TokenType } from '../token/enums/token-type.enum';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -29,17 +28,20 @@ export class AuthService {
   ) {}
 
   async validateCredentials(dto: LoginDto): Promise<UserWithoutPassword> {
-    const user = (await this.userService.findOneOrThrow(
+    const user = (await this.userService.findOne(
       {
         email: dto.email,
       },
       false,
-    )) as User;
+    )) as User | null;
 
     const isValid =
-      user.password && (await argon2.verify(user.password, dto.password));
+      user &&
+      user.password &&
+      (await argon2.verify(user.password, dto.password));
+
     if (!isValid) {
-      throw new InvalidCredentialsException();
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const { password: _, ...safeUser } = user;
@@ -52,7 +54,7 @@ export class AuthService {
     ip: string,
   ): Promise<string> {
     if (!user.isEmailVerified) {
-      throw new EmailNotVerifiedException();
+      throw new ForbiddenException('Verify your email address first');
     }
     return this.sessionService.createSession(user.id, ua, ip);
   }
@@ -78,7 +80,7 @@ export class AuthService {
   async verifyEmail(token: string): Promise<void> {
     const email = await this.tokenService.consumeToken(TokenType.VERIFY, token);
     if (!email) {
-      throw new InvalidOrExpiredSubjectException('verify token');
+      throw new BadRequestException('Invalid or expired verify token');
     }
 
     await this.userService.update({ email }, { isEmailVerified: true });
@@ -90,7 +92,7 @@ export class AuthService {
     });
 
     if (user.isEmailVerified) {
-      throw new EmailVerifiedException();
+      throw new BadRequestException('Email already verified');
     }
 
     const verifyToken = await this.tokenService.createToken(
@@ -115,7 +117,7 @@ export class AuthService {
   async resetPassword(token: string, dto: ResetPasswordDto): Promise<void> {
     const email = await this.tokenService.consumeToken(TokenType.RESET, token);
     if (!email) {
-      throw new InvalidOrExpiredSubjectException('reset token');
+      throw new BadRequestException('Invalid or expired reset token');
     }
 
     await this.userService.update({ email }, { password: dto.password });

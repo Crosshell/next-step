@@ -1,10 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { Language, Prisma, Skill } from '@prisma/client';
-import {
-  SubjectExistsException,
-  SubjectNotFoundException,
-} from '@common/exceptions';
 import { LanguageRepository } from './language.repository';
 
 @Injectable()
@@ -15,7 +11,7 @@ export class LanguageService {
     const found = await this.repository.count({ id: { in: languageIds } });
 
     if (found !== languageIds.length) {
-      throw new SubjectNotFoundException('Language');
+      throw new BadRequestException('Language not found');
     }
   }
 
@@ -30,13 +26,13 @@ export class LanguageService {
 
   async findOneOrThrow(where: Prisma.LanguageWhereUniqueInput): Promise<Skill> {
     const language = await this.repository.findOne(where);
-    if (!language) throw new SubjectNotFoundException('Language');
+    if (!language) throw new BadRequestException('Language not found');
     return language;
   }
 
   async assertNotExists(where: Prisma.LanguageWhereUniqueInput): Promise<void> {
     const language = await this.repository.findOne(where);
-    if (language) throw new SubjectExistsException('Language');
+    if (language) throw new BadRequestException('Language already exists');
   }
 
   async delete(where: Prisma.LanguageWhereUniqueInput): Promise<Language> {

@@ -30,8 +30,8 @@ export class TokenService {
 
   private tokenTtl(type: TokenType): number {
     return {
-      [TokenType.VERIFY]: this.config.getOrThrow('token.verify.ttl'),
-      [TokenType.RESET]: this.config.getOrThrow('token.reset.ttl'),
+      [TokenType.VERIFY]: this.config.getOrThrow<number>('token.verify.ttl'),
+      [TokenType.RESET]: this.config.getOrThrow<number>('token.reset.ttl'),
     }[type];
   }
 }
