@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { RequestWithCompany } from '../../company/types/request-with-company.type';
 import { VacancyService } from '../vacancy.service';
 
@@ -11,11 +16,19 @@ export class VacancyOwnerGuard implements CanActivate {
     const vacancyId = req.params['id'];
 
     if (!vacancyId) {
-      return false;
+      throw new ForbiddenException('Vacancy id not found');
     }
 
-    const vacancy = await this.service.findOneOrThrow({ id: vacancyId });
+    const vacancy = await this.service.findOne({ id: vacancyId });
 
-    return vacancy.companyId === req.company.id;
+    if (!vacancy) {
+      throw new ForbiddenException('Vacancy not found');
+    }
+
+    if (vacancy.companyId !== req.company.id) {
+      throw new ForbiddenException('You are not the owner of this vacancy');
+    }
+
+    return true;
   }
 }

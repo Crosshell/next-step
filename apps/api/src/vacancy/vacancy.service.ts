@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { VacancyRepository } from './vacancy.repository';
 import { CreateVacancyDto } from './dto/create-vacancy.dto';
 import { Prisma, Vacancy } from '@prisma/client';
-import { SubjectNotFoundException } from '@common/exceptions';
 import { UpdateVacancyDto } from './dto/update-vacancy.dto';
 import { SearchVacancyDto } from './dto/search-vacancy.dto';
 import { LanguageService } from '../language/language.service';
@@ -24,11 +23,17 @@ export class VacancyService {
     return this.repository.create(companyId, dto, true);
   }
 
+  async findOne(
+    where: Prisma.VacancyWhereUniqueInput,
+  ): Promise<Vacancy | null> {
+    return this.repository.findOne(where, true);
+  }
+
   async findOneOrThrow(
     where: Prisma.VacancyWhereUniqueInput,
   ): Promise<Vacancy> {
     const vacancy = await this.repository.findOne(where, true);
-    if (!vacancy) throw new SubjectNotFoundException('Vacancy');
+    if (!vacancy) throw new BadRequestException('Vacancy not found');
     return vacancy;
   }
 
