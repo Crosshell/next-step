@@ -9,9 +9,9 @@ import {
   Length,
   Max,
   Min,
-  Validate,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsBiggerThan } from '@common/validators/is-bigger-than';
 
 export class CreateVacancyDto {
   @IsString()
@@ -26,17 +26,14 @@ export class CreateVacancyDto {
   @Type(() => Number)
   @Min(0)
   @Max(1000000)
-  salaryMin?: number;
+  salaryMin: number;
 
   @IsOptional()
   @Type(() => Number)
   @Min(0)
   @Max(1000000)
-  @Validate((value: number, obj: CreateVacancyDto) => {
-    if (value === undefined || obj.salaryMin === undefined) return true;
-    return value >= obj.salaryMin;
-  })
-  salaryMax?: number;
+  @IsBiggerThan('salaryMin')
+  salaryMax: number;
 
   @IsOptional()
   @IsString()
