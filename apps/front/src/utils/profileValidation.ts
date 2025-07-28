@@ -1,4 +1,4 @@
-import { CertificateData, LanguageData } from '@/types/profile';
+import { CertificateData, ExperienceData, LanguageData } from '@/types/profile';
 import { FormikHelpers } from 'formik';
 
 export function handleCertificatesSubmit(
@@ -77,4 +77,53 @@ export function handleLanguagesSubmit(
   }
 
   onSuccess(values.languages);
+}
+
+export function handleExperienceSubmit(
+  values: { experience: ExperienceData[] },
+  helpers: FormikHelpers<{ experience: ExperienceData[] }>,
+  onSuccess: (updatedExperience: ExperienceData[]) => void
+) {
+  const { setErrors } = helpers;
+
+  const hasEmptyFields = values.experience.some(
+    (exp) =>
+      !exp.companyName.trim() || !exp.startDate.trim() || !exp.details.trim()
+  );
+
+  if (hasEmptyFields) {
+    setErrors({
+      experience: 'All fields must be filled.',
+    });
+    return;
+  }
+
+  const missingEndDate = values.experience.some(
+    (exp) => !exp.isCurrent && !exp.endDate?.trim()
+  );
+
+  if (missingEndDate) {
+    setErrors({
+      experience: 'End Date is required if the job is not current.',
+    });
+    return;
+  }
+
+  const invalidDateRange = values.experience.some((exp) => {
+    if (exp.isCurrent || !exp.endDate) return false;
+
+    const start = new Date(exp.startDate);
+    const end = new Date(exp.endDate);
+
+    return start > end;
+  });
+
+  if (invalidDateRange) {
+    setErrors({
+      experience: 'Start Date must be earlier than End Date.',
+    });
+    return;
+  }
+
+  onSuccess(values.experience);
 }

@@ -1,14 +1,17 @@
 'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
+import { Field, FieldArray, Form, Formik } from 'formik';
+
 import InfoBox from './InfoBox';
 import InfoItem from './InfoItem';
-import { CertificateData } from '@/types/profile';
-import { useState } from 'react';
-import { Field, FieldArray, Form, Formik } from 'formik';
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
-import classes from './Profile.module.css';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import classes from './Profile.module.css';
+
+import { CertificateData } from '@/types/profile';
 import { handleCertificatesSubmit } from '@/utils/profileValidation';
 
 interface Props {

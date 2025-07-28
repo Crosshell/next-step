@@ -11,7 +11,6 @@ import PersonalInfo from '@/components/ProfileItems/PersonalInfo';
 import Contacts from '@/components/ProfileItems/Contacts';
 
 import classes from './page.module.css';
-import itemClasses from '../../components/ProfileItems/Profile.module.css';
 
 import { useAuthStore } from '@/store/authSlice';
 import { logoutUser } from '@/services/userService';
@@ -19,6 +18,7 @@ import { logoutUser } from '@/services/userService';
 import {
   bioData,
   certificatesData,
+  experienceData,
   personalInfo,
   skills,
   userLanguages,
@@ -26,6 +26,7 @@ import {
 import Bio from '@/components/ProfileItems/Bio';
 import Languages from '@/components/ProfileItems/Languages';
 import Certificates from '@/components/ProfileItems/Certificates';
+import WorkExperience from '@/components/ProfileItems/WorkExperience';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -72,17 +73,8 @@ export default function ProfilePage() {
         </div>
         <Contacts />
         <Bio isEditable bio={bioData.bio} />
-        <InfoBox title="Work Experience" isEditable>
-          <InfoItem title="Company Name" date="02.02.2002 - 03.03.2003">
-            <p>
-              Some information Some information Some information Some
-              information Some information Some information Some information
-              Some information Some information Some information Some
-              information
-            </p>
-            <span className={itemClasses['is-current']}>is current</span>
-          </InfoItem>
-        </InfoBox>
+        <WorkExperience isEditable data={experienceData} />
+
         <InfoBox title="High Education" isEditable>
           <InfoItem title="University Name" date="02.02.2002 - 03.03.2003">
             <p className="row-space-between">

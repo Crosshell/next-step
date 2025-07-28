@@ -23,9 +23,18 @@ interface CertificateData {
   date: string;
 }
 
+interface ExperienceData {
+  companyName: string;
+  startDate: string;
+  endDate: string;
+  details: string;
+  isCurrent: boolean;
+}
+
 export {
   type PersonalData,
   type ContactsData,
   type LanguageData,
   type CertificateData,
+  type ExperienceData,
 };

@@ -60,6 +60,25 @@ const certificatesData = [
   { name: 'JS Course', url: 'https://www.google.com/3', date: '2020-02-27' },
 ];
 
+const experienceData = [
+  {
+    companyName: 'A cool company',
+    startDate: '2020-02-27',
+    endDate: '',
+    details:
+      'Some information Some information Some information Some information Some information Some information Some information Some information Some information Some information Some information',
+    isCurrent: true,
+  },
+  {
+    companyName: 'Not cool company',
+    startDate: '2020-02-25',
+    endDate: '2020-02-26',
+    details:
+      'Bad company Bad company Bad company Bad company Bad company Bad company ',
+    isCurrent: false,
+  },
+];
+
 export {
   skills,
   personalInfo,
@@ -69,4 +88,5 @@ export {
   languages,
   userLanguages,
   certificatesData,
+  experienceData,
 };
