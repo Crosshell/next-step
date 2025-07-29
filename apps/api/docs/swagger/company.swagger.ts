@@ -15,6 +15,40 @@ import { SearchCompanyDto } from '../../src/company/dto/search-company.dto';
 import { UpdateCompanyDto } from '../../src/company/dto/update-company.dto';
 
 export class CompanySwagger {
+  static companyOkResponseExample = {
+    id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+    name: 'Company Name',
+    description: 'Company description',
+    url: 'https://company.url',
+    logoUrl: 'https://company.logo/url',
+  };
+
+  static companyOkResponseSchema = {
+    type: 'object',
+    properties: {
+      id: {
+        type: 'string',
+        example: this.companyOkResponseExample.id,
+      },
+      name: {
+        type: 'string',
+        example: this.companyOkResponseExample.name,
+      },
+      description: {
+        type: 'string',
+        example: this.companyOkResponseExample.description,
+      },
+      url: {
+        type: 'string',
+        example: this.companyOkResponseExample.url,
+      },
+      logoUrl: {
+        type: 'string',
+        example: this.companyOkResponseExample.logoUrl,
+      },
+    },
+  };
+
   static create() {
     return applyDecorators(
       ApiOperation({ summary: 'Create company' }),
@@ -34,31 +68,8 @@ export class CompanySwagger {
       }),
       ApiCreatedResponse({
         description: 'Company created',
-        schema: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            name: {
-              type: 'string',
-              example: 'Company Name',
-            },
-            description: {
-              type: 'string',
-              example: 'Company description',
-            },
-            url: {
-              type: 'string',
-              example: 'https://company.url',
-            },
-            logoUrl: {
-              type: 'string',
-              example: 'https://company.logo/url',
-            },
-          },
-        },
+        schema: this.companyOkResponseSchema,
+        example: this.companyOkResponseExample,
       }),
       ApiBadRequestResponse({ description: 'Company already exists' }),
       ApiForbiddenResponse({ description: 'User is not a company' }),
@@ -87,44 +98,11 @@ export class CompanySwagger {
           type: 'array',
           items: {
             type: 'object',
-            properties: {
-              id: {
-                type: 'string',
-                example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-              },
-              name: {
-                type: 'string',
-                example: 'Company Name',
-              },
-              description: {
-                type: 'string',
-                example: 'Company description',
-              },
-              url: {
-                type: 'string',
-                example: 'https://company.url',
-              },
-              logoUrl: {
-                type: 'string',
-                example: 'https://company.logo/url',
-              },
-            },
+            properties: this.companyOkResponseSchema.properties,
           },
           example: [
-            {
-              id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-              name: 'Company Name',
-              description: 'Company description',
-              url: 'https://company.url',
-              logoUrl: 'https://company.logo/url',
-            },
-            {
-              id: '2xdb968a-ca6c-nc35-1ad9-1xdg85f4e152',
-              name: 'Company Name 2',
-              description: 'Company description 2',
-              url: 'https://company.url-2',
-              logoUrl: 'https://company.logo/url-2',
-            },
+            this.companyOkResponseExample,
+            this.companyOkResponseExample,
           ],
         },
       }),
@@ -136,38 +114,8 @@ export class CompanySwagger {
       ApiOperation({ summary: 'Get my company profile' }),
       ApiOkResponse({
         description: 'Company profile',
-        schema: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            name: {
-              type: 'string',
-              example: 'Company Name',
-            },
-            description: {
-              type: 'string',
-              example: 'Company description',
-            },
-            url: {
-              type: 'string',
-              example: 'https://company.url',
-            },
-            logoUrl: {
-              type: 'string',
-              example: 'https://company.logo/url',
-            },
-          },
-        },
-        example: {
-          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-          name: 'Company Name',
-          description: 'Company description',
-          url: 'https://company.url',
-          logoUrl: 'https://company.logo/url',
-        },
+        schema: this.companyOkResponseSchema,
+        example: this.companyOkResponseExample,
       }),
       ApiNotFoundResponse({ description: 'Company not found' }),
       ApiForbiddenResponse({ description: 'User is not a company' }),
@@ -185,38 +133,8 @@ export class CompanySwagger {
       }),
       ApiOkResponse({
         description: 'Company profile',
-        schema: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            name: {
-              type: 'string',
-              example: 'Company Name',
-            },
-            description: {
-              type: 'string',
-              example: 'Company description',
-            },
-            url: {
-              type: 'string',
-              example: 'https://company.url',
-            },
-            logoUrl: {
-              type: 'string',
-              example: 'https://company.logo/url',
-            },
-          },
-        },
-        example: {
-          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-          name: 'Company Name',
-          description: 'Company description',
-          url: 'https://company.url',
-          logoUrl: 'https://company.logo/url',
-        },
+        schema: this.companyOkResponseSchema,
+        example: this.companyOkResponseExample,
       }),
       ApiNotFoundResponse({ description: 'Company not found' }),
       ...AuthSwagger.sessionAuthDecorators(),
@@ -242,38 +160,8 @@ export class CompanySwagger {
       }),
       ApiOkResponse({
         description: 'Company updated',
-        schema: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            name: {
-              type: 'string',
-              example: 'Company Name',
-            },
-            description: {
-              type: 'string',
-              example: 'Company description',
-            },
-            url: {
-              type: 'string',
-              example: 'https://company.url',
-            },
-            logoUrl: {
-              type: 'string',
-              example: 'https://company.logo/url',
-            },
-          },
-        },
-        example: {
-          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-          name: 'Company Name',
-          description: 'Company description',
-          url: 'https://company.url',
-          logoUrl: 'https://company.logo/url',
-        },
+        schema: this.companyOkResponseSchema,
+        example: this.companyOkResponseExample,
       }),
       ApiNotFoundResponse({ description: 'Company not found' }),
       ApiForbiddenResponse({ description: 'User is not a company' }),
