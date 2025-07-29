@@ -9,6 +9,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { CreateSkillDto } from '../../src/skill/dto/create-skill.dto';
+import { MessageResponse } from '@common/responses';
 
 export class SkillSwagger {
   static skillOkResponseExample = {
@@ -98,7 +99,10 @@ export class SkillSwagger {
         type: 'string',
         example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
       }),
-      ApiOkResponse({ description: 'Skill deleted successfully' }),
+      ApiOkResponse({
+        description: 'Skill deleted successfully',
+        type: MessageResponse,
+      }),
       ApiNotFoundResponse({ description: 'Skill not found' }),
     );
   }

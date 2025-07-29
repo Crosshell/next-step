@@ -38,11 +38,6 @@ export class SearchVacancyDto {
   title?: string;
 
   @IsOptional()
-  @IsString()
-  @Length(3, 100)
-  officeLocation?: string;
-
-  @IsOptional()
   @Type(() => Number)
   @Min(0)
   @Max(1000000)

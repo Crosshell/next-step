@@ -9,6 +9,7 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { CreateLanguageDto } from '../../src/language/dto/create-language.dto';
+import { MessageResponse } from '@common/responses';
 
 export class LanguageSwagger {
   static languageOkResponseExample = {
@@ -96,7 +97,10 @@ export class LanguageSwagger {
         type: 'string',
         example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
       }),
-      ApiOkResponse({ description: 'Language deleted successfully' }),
+      ApiOkResponse({
+        description: 'Language deleted successfully',
+        type: MessageResponse,
+      }),
       ApiNotFoundResponse({ description: 'Language not found' }),
     );
   }

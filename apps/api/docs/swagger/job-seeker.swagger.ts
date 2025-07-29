@@ -15,6 +15,8 @@ import { SearchJobSeekerDto } from '../../src/job-seeker/dto/search-job-seeker.d
 import { UpdateJobSeekerDto } from '../../src/job-seeker/dto/update-job-seeker.dto';
 import { SetSkillsDto } from '../../src/job-seeker/dto/set-skills.dto';
 import { SetLanguagesDto } from '../../src/job-seeker/dto/set-languages.dto';
+import { LanguageSwagger } from './language.swagger';
+import { SkillSwagger } from './skill.swagger';
 
 export class JobSeekerSwagger {
   static jobSeekerOkResponseExample = {
@@ -31,34 +33,24 @@ export class JobSeekerSwagger {
     languages: [
       {
         level: 'INTERMEDIATE',
-        language: {
-          id: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
-          name: 'English',
-        },
+        language: LanguageSwagger.languageOkResponseExample,
       },
       {
         level: 'NATIVE',
-        language: {
-          id: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
-          name: 'Ukrainian',
-        },
+        language: LanguageSwagger.languageOkResponseExample,
       },
     ],
     skills: [
       {
-        skill: {
-          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-          name: 'HTML',
-        },
+        skill: SkillSwagger.skillOkResponseExample,
       },
       {
-        skill: {
-          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-          name: 'HTML',
-        },
+        skill: SkillSwagger.skillOkResponseExample,
       },
     ],
     contacts: null,
+    createdAt: '2025-07-29T17:11:23.567Z',
+    updatedAt: '2025-07-29T17:11:23.567Z',
   };
 
   static jobSeekerOkResponseSchema = {
@@ -102,7 +94,10 @@ export class JobSeekerSwagger {
         type: 'array',
         items: {
           type: 'object',
-          properties: {},
+          properties: {
+            level: { type: 'string', example: 'INTERMEDIATE' },
+            language: LanguageSwagger.languageOkResponseSchema,
+          },
         },
         example: this.jobSeekerOkResponseExample.languages,
       },
@@ -111,19 +106,7 @@ export class JobSeekerSwagger {
         items: {
           type: 'object',
           properties: {
-            skill: {
-              type: 'object',
-              properties: {
-                id: {
-                  type: 'string',
-                  example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-                },
-                name: {
-                  type: 'string',
-                  example: 'Nest.js',
-                },
-              },
-            },
+            skill: SkillSwagger.skillOkResponseSchema,
           },
         },
         example: this.jobSeekerOkResponseExample.skills,
@@ -131,6 +114,14 @@ export class JobSeekerSwagger {
       contacts: {
         type: 'object',
         example: this.jobSeekerOkResponseExample.contacts,
+      },
+      createdAt: {
+        type: 'Date',
+        example: this.jobSeekerOkResponseExample.createdAt,
+      },
+      updatedAt: {
+        type: 'Date',
+        example: this.jobSeekerOkResponseExample.updatedAt,
       },
     },
   };

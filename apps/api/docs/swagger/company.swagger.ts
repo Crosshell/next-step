@@ -21,6 +21,9 @@ export class CompanySwagger {
     description: 'Company description',
     url: 'https://company.url',
     logoUrl: 'https://company.logo/url',
+    isVerified: false,
+    createdAt: '2025-07-29T18:40:17.097Z',
+    updatedAt: '2025-07-29T18:40:17.097Z',
   };
 
   static companyOkResponseSchema = {
@@ -45,6 +48,17 @@ export class CompanySwagger {
       logoUrl: {
         type: 'string',
         example: this.companyOkResponseExample.logoUrl,
+      },
+      isVerified: {
+        type: 'boolean',
+      },
+      createdAt: {
+        type: 'Date',
+        example: this.companyOkResponseExample.createdAt,
+      },
+      updatedAt: {
+        type: 'Date',
+        example: this.companyOkResponseExample.updatedAt,
       },
     },
   };
