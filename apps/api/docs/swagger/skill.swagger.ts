@@ -11,6 +11,25 @@ import {
 import { CreateSkillDto } from '../../src/skill/dto/create-skill.dto';
 
 export class SkillSwagger {
+  static skillOkResponseExample = {
+    id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+    name: 'Nest.js',
+  };
+
+  static skillOkResponseSchema = {
+    type: 'object',
+    properties: {
+      id: {
+        type: 'string',
+        example: this.skillOkResponseExample.id,
+      },
+      name: {
+        type: 'string',
+        example: this.skillOkResponseExample.name,
+      },
+    },
+  };
+
   static findAll() {
     return applyDecorators(
       ApiOperation({ summary: 'Get all skills' }),
@@ -20,30 +39,12 @@ export class SkillSwagger {
           type: 'array',
           items: {
             type: 'object',
-            properties: {
-              id: {
-                type: 'string',
-                example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-              },
-              name: {
-                type: 'string',
-                example: 'Nest.js',
-              },
-            },
+            properties: this.skillOkResponseSchema.properties,
           },
           example: [
-            {
-              id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-              name: 'Nest.js',
-            },
-            {
-              id: 'a1b2c3d4-5678-90ab-cdef-1234567890ab',
-              name: 'TypeScript',
-            },
-            {
-              id: 'bb0a4c4f-cd55-44ff-bfd3-5539e2df74d1',
-              name: 'PostgreSQL',
-            },
+            this.skillOkResponseExample,
+            this.skillOkResponseExample,
+            this.skillOkResponseExample,
           ],
         },
       }),
@@ -60,19 +61,8 @@ export class SkillSwagger {
       }),
       ApiOkResponse({
         description: 'Skill',
-        schema: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            name: {
-              type: 'string',
-              example: 'Nest.js',
-            },
-          },
-        },
+        schema: this.skillOkResponseSchema,
+        example: this.skillOkResponseExample,
       }),
       ApiNotFoundResponse({ description: 'Skill not found' }),
     );
@@ -94,19 +84,8 @@ export class SkillSwagger {
       }),
       ApiCreatedResponse({
         description: 'Skill created',
-        schema: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            name: {
-              type: 'string',
-              example: 'Nest.js',
-            },
-          },
-        },
+        schema: this.skillOkResponseSchema,
+        example: this.skillOkResponseExample,
       }),
       ApiBadRequestResponse({ description: 'Skill already exists' }),
     );
