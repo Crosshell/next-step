@@ -36,14 +36,79 @@ export class JobSeekerSwagger {
           type: 'object',
           properties: {},
         },
-        example: [],
+        example: [
+          {
+            jobSeekerId: {
+              type: 'string',
+              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+            },
+            languageId: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
+            level: 'INTERMEDIATE',
+            language: {
+              id: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
+              name: 'English',
+            },
+          },
+          {
+            jobSeekerId: {
+              type: 'string',
+              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+            },
+            languageId: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
+            level: 'NATIVE',
+            language: {
+              id: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
+              name: 'Ukrainian',
+            },
+          },
+        ],
       },
       skills: {
         type: 'array',
         items: {
           type: 'object',
-          properties: {},
+          properties: {
+            jobSeekerId: {
+              type: 'string',
+              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+            },
+            skillId: {
+              type: 'string',
+              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+            },
+            skill: {
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'string',
+                  example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+                },
+                name: {
+                  type: 'string',
+                  example: 'Nest.js',
+                },
+              },
+            },
+          },
         },
+        example: [
+          {
+            jobSeekerId: '05365a8f-5e40-4852-ac7b-4fccfd0be9ad',
+            skillId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+            skill: {
+              id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+              name: 'HTML',
+            },
+          },
+          {
+            jobSeekerId: '05365a8f-5e40-4852-ac7b-4fccfd0be9ad',
+            skillId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+            skill: {
+              id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+              name: 'HTML',
+            },
+          },
+        ],
       },
       contacts: { type: 'object', example: null },
     },
@@ -60,8 +125,50 @@ export class JobSeekerSwagger {
     dateOfBirth: '2025-07-29',
     isOpenToWork: true,
     seniorityLevel: 'MIDDLE',
-    languages: [],
-    skills: [],
+    languages: [
+      {
+        jobSeekerId: {
+          type: 'string',
+          example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+        },
+        languageId: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
+        level: 'INTERMEDIATE',
+        language: {
+          id: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
+          name: 'English',
+        },
+      },
+      {
+        jobSeekerId: {
+          type: 'string',
+          example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+        },
+        languageId: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
+        level: 'NATIVE',
+        language: {
+          id: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
+          name: 'Ukrainian',
+        },
+      },
+    ],
+    skills: [
+      {
+        jobSeekerId: '05365a8f-5e40-4852-ac7b-4fccfd0be9ad',
+        skillId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+        skill: {
+          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+          name: 'HTML',
+        },
+      },
+      {
+        jobSeekerId: '05365a8f-5e40-4852-ac7b-4fccfd0be9ad',
+        skillId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+        skill: {
+          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+          name: 'HTML',
+        },
+      },
+    ],
     contacts: null,
   };
 
