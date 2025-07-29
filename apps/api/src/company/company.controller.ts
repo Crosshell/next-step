@@ -21,6 +21,7 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 import { SearchCompanyDto } from './dto/search-company.dto';
 import { CreateCompanyGuard } from './guards/create-company.guard';
 import { CurrentCompany } from './decorators/current-company.decorator';
+import { CompanySwagger } from '../../docs/swagger/company.swagger';
 
 @Controller('companies')
 export class CompanyController {
@@ -29,6 +30,7 @@ export class CompanyController {
   @Post()
   @UseGuards(SessionAuthGuard, CreateCompanyGuard)
   @HttpCode(HttpStatus.CREATED)
+  @CompanySwagger.create()
   async create(
     @Body() dto: CreateCompanyDto,
     @CurrentUser() user: UserWithoutPassword,
@@ -38,6 +40,7 @@ export class CompanyController {
 
   @Post('search')
   @HttpCode(HttpStatus.OK)
+  @CompanySwagger.search()
   async search(@Body() dto: SearchCompanyDto): Promise<Company[]> {
     return this.service.search(dto);
   }
@@ -45,12 +48,14 @@ export class CompanyController {
   @Get('me')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   @HttpCode(HttpStatus.OK)
+  @CompanySwagger.getMyProfile()
   async getMyProfile(@CurrentCompany() company: Company): Promise<Company> {
     return this.service.findOneOrThrow({ id: company.id });
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
+  @CompanySwagger.getProfile()
   async getProfile(@Param('id', ParseUUIDPipe) id: string): Promise<Company> {
     return this.service.findOneOrThrow({ id });
   }
@@ -58,6 +63,7 @@ export class CompanyController {
   @Patch('me')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   @HttpCode(HttpStatus.OK)
+  @CompanySwagger.update()
   async update(
     @Body() dto: UpdateCompanyDto,
     @CurrentCompany() company: Company,
