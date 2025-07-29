@@ -43,9 +43,7 @@ export class AuthSwagger {
         description: 'Registration successful. Confirmation link sent to email',
         schema: { type: 'object', properties: { message: { type: 'string' } } },
       }),
-      ApiBadRequestResponse({
-        description: 'User already exists',
-      }),
+      ApiBadRequestResponse({ description: 'User already exists' }),
     );
   }
 
@@ -130,8 +128,10 @@ export class AuthSwagger {
   static sessionAuthDecorators() {
     return [
       ApiCookieAuth('sid'),
-      ApiNotFoundResponse({ description: 'Session or user not found' }),
-      ApiUnauthorizedResponse({ description: 'Invalid or expired session' }),
+      ApiUnauthorizedResponse({
+        description:
+          'Session id not found / Session not found / User not found / Invalid or expired session',
+      }),
     ];
   }
 }

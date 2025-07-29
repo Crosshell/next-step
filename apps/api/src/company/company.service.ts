@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Company, Prisma } from '@prisma/client';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -35,7 +39,7 @@ export class CompanyService {
     where: Prisma.CompanyWhereUniqueInput,
   ): Promise<Company> {
     const company = await this.repository.findOne(where);
-    if (!company) throw new BadRequestException('Company not found');
+    if (!company) throw new NotFoundException('Company not found');
     return company;
   }
 

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateJobSeekerDto } from './dto/create-job-seeker.dto';
 import { JobSeeker, Prisma } from '@prisma/client';
 import { UpdateJobSeekerDto } from './dto/update-job-seeker.dto';
@@ -34,7 +38,7 @@ export class JobSeekerService {
     where: Prisma.JobSeekerWhereUniqueInput,
   ): Promise<JobSeeker> {
     const jobSeeker = await this.repository.findOne(where, true);
-    if (!jobSeeker) throw new BadRequestException('Job seeker not found');
+    if (!jobSeeker) throw new NotFoundException('Job seeker not found');
     return jobSeeker;
   }
 

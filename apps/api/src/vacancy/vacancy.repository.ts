@@ -10,8 +10,27 @@ export class VacancyRepository {
   constructor(private readonly prisma: PrismaService) {
     this.vacancyRelations = {
       company: true,
-      requiredSkills: { include: { skill: true } },
-      requiredLanguages: { include: { language: true } },
+      requiredSkills: {
+        select: {
+          skill: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      requiredLanguages: {
+        select: {
+          level: true,
+          language: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
     };
   }
 

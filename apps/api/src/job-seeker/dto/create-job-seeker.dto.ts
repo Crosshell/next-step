@@ -12,11 +12,11 @@ import { Type } from 'class-transformer';
 
 export class CreateJobSeekerDto {
   @IsString()
-  @Length(2, 35, { message: 'firstName must be between 2 and 35 characters' })
+  @Length(2, 35)
   firstName: string;
 
   @IsString()
-  @Length(2, 35, { message: 'lastName must be between 2 and 35 characters' })
+  @Length(2, 35)
   lastName: string;
 
   @IsString()
@@ -48,8 +48,6 @@ export class CreateJobSeekerDto {
   isOpenToWork?: boolean;
 
   @IsOptional()
-  @IsEnum(SeniorityLevel, {
-    message: 'Seniority level must be an enum SeniorityLevel',
-  })
+  @IsEnum(SeniorityLevel)
   seniorityLevel?: SeniorityLevel;
 }

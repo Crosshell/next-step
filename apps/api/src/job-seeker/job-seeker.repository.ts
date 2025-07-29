@@ -10,8 +10,27 @@ export class JobSeekerRepository {
 
   constructor(private readonly prisma: PrismaService) {
     this.jobSeekerRelations = {
-      languages: { include: { language: true } },
-      skills: { include: { skill: true } },
+      languages: {
+        select: {
+          level: true,
+          language: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+      skills: {
+        select: {
+          skill: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
       contacts: true,
     };
   }

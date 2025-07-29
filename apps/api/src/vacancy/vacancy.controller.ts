@@ -24,6 +24,7 @@ import { SearchVacancyDto } from './dto/search-vacancy.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
 import { SetLanguagesDto } from './dto/set-languages.dto';
 import { VacancyOwnerGuard } from './guards/vacancy-owner.guard';
+import { VacancySwagger } from '../../docs/swagger/vacancy.swagger';
 
 @Controller('vacancies')
 export class VacancyController {
@@ -32,6 +33,7 @@ export class VacancyController {
   @Post()
   @UseGuards(SessionAuthGuard, CompanyGuard)
   @HttpCode(HttpStatus.CREATED)
+  @VacancySwagger.create()
   async create(
     @CurrentCompany() company: Company,
     @Body() dto: CreateVacancyDto,
@@ -42,33 +44,38 @@ export class VacancyController {
   @Get('my')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   @HttpCode(HttpStatus.OK)
+  @VacancySwagger.getMyVacancies()
   async getMyVacancies(@CurrentCompany() company: Company): Promise<Vacancy[]> {
     return this.service.findMany({ companyId: company.id });
   }
 
   @Post('search')
   @HttpCode(HttpStatus.OK)
+  @VacancySwagger.search()
   async search(@Body() dto: SearchVacancyDto): Promise<Vacancy[]> {
     return this.service.search(dto);
   }
 
-  @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Vacancy> {
-    return this.service.findOneOrThrow({ id });
-  }
-
   @Get('company/:companyId')
   @HttpCode(HttpStatus.OK)
+  @VacancySwagger.getByCompany()
   async getByCompany(
     @Param('companyId') companyId: string,
   ): Promise<Vacancy[]> {
     return this.service.findMany({ companyId });
   }
 
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @VacancySwagger.findOne()
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Vacancy> {
+    return this.service.findOneOrThrow({ id });
+  }
+
   @Patch(':id')
   @UseGuards(SessionAuthGuard, CompanyGuard, VacancyOwnerGuard)
   @HttpCode(HttpStatus.OK)
+  @VacancySwagger.update()
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: UpdateVacancyDto,
@@ -79,6 +86,7 @@ export class VacancyController {
   @Delete(':id')
   @UseGuards(SessionAuthGuard, CompanyGuard, VacancyOwnerGuard)
   @HttpCode(HttpStatus.OK)
+  @VacancySwagger.delete()
   async delete(
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<MessageResponse> {
@@ -89,6 +97,7 @@ export class VacancyController {
   @Put(':id/skills')
   @UseGuards(SessionAuthGuard, CompanyGuard, VacancyOwnerGuard)
   @HttpCode(HttpStatus.OK)
+  @VacancySwagger.setRequiredSkills()
   async setRequiredSkills(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: SetSkillsDto,
@@ -99,6 +108,7 @@ export class VacancyController {
   @Put(':id/languages')
   @UseGuards(SessionAuthGuard, CompanyGuard, VacancyOwnerGuard)
   @HttpCode(HttpStatus.OK)
+  @VacancySwagger.setRequiredLanguages()
   async setRequiredLanguages(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() dto: SetLanguagesDto,
