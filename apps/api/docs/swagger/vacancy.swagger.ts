@@ -1,5 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -188,6 +189,7 @@ export class VacancySwagger {
       ApiForbiddenResponse({
         description: 'User is not a company / Company profile not found',
       }),
+      ApiBadRequestResponse({ description: 'Company not found' }),
       ...AuthSwagger.sessionAuthDecorators(),
     );
   }
@@ -273,6 +275,7 @@ export class VacancySwagger {
           },
         },
       }),
+      ApiBadRequestResponse({ description: 'Company not found' }),
     );
   }
 

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { VacancyRepository } from './vacancy.repository';
 import { CreateVacancyDto } from './dto/create-vacancy.dto';
 import { Prisma, Vacancy } from '@prisma/client';
@@ -9,6 +13,7 @@ import { SkillService } from '../skill/skill.service';
 import { SetLanguagesDto } from './dto/set-languages.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
 import { VacancySearchService } from './vacancy-search.service';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class VacancyService {
@@ -17,6 +22,7 @@ export class VacancyService {
     private readonly languageService: LanguageService,
     private readonly skillService: SkillService,
     private readonly searchService: VacancySearchService,
+    private readonly companyService: CompanyService,
   ) {}
 
   async create(companyId: string, dto: CreateVacancyDto): Promise<Vacancy> {
@@ -37,8 +43,10 @@ export class VacancyService {
     return vacancy;
   }
 
-  async findMany(where: Prisma.VacancyWhereInput): Promise<Vacancy[]> {
-    return this.repository.findMany({ where }, true);
+  async findByCompanyId(companyId: string): Promise<Vacancy[]> {
+    const company = await this.companyService.findOne({ id: companyId });
+    if (!company) throw new BadRequestException('Company not found');
+    return this.repository.findMany({ where: { companyId } }, true);
   }
 
   async search(dto: SearchVacancyDto): Promise<Vacancy[]> {
