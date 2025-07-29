@@ -9,13 +9,13 @@ import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import classes from './Profile.module.css';
 
 interface Props {
-  bio: string;
+  data: string;
   isEditable?: boolean;
 }
 
-export default function Bio({ isEditable, bio }: Props) {
+export default function Bio({ isEditable, data }: Props) {
   const [isChanging, setIsChanging] = useState<boolean>(false);
-  const [bioData, setBioData] = useState<string>(bio);
+  const [bioData, setBioData] = useState<string>(data);
 
   const toggleEdit = () => {
     setIsChanging((prev) => !prev);

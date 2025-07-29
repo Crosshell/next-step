@@ -2,13 +2,13 @@ import { useRef, useState } from 'react';
 
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
-import classes from './Profile.module.css';
 import {
   faPlus,
   faCheck,
   faXmark,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
+import classes from './Profile.module.css';
 
 interface Props {
   skills: string[];

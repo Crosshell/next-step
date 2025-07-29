@@ -4,10 +4,11 @@ import { Field, FieldArray, Form, Formik } from 'formik';
 import InfoBox from './InfoBox';
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
-import classes from './Profile.module.css';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import classes from './Profile.module.css';
+
 import { LanguageData } from '@/types/profile';
-import { languageLevel, languages } from '@/lib/profile-test-data';
+import { languageLevels, languagesList } from '@/lib/profile-data';
 import { handleLanguagesSubmit } from '@/utils/profileValidation';
 
 interface Props {
@@ -62,7 +63,7 @@ export default function Languages({ isEditable, data }: Props) {
                           <option value="" disabled>
                             Select language
                           </option>
-                          {languages.map((lang) => (
+                          {languagesList.map((lang) => (
                             <option key={lang} value={lang}>
                               {lang}
                             </option>
@@ -77,7 +78,7 @@ export default function Languages({ isEditable, data }: Props) {
                           <option value="" disabled>
                             Select level
                           </option>
-                          {languageLevel.map((level) => (
+                          {languageLevels.map((level) => (
                             <option key={level} value={level}>
                               {level}
                             </option>

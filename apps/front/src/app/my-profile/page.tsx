@@ -18,15 +18,7 @@ import classes from './page.module.css';
 import { useAuthStore } from '@/store/authSlice';
 import { logoutUser } from '@/services/userService';
 
-import {
-  bioData,
-  certificatesData,
-  educationData,
-  experienceData,
-  personalInfo,
-  skills,
-  userLanguages,
-} from '@/lib/profile-test-data';
+import { userData } from '@/lib/profile-data';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -67,18 +59,18 @@ export default function ProfilePage() {
             priority
           />
           <div className={classes['main-info-side']}>
-            <SkillItems skills={skills} />
-            <PersonalInfo {...personalInfo} />
+            <SkillItems skills={userData.skills} />
+            <PersonalInfo {...userData.personalInfo} />
           </div>
         </div>
-        <Contacts />
-        <Bio isEditable bio={bioData.bio} />
-        <WorkExperience isEditable data={experienceData} />
+        <Contacts isEditable data={userData.contacts} />
+        <Bio isEditable data={userData.bio} />
+        <WorkExperience isEditable data={userData.experience} />
 
-        <Education isEditable data={educationData} />
-        <Certificates isEditable data={certificatesData} />
+        <Education isEditable data={userData.education} />
+        <Certificates isEditable data={userData.certificates} />
 
-        <Languages isEditable data={userLanguages} />
+        <Languages isEditable data={userData.languages} />
 
         <div className="row-end">
           <button className={classes['logout-btn']} onClick={handleLogoutAll}>

@@ -10,7 +10,7 @@ import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import classes from './Profile.module.css';
 
 import { EducationData } from '@/types/profile';
-import { degreeTypes } from '@/lib/profile-test-data';
+import { degreeTypes } from '@/lib/profile-data';
 import { handleEducationSubmit } from '@/utils/profileValidation';
 
 interface Props {

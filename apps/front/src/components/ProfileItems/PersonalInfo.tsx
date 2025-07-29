@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
-import { faPencil, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 
+import { faPencil, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import classes from './Profile.module.css';
+
 import { PersonalData } from '@/types/profile';
 
 export default function PersonalInfo({

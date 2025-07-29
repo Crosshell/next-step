@@ -6,38 +6,45 @@ import ContactLink from './ContactLink';
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import ContactsModal from './ContactsModal';
 
-import classes from './Profile.module.css';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import classes from './Profile.module.css';
 
 import { useModalStore } from '@/store/modalSlice';
-import { contactData } from '@/lib/profile-test-data';
+import { ContactsData } from '@/types/profile';
 
-export default function Contacts() {
+interface Props {
+  isEditable: boolean;
+  data: ContactsData;
+}
+
+export default function Contacts({ isEditable, data }: Props) {
   const openModal = useModalStore((state) => state.openModal);
 
   return (
     <div className={classes.contacts}>
       <h3>Contacts:</h3>
 
-      {contactData &&
-        Object.entries(contactData).map(([key, value]) => {
+      {data &&
+        Object.entries(data).map(([key, value]) => {
           if (!value || value.trim().length === 0) return null;
 
           return <ContactLink key={key} type={key} url={value} />;
         })}
 
-      <button
-        className={classes['edit-contacts-btn']}
-        onClick={() =>
-          openModal(
-            <AnimatePresence>
-              <ContactsModal data={contactData} />
-            </AnimatePresence>
-          )
-        }
-      >
-        <AnimatedIcon iconType={faPlus} />
-      </button>
+      {isEditable && (
+        <button
+          className={classes['edit-contacts-btn']}
+          onClick={() =>
+            openModal(
+              <AnimatePresence>
+                <ContactsModal data={data} />
+              </AnimatePresence>
+            )
+          }
+        >
+          <AnimatedIcon iconType={faPlus} />
+        </button>
+      )}
     </div>
   );
 }
