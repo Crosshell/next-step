@@ -7,6 +7,7 @@ import {
 import { UserService } from '../../user/user.service';
 import { SessionService } from '../../session/session.service';
 import { RequestWithUser } from '../types/request-with-user.type';
+import { RequestWithSessionId } from '../types/request-with-session-id.type';
 
 @Injectable()
 export class SessionAuthGuard implements CanActivate {
@@ -16,7 +17,9 @@ export class SessionAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<RequestWithUser>();
+    const request = context
+      .switchToHttp()
+      .getRequest<RequestWithUser & RequestWithSessionId>();
 
     const sessionId = this.extractSessionId(request);
 
@@ -38,7 +41,7 @@ export class SessionAuthGuard implements CanActivate {
     return true;
   }
 
-  private extractSessionId(request: RequestWithUser): string {
+  private extractSessionId(request: RequestWithSessionId): string {
     const sessionId = request.cookies?.sid;
     if (!sessionId) {
       throw new UnauthorizedException('Session id not found');

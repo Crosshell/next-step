@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Session } from './types/session-data.type';
 import { RedisService } from '../redis/redis.service';
 import { randomUUID } from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
@@ -7,6 +6,7 @@ import {
   SESSION_PREFIX,
   USER_SESSIONS_PREFIX,
 } from './constants/session.constants';
+import { SessionSchema, Session } from './schemas/session.schema';
 
 @Injectable()
 export class SessionService {
@@ -54,8 +54,9 @@ export class SessionService {
     const data = await this.redis.get(key);
 
     if (!data) return null;
-
-    return JSON.parse(data);
+    const parsed = SessionSchema.safeParse(JSON.parse(data));
+    if (!parsed.success) return null;
+    return parsed.data;
   }
 
   async deleteSession(sid: string): Promise<void> {
@@ -95,9 +96,13 @@ export class SessionService {
     const sessionKeys = sids.map((sid) => this.sessionKey(sid));
     const raw = await this.redis.mget(sessionKeys);
 
-    raw.map((data) => {
-      if (data) sessions.push(JSON.parse(data));
-    });
+    for (const data of raw) {
+      if (data) {
+        const parsed = SessionSchema.safeParse(JSON.parse(data));
+        if (!parsed.success) continue;
+        sessions.push(parsed.data);
+      }
+    }
 
     return sessions;
   }
