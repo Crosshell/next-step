@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { Language, Prisma, Skill } from '@prisma/client';
 import { LanguageRepository } from './language.repository';
@@ -26,7 +30,7 @@ export class LanguageService {
 
   async findOneOrThrow(where: Prisma.LanguageWhereUniqueInput): Promise<Skill> {
     const language = await this.repository.findOne(where);
-    if (!language) throw new BadRequestException('Language not found');
+    if (!language) throw new NotFoundException('Language not found');
     return language;
   }
 
