@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma, Skill } from '@prisma/client';
 import { CreateSkillDto } from './dto/create-skill.dto';
 import { SkillRepository } from './skill.repository';
@@ -28,7 +32,7 @@ export class SkillService {
 
   async findOneOrThrow(where: Prisma.SkillWhereUniqueInput): Promise<Skill> {
     const skill = await this.repository.findOne(where);
-    if (!skill) throw new BadRequestException('Skill not found');
+    if (!skill) throw new NotFoundException('Skill not found');
     return skill;
   }
 

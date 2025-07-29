@@ -43,9 +43,7 @@ export class AuthSwagger {
         description: 'Registration successful. Confirmation link sent to email',
         schema: { type: 'object', properties: { message: { type: 'string' } } },
       }),
-      ApiBadRequestResponse({
-        description: 'User already exists',
-      }),
+      ApiBadRequestResponse({ description: 'User already exists' }),
     );
   }
 
