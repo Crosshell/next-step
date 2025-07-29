@@ -46,7 +46,7 @@ export class VacancyController {
   @HttpCode(HttpStatus.OK)
   @VacancySwagger.getMyVacancies()
   async getMyVacancies(@CurrentCompany() company: Company): Promise<Vacancy[]> {
-    return this.service.findMany({ companyId: company.id });
+    return this.service.findByCompanyId(company.id);
   }
 
   @Post('search')
@@ -62,7 +62,7 @@ export class VacancyController {
   async getByCompany(
     @Param('companyId') companyId: string,
   ): Promise<Vacancy[]> {
-    return this.service.findMany({ companyId });
+    return this.service.findByCompanyId(companyId);
   }
 
   @Get(':id')
