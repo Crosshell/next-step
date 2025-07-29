@@ -2,6 +2,7 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -91,7 +92,7 @@ export class LanguageSwagger {
           },
         },
       }),
-      ApiOkResponse({
+      ApiCreatedResponse({
         description: 'Language created',
         schema: {
           type: 'object',

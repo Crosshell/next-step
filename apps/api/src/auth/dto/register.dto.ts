@@ -16,9 +16,7 @@ export class RegisterDto {
     maxLength: 50,
   })
   @IsString()
-  @Length(8, 50, {
-    message: 'Password must be between 8 and 50 characters',
-  })
+  @Length(8, 50)
   password: string;
 
   @ApiProperty({
@@ -27,6 +25,6 @@ export class RegisterDto {
     example: UserType.JOB_SEEKER,
     description: 'User type (JOB_SEEKER or COMPANY)',
   })
-  @IsEnum(UserType, { message: 'User type must be an enum UserType' })
+  @IsEnum(UserType)
   type: UserType;
 }

@@ -129,7 +129,8 @@ export class AuthSwagger {
     return [
       ApiCookieAuth('sid'),
       ApiUnauthorizedResponse({
-        description: 'Session or user not found / Invalid or expired session',
+        description:
+          'Session id not found / Session not found / User not found / Invalid or expired session',
       }),
     ];
   }

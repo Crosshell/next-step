@@ -2,6 +2,7 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
+  ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -31,7 +32,7 @@ export class CompanySwagger {
           },
         },
       }),
-      ApiOkResponse({
+      ApiCreatedResponse({
         description: 'Company created',
         schema: {
           type: 'object',

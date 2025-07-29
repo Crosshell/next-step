@@ -25,6 +25,7 @@ import { SetSkillsDto } from './dto/set-skills.dto';
 import { SetLanguagesDto } from './dto/set-languages.dto';
 import { CreateJobSeekerGuard } from './guards/create-job-seeker.guard';
 import { CurrentJobSeeker } from './decorators/current-job-seeker.decorator';
+import { JobSeekerSwagger } from '../../docs/swagger/job-seeker.swagger';
 
 @Controller('job-seekers')
 export class JobSeekerController {
@@ -33,6 +34,7 @@ export class JobSeekerController {
   @Post()
   @UseGuards(SessionAuthGuard, CreateJobSeekerGuard)
   @HttpCode(HttpStatus.CREATED)
+  @JobSeekerSwagger.create()
   async create(
     @CurrentUser() user: UserWithoutPassword,
     @Body() dto: CreateJobSeekerDto,
@@ -43,6 +45,7 @@ export class JobSeekerController {
   @Get('me')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   @HttpCode(HttpStatus.OK)
+  @JobSeekerSwagger.getMyProfile()
   getMyProfile(@CurrentJobSeeker() jobSeeker: JobSeeker): JobSeeker {
     return jobSeeker;
   }
@@ -50,6 +53,7 @@ export class JobSeekerController {
   @Get(':id')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   @HttpCode(HttpStatus.OK)
+  @JobSeekerSwagger.getProfile()
   async getProfile(@Param('id', ParseUUIDPipe) id: string): Promise<JobSeeker> {
     return this.service.findOneOrThrow({ id });
   }
@@ -57,6 +61,7 @@ export class JobSeekerController {
   @Post('search')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   @HttpCode(HttpStatus.OK)
+  @JobSeekerSwagger.search()
   async search(@Body() dto: SearchJobSeekerDto): Promise<JobSeeker[]> {
     return this.service.search(dto);
   }
@@ -64,6 +69,7 @@ export class JobSeekerController {
   @Patch('me')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   @HttpCode(HttpStatus.OK)
+  @JobSeekerSwagger.update()
   async update(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
     @Body() dto: UpdateJobSeekerDto,
@@ -74,6 +80,7 @@ export class JobSeekerController {
   @Put('me/skills')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   @HttpCode(HttpStatus.OK)
+  @JobSeekerSwagger.setSkills()
   async setSkills(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
     @Body() dto: SetSkillsDto,
@@ -84,6 +91,7 @@ export class JobSeekerController {
   @Put('me/languages')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   @HttpCode(HttpStatus.OK)
+  @JobSeekerSwagger.setLanguages()
   async setLanguages(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
     @Body() dto: SetLanguagesDto,
