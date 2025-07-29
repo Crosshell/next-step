@@ -59,6 +59,7 @@ export default function Languages({ isEditable, data }: Props) {
                         <Field
                           as="select"
                           name={`languages[${index}].language`}
+                          className={classes['form-input']}
                         >
                           <option value="" disabled>
                             Select language
@@ -73,7 +74,7 @@ export default function Languages({ isEditable, data }: Props) {
                         <Field
                           as="select"
                           name={`languages[${index}].level`}
-                          className={classes['language-level-input']}
+                          className={classes['form-input']}
                         >
                           <option value="" disabled>
                             Select level

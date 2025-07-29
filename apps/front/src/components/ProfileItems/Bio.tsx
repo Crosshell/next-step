@@ -36,9 +36,14 @@ export default function Bio({ isEditable, data }: Props) {
         >
           {() => (
             <Form className={classes['bio-form']}>
-              <Field name="bio" as="textarea" rows={10} />
+              <Field
+                className={`${classes['form-input']} ${classes['form-details']}`}
+                name="bio"
+                as="textarea"
+                rows={10}
+              />
 
-              <div className={classes['info-form-btn-container']}>
+              <div className={classes['form-btn-container']}>
                 <button
                   className="underline-link"
                   type="button"

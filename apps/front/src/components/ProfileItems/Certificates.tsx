@@ -62,20 +62,20 @@ export default function Certificates({ isEditable, data }: Props) {
                           name={`certs[${index}].name`}
                           type="text"
                           placeholder="Certificate Name"
-                          className={classes['input']}
+                          className={classes['form-input']}
                         />
 
                         <Field
                           name={`certs[${index}].date`}
                           type="date"
-                          className={classes['input']}
+                          className={classes['form-input']}
                         />
 
                         <Field
                           name={`certs[${index}].url`}
                           type="text"
                           placeholder="Certificate URL"
-                          className={classes['input']}
+                          className={classes['form-input']}
                         />
 
                         <button

@@ -109,7 +109,7 @@ export default function WorkExperience({ isEditable, data }: Props) {
                             placeholder="Details"
                             as="textarea"
                             rows={3}
-                            className={classes['experience-details']}
+                            className={`${classes['form-input']} ${classes['form-details']}`}
                           />
                         </div>
                         <button

@@ -1,11 +1,3 @@
-.icon-link div {
-  padding: 5px 10px;
-  background-color: white;
-  border-radius: 5px;
-  font-size: 1.25rem;
-  color: #1f1f21;
-}
-
 .info-box {
   position: relative;
   padding: 25px 30px;
@@ -53,17 +45,6 @@
   font-size: 1.1rem;
 }
 
-.is-current {
-  display: inline-block;
-  padding: 10px 20px;
-
-  background-color: white;
-  border-radius: 5px;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #1f1f21;
-}
-
 .edit-info-btn div {
   padding: 5px 8px;
   border-radius: 10px;
@@ -80,6 +61,19 @@
   border-radius: 12px;
   font-size: 1.25rem;
   color: white;
+}
+
+.form-btn-container {
+  display: flex;
+  justify-content: end;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.form-btn-container button div {
+  padding: 8px 12px;
+  font-size: 1.25rem;
+  font-weight: 500;
 }
 
 .add-save-btn-container {
@@ -99,6 +93,23 @@
   gap: 1.5rem;
 }
 
+.form-input {
+  padding: 10px 15px;
+  width: 15%;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}
+
+.form-details {
+  padding: 20px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
 /* General form styles */
 
 /* Skills */
@@ -106,6 +117,10 @@
 .skills {
   display: flex;
   gap: 30px;
+}
+
+.skills .form-input {
+  width: 25%;
 }
 
 .skills span {
@@ -118,44 +133,30 @@
   color: #1f1f21;
 }
 
-.skills input {
-  display: block;
-  padding: 10px 15px;
-  width: 25%;
-  background-color: transparent;
-  border: 2px solid white;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: white;
-}
-
 .btn-container {
   display: flex;
   gap: 15px;
 }
 
-.edit-skills-btn div {
+.btn-container button div {
   padding: 5px 8px;
   border: 2px solid white;
   border-radius: 10px;
   font-size: 1.5rem;
+}
+
+.edit-skills-btn div {
   color: white;
 }
 
 .skills-check-btn div,
 .skills-cross-btn div {
-  padding: 5px 8px;
   background-color: white;
-  border: 2px solid white;
-  border-radius: 10px;
-  font-size: 1.5rem;
-  font-weight: 600;
   color: #1f1f21;
 }
 
 .skills-cross-btn div {
-  padding: 5px 9px;
+  padding: 5px 9.5px !important;
 }
 
 .del-btn-box {
@@ -200,6 +201,10 @@
   border: 0;
   font-size: 1.5rem;
   font-weight: 500;
+}
+
+.personal-info .birthdate-input {
+  width: 10vw;
 }
 
 .personal-info .name-input {
@@ -249,6 +254,14 @@
 
 /* Contacts */
 
+.icon-link div {
+  padding: 5px 10px;
+  background-color: white;
+  border-radius: 5px;
+  font-size: 1.25rem;
+  color: #1f1f21;
+}
+
 .contacts {
   display: flex;
   gap: 1.25%;
@@ -258,6 +271,10 @@
 .contacts h3 {
   display: inline;
   font-size: 1.5rem;
+}
+
+.contacts-btn-container {
+  margin-top: 15px;
 }
 
 .edit-contacts-btn div {
@@ -318,28 +335,6 @@
 
 /* Bio */
 
-.bio-form textarea {
-  padding: 20px;
-  margin-bottom: 20px;
-  width: 100%;
-  background-color: transparent;
-  border: 2px solid white;
-  border-radius: 10px;
-  font-size: 1.25rem;
-}
-
-.info-form-btn-container {
-  display: flex;
-  justify-content: end;
-  gap: 20px;
-}
-
-.info-form-btn-container button div {
-  padding: 8px 12px;
-  font-size: 1.25rem;
-  font-weight: 500;
-}
-
 .info-form-btn div {
   background-color: white;
   border: 2px solid white;
@@ -361,25 +356,19 @@
   margin-bottom: 20px;
 }
 
-.experience-row input {
-  padding: 10px 15px;
-  width: 15%;
-  background-color: #1f1f21;
-  border: 2px solid white;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: white;
+.experience-row .form-input:first-of-type {
+  width: 20%;
 }
 
-.experience-details {
-  padding: 20px;
-  margin-bottom: 15px;
-  width: 100%;
-  background-color: transparent;
-  border: 2px solid white;
-  border-radius: 10px;
-  font-size: 1.25rem;
+.is-current {
+  display: inline-block;
+  padding: 10px 20px;
+
+  background-color: white;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #1f1f21;
 }
 
 .experience-del-btn {
@@ -424,17 +413,6 @@
   width: 25%;
 }
 
-.education-row select {
-  padding: 10px 15px;
-  width: 15%;
-  background-color: #1f1f21;
-  border: 2px solid white;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: white;
-}
-
 /* Education */
 
 /* Certificates */
@@ -443,17 +421,6 @@
   display: flex;
   gap: 15px;
   margin-bottom: 20px;
-}
-
-.certificates-row input {
-  padding: 10px 15px;
-  width: 15%;
-  background-color: #1f1f21;
-  border: 2px solid white;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: white;
 }
 
 .certificates-row input:first-of-type {
@@ -474,18 +441,11 @@
   margin-bottom: 20px;
 }
 
-.language-row select {
-  padding: 10px 15px;
+.language-row select:first-of-type {
   width: 20%;
-  background-color: #1f1f21;
-  border: 2px solid white;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: white;
 }
 
-.language-row .language-level-input {
+.language-row select:last-of-type {
   width: 25%;
 }
 

@@ -86,7 +86,7 @@ export default function SkillItems({ skills }: Props) {
           {isAdding && (
             <input
               type="text"
-              className={classes['add-skill-input']}
+              className={classes['form-input']}
               value={newSkill}
               onChange={(e) => setNewSkill(e.target.value)}
               placeholder="Enter new skill"

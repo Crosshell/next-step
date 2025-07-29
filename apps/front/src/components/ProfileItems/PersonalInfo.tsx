@@ -57,7 +57,11 @@ export default function PersonalInfo({
                   name="name"
                   type="text"
                 />
-                <Field name="birthdate" type="date" />
+                <Field
+                  className={classes['birthdate-input']}
+                  name="birthdate"
+                  type="date"
+                />
                 <Field name="address" type="text" />
               </div>
               <div className={classes['personal-info-btn-container']}>

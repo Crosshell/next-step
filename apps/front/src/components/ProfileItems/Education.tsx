@@ -99,7 +99,7 @@ export default function Education({ isEditable, data }: Props) {
                           <Field
                             as="select"
                             name={`education[${index}].degree`}
-                            className={classes['language-level-input']}
+                            className={classes['form-input']}
                           >
                             <option value="" disabled>
                               Select degree
@@ -118,7 +118,7 @@ export default function Education({ isEditable, data }: Props) {
                             placeholder="Details"
                             as="textarea"
                             rows={3}
-                            className={classes['experience-details']}
+                            className={`${classes['form-input']} ${classes['form-details']}`}
                           />
                         </div>
                         <button
