@@ -11,6 +11,22 @@ import {
 import { CreateLanguageDto } from '../../src/language/dto/create-language.dto';
 
 export class LanguageSwagger {
+  static languageOkResponseExample = {
+    id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+    name: 'English',
+  };
+
+  static languageOkResponseSchema = {
+    type: 'object',
+    properties: {
+      id: { type: 'string', example: this.languageOkResponseExample.id },
+      name: {
+        type: 'string',
+        example: this.languageOkResponseExample.name,
+      },
+    },
+  };
+
   static findAll() {
     return applyDecorators(
       ApiOperation({ summary: 'Get all languages' }),
@@ -20,32 +36,14 @@ export class LanguageSwagger {
           type: 'array',
           items: {
             type: 'object',
-            properties: {
-              id: {
-                type: 'string',
-                example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-              },
-              name: {
-                type: 'string',
-                example: 'English',
-              },
-            },
+            properties: this.languageOkResponseSchema.properties,
           },
-          example: [
-            {
-              id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-              name: 'English',
-            },
-            {
-              id: 'a1b2c3d4-5678-90ab-cdef-1234567890ab',
-              name: 'Spanish',
-            },
-            {
-              id: 'bb0a4c4f-cd55-44ff-bfd3-5539e2df74d1',
-              name: 'French',
-            },
-          ],
         },
+        example: [
+          this.languageOkResponseExample,
+          this.languageOkResponseExample,
+          this.languageOkResponseExample,
+        ],
       }),
     );
   }
@@ -60,19 +58,8 @@ export class LanguageSwagger {
       }),
       ApiOkResponse({
         description: 'Language',
-        schema: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            name: {
-              type: 'string',
-              example: 'English',
-            },
-          },
-        },
+        schema: this.languageOkResponseSchema,
+        example: this.languageOkResponseExample,
       }),
       ApiNotFoundResponse({ description: 'Language not found' }),
     );
@@ -94,19 +81,8 @@ export class LanguageSwagger {
       }),
       ApiCreatedResponse({
         description: 'Language created',
-        schema: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            name: {
-              type: 'string',
-              example: 'English',
-            },
-          },
-        },
+        schema: this.languageOkResponseSchema,
+        example: this.languageOkResponseExample,
       }),
       ApiBadRequestResponse({ description: 'Language already exists' }),
     );
