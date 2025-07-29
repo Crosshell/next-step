@@ -17,65 +17,100 @@ import { SetSkillsDto } from '../../src/job-seeker/dto/set-skills.dto';
 import { SetLanguagesDto } from '../../src/job-seeker/dto/set-languages.dto';
 
 export class JobSeekerSwagger {
+  static jobSeekerOkResponseExample = {
+    id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+    firstName: 'First Name',
+    lastName: 'Last Name',
+    location: 'Hostel 8',
+    bio: 'bio',
+    avatarUrl: 'https://job-seeker/avatar-url',
+    expectedSalary: 1300,
+    dateOfBirth: '2025-07-29',
+    isOpenToWork: true,
+    seniorityLevel: 'MIDDLE',
+    languages: [
+      {
+        level: 'INTERMEDIATE',
+        language: {
+          id: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
+          name: 'English',
+        },
+      },
+      {
+        level: 'NATIVE',
+        language: {
+          id: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
+          name: 'Ukrainian',
+        },
+      },
+    ],
+    skills: [
+      {
+        skill: {
+          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+          name: 'HTML',
+        },
+      },
+      {
+        skill: {
+          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+          name: 'HTML',
+        },
+      },
+    ],
+    contacts: null,
+  };
+
   static jobSeekerOkResponseSchema = {
     type: 'object',
     properties: {
-      id: { type: 'string', example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158' },
-      firstName: { type: 'string', example: 'First Name' },
-      lastName: { type: 'string', example: 'Last Name' },
-      location: { type: 'string', example: 'Hostel 8' },
-      bio: { type: 'string', example: 'bio' },
-      avatarUrl: { type: 'string', example: 'https://job-seeker/avatar-url' },
-      expectedSalary: { type: 'number', example: 1300 },
-      dateOfBirth: { type: 'Date', example: '2025-07-29' },
-      isOpenToWork: { type: 'boolean', example: true },
-      seniorityLevel: { type: 'string', example: 'MIDDLE' },
+      id: { type: 'string', example: this.jobSeekerOkResponseExample.id },
+      firstName: {
+        type: 'string',
+        example: this.jobSeekerOkResponseExample.firstName,
+      },
+      lastName: {
+        type: 'string',
+        example: this.jobSeekerOkResponseExample.lastName,
+      },
+      location: {
+        type: 'string',
+        example: this.jobSeekerOkResponseExample.location,
+      },
+      bio: { type: 'string', example: this.jobSeekerOkResponseExample.bio },
+      avatarUrl: {
+        type: 'string',
+        example: this.jobSeekerOkResponseExample.avatarUrl,
+      },
+      expectedSalary: {
+        type: 'number',
+        example: this.jobSeekerOkResponseExample.expectedSalary,
+      },
+      dateOfBirth: {
+        type: 'Date',
+        example: this.jobSeekerOkResponseExample.dateOfBirth,
+      },
+      isOpenToWork: {
+        type: 'boolean',
+        example: this.jobSeekerOkResponseExample.isOpenToWork,
+      },
+      seniorityLevel: {
+        type: 'string',
+        example: this.jobSeekerOkResponseExample.seniorityLevel,
+      },
       languages: {
         type: 'array',
         items: {
           type: 'object',
           properties: {},
         },
-        example: [
-          {
-            jobSeekerId: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            languageId: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
-            level: 'INTERMEDIATE',
-            language: {
-              id: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
-              name: 'English',
-            },
-          },
-          {
-            jobSeekerId: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            languageId: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
-            level: 'NATIVE',
-            language: {
-              id: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
-              name: 'Ukrainian',
-            },
-          },
-        ],
+        example: this.jobSeekerOkResponseExample.languages,
       },
       skills: {
         type: 'array',
         items: {
           type: 'object',
           properties: {
-            jobSeekerId: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
-            skillId: {
-              type: 'string',
-              example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            },
             skill: {
               type: 'object',
               properties: {
@@ -91,85 +126,13 @@ export class JobSeekerSwagger {
             },
           },
         },
-        example: [
-          {
-            jobSeekerId: '05365a8f-5e40-4852-ac7b-4fccfd0be9ad',
-            skillId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            skill: {
-              id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-              name: 'HTML',
-            },
-          },
-          {
-            jobSeekerId: '05365a8f-5e40-4852-ac7b-4fccfd0be9ad',
-            skillId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-            skill: {
-              id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-              name: 'HTML',
-            },
-          },
-        ],
+        example: this.jobSeekerOkResponseExample.skills,
       },
-      contacts: { type: 'object', example: null },
+      contacts: {
+        type: 'object',
+        example: this.jobSeekerOkResponseExample.contacts,
+      },
     },
-  };
-
-  static jobSeekerOkResponseExample = {
-    id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-    firstName: 'First Name',
-    lastName: 'Last Name',
-    location: 'Hostel 8',
-    bio: 'bio',
-    avatarUrl: 'https://job-seeker/avatar-url',
-    expectedSalary: 1300,
-    dateOfBirth: '2025-07-29',
-    isOpenToWork: true,
-    seniorityLevel: 'MIDDLE',
-    languages: [
-      {
-        jobSeekerId: {
-          type: 'string',
-          example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-        },
-        languageId: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
-        level: 'INTERMEDIATE',
-        language: {
-          id: 'c386091e-5c7f-4fb4-a248-b77d23c4873b',
-          name: 'English',
-        },
-      },
-      {
-        jobSeekerId: {
-          type: 'string',
-          example: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-        },
-        languageId: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
-        level: 'NATIVE',
-        language: {
-          id: 'b72340be-4044-4d1d-9a7e-8bc507aafc94',
-          name: 'Ukrainian',
-        },
-      },
-    ],
-    skills: [
-      {
-        jobSeekerId: '05365a8f-5e40-4852-ac7b-4fccfd0be9ad',
-        skillId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-        skill: {
-          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-          name: 'HTML',
-        },
-      },
-      {
-        jobSeekerId: '05365a8f-5e40-4852-ac7b-4fccfd0be9ad',
-        skillId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-        skill: {
-          id: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
-          name: 'HTML',
-        },
-      },
-    ],
-    contacts: null,
   };
 
   static create() {
