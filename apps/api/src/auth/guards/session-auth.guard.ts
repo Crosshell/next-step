@@ -1,11 +1,13 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../../user/user.service';
 import { SessionService } from '../../session/session.service';
 import { RequestWithUser } from '../types/request-with-user.type';
-import {
-  SubjectNotFoundException,
-  InvalidOrExpiredSubjectException,
-} from '@common/exceptions';
+import { RequestWithSessionId } from '../types/request-with-session-id.type';
 
 @Injectable()
 export class SessionAuthGuard implements CanActivate {
@@ -15,18 +17,22 @@ export class SessionAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<RequestWithUser>();
+    const request = context
+      .switchToHttp()
+      .getRequest<RequestWithUser & RequestWithSessionId>();
 
     const sessionId = this.extractSessionId(request);
 
     const session = await this.sessionService.getSession(sessionId);
+
     if (!session) {
-      throw new InvalidOrExpiredSubjectException('session');
+      throw new UnauthorizedException('Invalid or expired session token');
     }
 
     const user = await this.userService.findOne({ id: session.userId });
+
     if (!user) {
-      throw new SubjectNotFoundException('User');
+      throw new UnauthorizedException('User not found');
     }
 
     await this.sessionService.refreshSessionTTL(session.userId, sessionId);
@@ -35,10 +41,10 @@ export class SessionAuthGuard implements CanActivate {
     return true;
   }
 
-  private extractSessionId(request: RequestWithUser): string {
+  private extractSessionId(request: RequestWithSessionId): string {
     const sessionId = request.cookies?.sid;
     if (!sessionId) {
-      throw new SubjectNotFoundException('Session id');
+      throw new UnauthorizedException('Session id not found');
     }
     return sessionId;
   }

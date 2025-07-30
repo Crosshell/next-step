@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Session } from './types/session-data.type';
 import { RedisService } from '../redis/redis.service';
 import { randomUUID } from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
@@ -7,6 +6,7 @@ import {
   SESSION_PREFIX,
   USER_SESSIONS_PREFIX,
 } from './constants/session.constants';
+import { SessionSchema, Session } from './schemas/session.schema';
 
 @Injectable()
 export class SessionService {
@@ -14,11 +14,11 @@ export class SessionService {
   private readonly sessionTTL: number;
 
   constructor(
-    private readonly redisService: RedisService,
-    private readonly configService: ConfigService,
+    private readonly redis: RedisService,
+    private readonly config: ConfigService,
   ) {
-    this.maxSessions = this.configService.getOrThrow<number>('session.max');
-    this.sessionTTL = this.configService.getOrThrow<number>('session.ttl');
+    this.maxSessions = this.config.getOrThrow<number>('session.max');
+    this.sessionTTL = this.config.getOrThrow<number>('session.ttl');
   }
 
   async createSession(userId: string, ua: string, ip: string): Promise<string> {
@@ -40,7 +40,7 @@ export class SessionService {
       await this.pruneUserSessions(sids);
     }
 
-    await this.redisService
+    await this.redis
       .pipeline()
       .setex(sessionKey, this.sessionTTL, JSON.stringify(session))
       .setex(userSessionKey, this.sessionTTL, '1')
@@ -51,11 +51,12 @@ export class SessionService {
 
   async getSession(sid: string): Promise<Session | null> {
     const key = this.sessionKey(sid);
-    const data = await this.redisService.get(key);
+    const data = await this.redis.get(key);
 
     if (!data) return null;
-
-    return JSON.parse(data);
+    const parsed = SessionSchema.safeParse(JSON.parse(data));
+    if (!parsed.success) return null;
+    return parsed.data;
   }
 
   async deleteSession(sid: string): Promise<void> {
@@ -65,11 +66,7 @@ export class SessionService {
     const sessionKey = this.sessionKey(sid);
     const userSessionsKey = this.userSessionKey(session.userId, sid);
 
-    await this.redisService
-      .pipeline()
-      .del(sessionKey)
-      .del(userSessionsKey)
-      .exec();
+    await this.redis.pipeline().del(sessionKey).del(userSessionsKey).exec();
   }
 
   async deleteAllSessions(userId: string): Promise<void> {
@@ -85,7 +82,7 @@ export class SessionService {
   }
 
   async refreshSessionTTL(userId: string, sid: string): Promise<void> {
-    await this.redisService
+    await this.redis
       .pipeline()
       .expire(this.sessionKey(sid), this.sessionTTL)
       .expire(this.userSessionKey(userId, sid), this.sessionTTL)
@@ -97,11 +94,15 @@ export class SessionService {
     const sids = await this.getSidsByUserId(userId);
 
     const sessionKeys = sids.map((sid) => this.sessionKey(sid));
-    const raw = await this.redisService.mget(sessionKeys);
+    const raw = await this.redis.mget(sessionKeys);
 
-    raw.map((data) => {
-      if (data) sessions.push(JSON.parse(data));
-    });
+    for (const data of raw) {
+      if (data) {
+        const parsed = SessionSchema.safeParse(JSON.parse(data));
+        if (!parsed.success) continue;
+        sessions.push(parsed.data);
+      }
+    }
 
     return sessions;
   }
@@ -116,7 +117,7 @@ export class SessionService {
     let leastTtlSid: string = sids[0];
 
     for (const sid of sids) {
-      const ttl = await this.redisService.ttl(this.sessionKey(sid));
+      const ttl = await this.redis.ttl(this.sessionKey(sid));
       if (ttl < minTtl) {
         minTtl = ttl;
         leastTtlSid = sid;
@@ -132,11 +133,7 @@ export class SessionService {
 
     let cursor = '0';
     do {
-      const [nextCursor, keys] = await this.redisService.scan(
-        cursor,
-        pattern,
-        10,
-      );
+      const [nextCursor, keys] = await this.redis.scan(cursor, pattern, 10);
       for (const key of keys) {
         sids.push(this.extractSid(key));
       }

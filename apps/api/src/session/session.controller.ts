@@ -3,12 +3,12 @@ import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
 import { SessionService } from './session.service';
-import { Session } from './types/session-data.type';
+import { Session } from './schemas/session.schema';
 import { SessionSwagger } from '../../docs/swagger/session.swagger';
 
 @Controller('sessions')
 export class SessionController {
-  constructor(private readonly sessionService: SessionService) {}
+  constructor(private readonly service: SessionService) {}
 
   @Get()
   @UseGuards(SessionAuthGuard)
@@ -16,6 +16,6 @@ export class SessionController {
   async getAllSessions(
     @CurrentUser() user: UserWithoutPassword,
   ): Promise<Session[]> {
-    return this.sessionService.getUserSessions(user.id);
+    return this.service.getUserSessions(user.id);
   }
 }

@@ -9,15 +9,22 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
-  const port = configService.getOrThrow('port');
+  const port = configService.getOrThrow<number>('port');
+  const clientUrl = configService.getOrThrow<string>('client.url');
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: clientUrl,
     credentials: true,
   });
 
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
   app.use(cookieParser());
 
   const config = new DocumentBuilder()

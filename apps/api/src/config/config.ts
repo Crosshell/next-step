@@ -2,7 +2,6 @@ import * as process from 'node:process';
 
 export default () => ({
   port: process.env.PORT && parseInt(process.env.PORT, 10),
-  baseUrl: process.env.BASE_URL,
 
   client: {
     url: process.env.CLIENT_URL,
@@ -52,5 +51,23 @@ export default () => ({
     unverifiedTtlMs:
       process.env.USER_UNVERIFIED_TTL_MS &&
       parseInt(process.env.USER_UNVERIFIED_TTL_MS, 10),
+  },
+
+  search: {
+    jobSeeker: {
+      pageSize:
+        process.env.SEARCH_JOB_SEEKER_PAGE_SIZE &&
+        parseInt(process.env.SEARCH_JOB_SEEKER_PAGE_SIZE, 10),
+    },
+    company: {
+      pageSize:
+        process.env.SEARCH_COMPANY_PAGE_SIZE &&
+        parseInt(process.env.SEARCH_COMPANY_PAGE_SIZE, 10),
+    },
+    vacancy: {
+      pageSize:
+        process.env.SEARCH_VACANCY_PAGE_SIZE &&
+        parseInt(process.env.SEARCH_VACANCY_PAGE_SIZE, 10),
+    },
   },
 });

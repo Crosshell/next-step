@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { RegisterDto } from './dto/register.dto';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
@@ -7,17 +12,11 @@ import { LoginDto } from './dto/login.dto';
 import { SessionService } from '../session/session.service';
 import { EmailService } from '../email/email.service';
 import { TokenService } from '../token/token.service';
-import {
-  EmailNotVerifiedException,
-  EmailVerifiedException,
-  InvalidCredentialsException,
-  InvalidOrExpiredSubjectException,
-  SubjectNotFoundException,
-} from '@common/exceptions';
 import { TokenType } from '../token/enums/token-type.enum';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -28,16 +27,21 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async validateCredentials(loginDto: LoginDto): Promise<UserWithoutPassword> {
-    const user = await this.userService.findOne(
-      { email: loginDto.email },
+  async validateCredentials(dto: LoginDto): Promise<UserWithoutPassword> {
+    const user = (await this.userService.findOne(
+      {
+        email: dto.email,
+      },
       false,
-    );
+    )) as User | null;
 
     const isValid =
-      user && (await argon2.verify(user.password, loginDto.password));
+      user &&
+      user.password &&
+      (await argon2.verify(user.password, dto.password));
+
     if (!isValid) {
-      throw new InvalidCredentialsException();
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const { password: _, ...safeUser } = user;
@@ -50,22 +54,19 @@ export class AuthService {
     ip: string,
   ): Promise<string> {
     if (!user.isEmailVerified) {
-      throw new EmailNotVerifiedException();
+      throw new ForbiddenException('Verify your email address first');
     }
     return this.sessionService.createSession(user.id, ua, ip);
   }
 
-  async register(registerDto: RegisterDto): Promise<void> {
-    await this.userService.create(registerDto);
+  async register(dto: RegisterDto): Promise<void> {
+    await this.userService.create(dto);
 
     const verifyToken = await this.tokenService.createToken(
       TokenType.VERIFY,
-      registerDto.email,
+      dto.email,
     );
-    await this.emailService.sendVerificationEmail(
-      registerDto.email,
-      verifyToken,
-    );
+    await this.emailService.sendVerificationEmail(dto.email, verifyToken);
   }
 
   async logout(sid: string): Promise<void> {
@@ -79,67 +80,46 @@ export class AuthService {
   async verifyEmail(token: string): Promise<void> {
     const email = await this.tokenService.consumeToken(TokenType.VERIFY, token);
     if (!email) {
-      throw new InvalidOrExpiredSubjectException('verify token');
+      throw new BadRequestException('Invalid or expired verify token');
     }
 
     await this.userService.update({ email }, { isEmailVerified: true });
   }
 
-  async resendVerification(
-    resendVerificationDto: ResendVerificationDto,
-  ): Promise<void> {
-    const user = await this.userService.findOne({
-      email: resendVerificationDto.email,
+  async resendVerification(dto: ResendVerificationDto): Promise<void> {
+    const user = await this.userService.findOneOrThrow({
+      email: dto.email,
     });
 
-    if (!user) {
-      throw new SubjectNotFoundException('User');
-    }
-
     if (user.isEmailVerified) {
-      throw new EmailVerifiedException();
+      throw new BadRequestException('Email already verified');
     }
 
     const verifyToken = await this.tokenService.createToken(
       TokenType.VERIFY,
-      resendVerificationDto.email,
+      dto.email,
     );
-    await this.emailService.sendVerificationEmail(
-      resendVerificationDto.email,
-      verifyToken,
-    );
+    await this.emailService.sendVerificationEmail(dto.email, verifyToken);
   }
 
-  async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
-    const user = await this.userService.findOne({
-      email: forgotPasswordDto.email,
+  async forgotPassword(dto: ForgotPasswordDto): Promise<void> {
+    await this.userService.findOneOrThrow({
+      email: dto.email,
     });
-    if (!user) {
-      throw new SubjectNotFoundException('User');
-    }
 
     const resetToken = await this.tokenService.createToken(
       TokenType.RESET,
-      forgotPasswordDto.email,
+      dto.email,
     );
-    await this.emailService.sendResetPasswordEmail(
-      forgotPasswordDto.email,
-      resetToken,
-    );
+    await this.emailService.sendResetPasswordEmail(dto.email, resetToken);
   }
 
-  async resetPassword(
-    token: string,
-    resetPasswordDto: ResetPasswordDto,
-  ): Promise<void> {
+  async resetPassword(token: string, dto: ResetPasswordDto): Promise<void> {
     const email = await this.tokenService.consumeToken(TokenType.RESET, token);
     if (!email) {
-      throw new InvalidOrExpiredSubjectException('reset token');
+      throw new BadRequestException('Invalid or expired reset token');
     }
 
-    await this.userService.update(
-      { email },
-      { password: resetPasswordDto.password },
-    );
+    await this.userService.update({ email }, { password: dto.password });
   }
 }
