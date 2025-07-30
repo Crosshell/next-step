@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Vacancy } from '@prisma/client';
-import { CreateVacancyDto } from './dto/create-vacancy.dto';
 
 @Injectable()
 export class VacancyRepository {
@@ -36,11 +35,11 @@ export class VacancyRepository {
 
   async create(
     companyId: string,
-    dto: CreateVacancyDto,
+    data: Prisma.VacancyCreateWithoutCompanyInput,
     includeRelations?: boolean,
   ): Promise<Vacancy> {
     return this.prisma.vacancy.create({
-      data: { ...dto, company: { connect: { id: companyId } } },
+      data: { ...data, company: { connect: { id: companyId } } },
       include: includeRelations ? this.vacancyRelations : null,
     });
   }

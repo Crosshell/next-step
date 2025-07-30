@@ -26,6 +26,7 @@ import { SetLanguagesDto } from './dto/set-languages.dto';
 import { CreateJobSeekerGuard } from './guards/create-job-seeker.guard';
 import { CurrentJobSeeker } from './decorators/current-job-seeker.decorator';
 import { JobSeekerSwagger } from '../../docs/swagger/job-seeker.swagger';
+import { SetContactsDto } from './dto/set-contacts.dto';
 
 @Controller('job-seekers')
 export class JobSeekerController {
@@ -97,5 +98,16 @@ export class JobSeekerController {
     @Body() dto: SetLanguagesDto,
   ): Promise<JobSeeker> {
     return this.service.setLanguages(jobSeeker.id, dto);
+  }
+
+  @Put('me/contacts')
+  @UseGuards(SessionAuthGuard, JobSeekerGuard)
+  @HttpCode(HttpStatus.OK)
+  @JobSeekerSwagger.setContacts()
+  async setContacts(
+    @CurrentJobSeeker() jobSeeker: JobSeeker,
+    @Body() dto: SetContactsDto,
+  ): Promise<JobSeeker> {
+    return this.service.setContacts(jobSeeker.id, dto);
   }
 }

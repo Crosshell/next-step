@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JobSeeker, Prisma } from '@prisma/client';
-import { CreateJobSeekerDto } from './dto/create-job-seeker.dto';
-import { UpdateJobSeekerDto } from './dto/update-job-seeker.dto';
 
 @Injectable()
 export class JobSeekerRepository {
@@ -37,11 +35,11 @@ export class JobSeekerRepository {
 
   async create(
     userId: string,
-    dto: CreateJobSeekerDto,
+    data: Prisma.JobSeekerCreateWithoutUserInput,
     includeRelations?: boolean,
   ): Promise<JobSeeker> {
     return this.prisma.jobSeeker.create({
-      data: { ...dto, user: { connect: { id: userId } } },
+      data: { ...data, user: { connect: { id: userId } } },
       include: includeRelations ? this.jobSeekerRelations : null,
     });
   }
@@ -65,12 +63,12 @@ export class JobSeekerRepository {
 
   async update(
     where: Prisma.JobSeekerWhereUniqueInput,
-    dto: UpdateJobSeekerDto,
+    data: Prisma.JobSeekerUpdateInput,
     includeRelations?: boolean,
   ): Promise<JobSeeker> {
     return this.prisma.jobSeeker.update({
       where,
-      data: dto,
+      data,
       include: includeRelations ? this.jobSeekerRelations : null,
     });
   }
@@ -112,6 +110,25 @@ export class JobSeekerRepository {
         },
       },
       include: includeRelations ? this.jobSeekerRelations : null,
+    });
+  }
+
+  async setContacts(
+    id: string,
+    data: Prisma.JobSeekerContactsCreateWithoutJobSeekerInput,
+    includeRelations?: boolean,
+  ): Promise<JobSeeker> {
+    return this.prisma.jobSeeker.update({
+      where: { id },
+      data: {
+        contacts: {
+          upsert: {
+            update: data,
+            create: data,
+          },
+        },
+      },
+      include: includeRelations ? this.jobSeekerRelations : undefined,
     });
   }
 }
