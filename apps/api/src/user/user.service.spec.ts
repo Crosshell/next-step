@@ -186,4 +186,35 @@ describe('UserService', () => {
       expect(result).toEqual(mockUser);
     });
   });
+
+  describe('findOneOrThrow', () => {
+    const where: Prisma.UserWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+    };
+
+    it('should find user', async () => {
+      repository.findOne.mockResolvedValue(mockUserWithoutPassword);
+
+      const result = await service.findOneOrThrow(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(result).toEqual(mockUserWithoutPassword);
+    });
+
+    it('should throw BadRequestException if user does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      await expect(service.findOneOrThrow(where)).rejects.toThrow(
+        new BadRequestException('User not found'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+    });
+  });
+
+  describe('assertNotExists', () => {
+    const where: Prisma.UserWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+    };
+  });
 });
