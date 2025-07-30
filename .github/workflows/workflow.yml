@@ -23,13 +23,13 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: ./api
+        working-directory: ./apps/api
         run: npm ci
 
       - name: Generate Prisma client
-        working-directory: ./api
+        working-directory: ./apps/api
         run: npx prisma generate
 
       - name: Run unit tests
-        working-directory: ./api
+        working-directory: ./apps/api
         run: npm test
