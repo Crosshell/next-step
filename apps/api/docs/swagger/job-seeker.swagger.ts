@@ -17,6 +17,7 @@ import { SetSkillsDto } from '../../src/job-seeker/dto/set-skills.dto';
 import { SetLanguagesDto } from '../../src/job-seeker/dto/set-languages.dto';
 import { LanguageSwagger } from './language.swagger';
 import { SkillSwagger } from './skill.swagger';
+import { SetContactsDto } from '../../src/job-seeker/dto/set-contacts.dto';
 
 export class JobSeekerSwagger {
   static jobSeekerOkResponseExample = {
@@ -48,7 +49,14 @@ export class JobSeekerSwagger {
         skill: SkillSwagger.skillOkResponseExample,
       },
     ],
-    contacts: null,
+    contacts: {
+      jobSeekerId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+      githubUrl: 'https://github.com/example',
+      linkedinUrl: 'https://www.linkedin.com/in/example',
+      telegramUrl: 'https://t.me/example',
+      publicEmail: 'public@gmail.com',
+      phoneNumber: '+380732222222',
+    },
     createdAt: '2025-07-29T17:11:23.567Z',
     updatedAt: '2025-07-29T17:11:23.567Z',
   };
@@ -344,6 +352,36 @@ export class JobSeekerSwagger {
       ApiNotFoundResponse({ description: 'Job seeker not found' }),
       ApiForbiddenResponse({ description: 'User is not a job seeker' }),
       ApiBadRequestResponse({ description: 'Language not found' }),
+      ...AuthSwagger.sessionAuthDecorators(),
+    );
+  }
+
+  static setContacts() {
+    return applyDecorators(
+      ApiOperation({ description: "Set job seeker's contacts" }),
+      ApiBody({
+        description: "Set job seeker's contacts data",
+        type: SetContactsDto,
+        examples: {
+          contacts: {
+            value: {
+              jobSeekerId: '2fd1960a-461c-4cfb-ba19-7ede8ef6e158',
+              githubUrl: 'https://github.com/example',
+              linkedinUrl: 'https://www.linkedin.com/in/example',
+              telegramUrl: 'https://t.me/example',
+              publicEmail: 'public@gmail.com',
+              phoneNumber: '+380732222222',
+            },
+          },
+        },
+      }),
+      ApiOkResponse({
+        description: 'Job seeker contacts updated',
+        schema: this.jobSeekerOkResponseSchema,
+        example: this.jobSeekerOkResponseExample,
+      }),
+      ApiNotFoundResponse({ description: 'Job seeker not found' }),
+      ApiForbiddenResponse({ description: 'User is not a job seeker' }),
       ...AuthSwagger.sessionAuthDecorators(),
     );
   }
