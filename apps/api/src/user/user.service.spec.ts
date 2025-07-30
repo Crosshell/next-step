@@ -91,4 +91,75 @@ describe('UserService', () => {
       expect(repository.create).not.toHaveBeenCalled();
     });
   });
+
+  describe('deleteMany', () => {
+    const where: Prisma.UserWhereInput = {
+      isEmailVerified: false,
+    };
+    const batchPayload: Prisma.BatchPayload = { count: 5 };
+
+    it('should delete users', async () => {
+      repository.deleteMany.mockResolvedValue(batchPayload);
+
+      const result = await service.deleteMany(where);
+
+      expect(repository.deleteMany).toHaveBeenCalledWith(where);
+      expect(result).toEqual(batchPayload);
+    });
+  });
+
+  describe('update', () => {
+    const where: Prisma.UserWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+    };
+
+    const data: Omit<Prisma.UserUpdateInput, 'type'> = {
+      password: 'plainPassword',
+      isEmailVerified: true,
+    };
+
+    it('should update a user', async () => {
+      const hashedPassword = 'hashedPassword123';
+
+      repository.findOne.mockResolvedValue(mockUserWithoutPassword);
+      mockedArgon2.hash.mockResolvedValue(hashedPassword);
+      repository.update.mockResolvedValue(mockUserWithoutPassword);
+
+      const result = await service.update(where, data);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where, true);
+      expect(mockedArgon2.hash).toHaveBeenCalledWith(data.password);
+      expect(repository.update).toHaveBeenCalledWith(where, {
+        ...data,
+        password: hashedPassword,
+      });
+      expect(result).toEqual(mockUserWithoutPassword);
+    });
+
+    it('should not update password if not provided', async () => {
+      repository.findOne.mockResolvedValue(mockUserWithoutPassword);
+      repository.update.mockResolvedValue(mockUserWithoutPassword);
+
+      const result = await service.update(where, { isEmailVerified: true });
+
+      expect(repository.findOne).toHaveBeenCalledWith(where, true);
+      expect(mockedArgon2.hash).not.toHaveBeenCalled();
+      expect(repository.update).toHaveBeenCalledWith(where, {
+        isEmailVerified: true,
+      });
+      expect(result).toEqual(mockUserWithoutPassword);
+    });
+
+    it('should throw BadRequestException if user does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      await expect(service.update(where, data)).rejects.toThrow(
+        new BadRequestException('User not found'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where, true);
+      expect(mockedArgon2.hash).not.toHaveBeenCalled();
+      expect(repository.update).not.toHaveBeenCalled();
+    });
+  });
 });
