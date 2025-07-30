@@ -13,6 +13,7 @@ import { JobSeekerRepository } from './job-seeker.repository';
 import { SkillService } from '../skill/skill.service';
 import { LanguageService } from '../language/language.service';
 import { JobSeekerSearchService } from './job-seeker-search.service';
+import { SetContactsDto } from './dto/set-contacts.dto';
 
 @Injectable()
 export class JobSeekerService {
@@ -67,5 +68,9 @@ export class JobSeekerService {
     const languageIds = dto.languages.map((language) => language.languageId);
     await this.languageService.assertExists(languageIds);
     return this.repository.setLanguages(id, dto.languages, true);
+  }
+
+  async setContacts(id: string, dto: SetContactsDto): Promise<JobSeeker> {
+    return this.repository.setContacts(id, dto, true);
   }
 }

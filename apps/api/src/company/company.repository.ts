@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Company, Prisma } from '@prisma/client';
-import { CreateCompanyDto } from './dto/create-company.dto';
 
 @Injectable()
 export class CompanyRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userId: string, dto: CreateCompanyDto): Promise<Company> {
+  async create(
+    userId: string,
+    data: Prisma.CompanyCreateWithoutUserInput,
+  ): Promise<Company> {
     return this.prisma.company.create({
       data: {
-        ...dto,
+        ...data,
         user: {
           connect: {
             id: userId,
