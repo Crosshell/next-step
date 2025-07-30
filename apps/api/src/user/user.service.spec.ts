@@ -216,5 +216,24 @@ describe('UserService', () => {
     const where: Prisma.UserWhereUniqueInput = {
       id: '123e4567-e89b-12d3-a456-426614174000',
     };
+
+    it('should not throw if user does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      const result = await service.assertNotExists(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw BadRequestException if user exists', async () => {
+      repository.findOne.mockResolvedValue(mockUserWithoutPassword);
+
+      await expect(service.assertNotExists(where)).rejects.toThrow(
+        new BadRequestException('User already exists'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+    });
   });
 });
