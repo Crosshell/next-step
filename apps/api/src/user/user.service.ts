@@ -20,7 +20,7 @@ export class UserService {
 
   async update(
     where: Prisma.UserWhereUniqueInput,
-    data: Prisma.UserUpdateInput,
+    data: Omit<Prisma.UserUpdateInput, 'type'>,
   ): Promise<UserWithoutPassword> {
     await this.findOneOrThrow(where);
 
@@ -39,9 +39,8 @@ export class UserService {
 
   async findOneOrThrow(
     where: Prisma.UserWhereUniqueInput,
-    excludePassword = true,
   ): Promise<UserWithoutPassword | User> {
-    const user = await this.repository.findOne(where, excludePassword);
+    const user = await this.repository.findOne(where);
     if (!user) throw new BadRequestException('User not found');
     return user;
   }
