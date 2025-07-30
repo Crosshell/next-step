@@ -103,6 +103,7 @@ export class JobSeekerController {
   @Put('me/contacts')
   @UseGuards(SessionAuthGuard, JobSeekerGuard)
   @HttpCode(HttpStatus.OK)
+  @JobSeekerSwagger.setContacts()
   async setContacts(
     @CurrentJobSeeker() jobSeeker: JobSeeker,
     @Body() dto: SetContactsDto,
