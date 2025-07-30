@@ -1,3 +1,8 @@
+.profile-container button {
+  background-color: transparent;
+  border: 0;
+}
+
 .page-header {
   margin-bottom: 40px;
   font-size: 2.5rem;
@@ -23,58 +28,26 @@
   justify-content: space-between;
 }
 
-.skills {
-  display: flex;
-  gap: 30px;
-}
-
-.skills span {
-  padding: 10px 30px;
-  background-color: white;
-  border-radius: 10px;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: black;
-}
-
-.personal-info h2 {
-  margin-bottom: 20px;
-  font-size: 2.5rem;
-}
-
-.personal-info p {
-  margin-bottom: 15px;
-  font-size: 1.5rem;
-  font-weight: 500;
-}
-
-.edit-link div {
+.edit-info-btn {
   position: absolute;
   bottom: 0;
   right: 0;
-  padding: 5px 8px;
   background-color: transparent;
+  border: 0;
+}
+
+.edit-info-btn div {
+  padding: 5px 8px;
   border: 2px solid #37aa9c;
   border-radius: 5px;
   font-size: 2rem;
   color: #37aa9c;
 }
 
-.contacts {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.contacts h3 {
-  display: inline;
-  font-size: 1.5rem;
-}
-
 .logout-btn {
   padding: 10px 20px;
   background-color: transparent;
-  border: 3px solid #f37199;
+  border: 3px solid #f37199 !important;
   border-radius: 10px;
   font-size: 1.5rem;
   color: #f37199;

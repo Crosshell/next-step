@@ -16,8 +16,9 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@tanstack/react-query": "^5.81.5",
     "axios": "^1.10.0",
+    "formik": "^2.4.6",
     "framer-motion": "^12.5.0",
-    "next": "15.2.3",
+    "next": "^15.4.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zustand": "^5.0.6"

@@ -41,6 +41,14 @@ a {
   }
 }
 
+input,
+textarea,
+button,
+select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
 .container {
   margin: auto;
   margin-top: 50px;

@@ -1,11 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
 import { useModalStore } from '@/store/modalSlice';
 import classes from './CompanyInfos.module.css';
+import CompanyInfoModal from './CompanyInfoModal';
 
 export default function CompanyInfoBox() {
   const isModalOpen = useModalStore((state) => state.isOpen);
@@ -14,7 +15,11 @@ export default function CompanyInfoBox() {
   const [renderKey, setRenderKey] = useState<number>(0);
 
   const handleClick = () => {
-    openModal();
+    openModal(
+      <AnimatePresence>
+        <CompanyInfoModal />
+      </AnimatePresence>
+    );
     setRenderKey((prev) => prev + 1);
   };
 

@@ -1,17 +1,14 @@
 'use client';
 import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import RegistrationForm from '@/components/SignUpItems/RegistrationForm';
 
 import classes from './page.module.css';
-import ProfileForm from '@/components/SignUpItems/ProfileForm';
 
 export default function SignUpPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const step = searchParams.get('step');
 
   useEffect(() => {
     router.push('/sign-up?step=role');
@@ -28,7 +25,7 @@ export default function SignUpPage() {
           priority
         />
       </div>
-      {step !== 'profile' ? <RegistrationForm /> : <ProfileForm />}
+      <RegistrationForm />
     </>
   );
 }

@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useMutation } from '@tanstack/react-query';
 
@@ -17,19 +16,9 @@ interface Props {
 }
 
 export default function ConfirmBoxItem({ email }: Props) {
-  const router = useRouter();
-
   const { mutate, isSuccess, isPending, isError } = useMutation({
     mutationFn: resendEmail,
   });
-
-  const stepUpHandler = () => {
-    router.push('/sign-up?step=profile');
-  };
-
-  const onConfirmed = () => {
-    stepUpHandler();
-  };
 
   const handleResendEmail = () => {
     mutate({ email });
@@ -60,24 +49,21 @@ export default function ConfirmBoxItem({ email }: Props) {
 
       <div className={classes['info-container']}>
         {isSuccess && (
-          <>
-            <MessageBox type="info">
-              <p>We have sent you another confirmation letter</p>
-            </MessageBox>
-          </>
+          <MessageBox type="info">
+            <p>We have sent you another confirmation letter</p>
+          </MessageBox>
         )}
         {isError && (
-          <MessageBox>Failed to resent a confirmation letter</MessageBox>
+          <MessageBox>Failed to resend a confirmation letter</MessageBox>
         )}
-
         {isPending && (
           <MessageBox type="info">
-            Wait while we sending you another letter...
+            Wait while we’re sending you another letter...
           </MessageBox>
         )}
       </div>
 
-      <div className="row-space-between">
+      <div className="row-center">
         <div className="align-center">
           <HoveredItem scale={1.1}>
             <button
@@ -88,11 +74,6 @@ export default function ConfirmBoxItem({ email }: Props) {
             </button>
           </HoveredItem>
         </div>
-        <HoveredItem scale={1.05}>
-          <button className={classes['continue-btn']} onClick={onConfirmed}>
-            Confirmed
-          </button>
-        </HoveredItem>
       </div>
     </motion.div>
   );
