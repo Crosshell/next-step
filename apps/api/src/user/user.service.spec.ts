@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { UserRepository } from './user.repository';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { UserWithoutPassword } from './types/user-without-password.type';
 import { BadRequestException } from '@nestjs/common';
@@ -13,15 +13,15 @@ describe('UserService', () => {
   let service: UserService;
   let repository: jest.Mocked<UserRepository>;
 
-  // const mockUser: User = {
-  //   id: '123e4567-e89b-12d3-a456-426614174000',
-  //   email: 'test@example.com',
-  //   password: 'hashedPassword',
-  //   type: 'COMPANY',
-  //   isEmailVerified: false,
-  //   createdAt: new Date(),
-  //   updatedAt: new Date(),
-  // };
+  const mockUser: User = {
+    id: '123e4567-e89b-12d3-a456-426614174000',
+    email: 'test@example.com',
+    password: 'hashedPassword',
+    type: 'COMPANY',
+    isEmailVerified: false,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
   const mockUserWithoutPassword: UserWithoutPassword = {
     id: '123e4567-e89b-12d3-a456-426614174000',
@@ -127,7 +127,7 @@ describe('UserService', () => {
 
       const result = await service.update(where, data);
 
-      expect(repository.findOne).toHaveBeenCalledWith(where, true);
+      expect(repository.findOne).toHaveBeenCalledWith(where);
       expect(mockedArgon2.hash).toHaveBeenCalledWith(data.password);
       expect(repository.update).toHaveBeenCalledWith(where, {
         ...data,
@@ -142,7 +142,7 @@ describe('UserService', () => {
 
       const result = await service.update(where, { isEmailVerified: true });
 
-      expect(repository.findOne).toHaveBeenCalledWith(where, true);
+      expect(repository.findOne).toHaveBeenCalledWith(where);
       expect(mockedArgon2.hash).not.toHaveBeenCalled();
       expect(repository.update).toHaveBeenCalledWith(where, {
         isEmailVerified: true,
@@ -157,9 +157,33 @@ describe('UserService', () => {
         new BadRequestException('User not found'),
       );
 
-      expect(repository.findOne).toHaveBeenCalledWith(where, true);
+      expect(repository.findOne).toHaveBeenCalledWith(where);
       expect(mockedArgon2.hash).not.toHaveBeenCalled();
       expect(repository.update).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('findOne', () => {
+    const where: Prisma.UserWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+    };
+
+    it('should find user without password', async () => {
+      repository.findOne.mockResolvedValue(mockUserWithoutPassword);
+
+      const result = await service.findOne(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where, true);
+      expect(result).toEqual(mockUserWithoutPassword);
+    });
+
+    it('should find user with password', async () => {
+      repository.findOne.mockResolvedValue(mockUser);
+
+      const result = await service.findOne(where, false);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where, false);
+      expect(result).toEqual(mockUser);
     });
   });
 });

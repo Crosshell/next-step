@@ -32,15 +32,15 @@ export class UserService {
 
   async findOne(
     where: Prisma.UserWhereUniqueInput,
+    excludePassword = true,
   ): Promise<UserWithoutPassword | User | null> {
-    return this.repository.findOne(where);
+    return this.repository.findOne(where, excludePassword);
   }
 
   async findOneOrThrow(
     where: Prisma.UserWhereUniqueInput,
-    excludePassword = true,
   ): Promise<UserWithoutPassword | User> {
-    const user = await this.repository.findOne(where, excludePassword);
+    const user = await this.repository.findOne(where);
     if (!user) throw new BadRequestException('User not found');
     return user;
   }
