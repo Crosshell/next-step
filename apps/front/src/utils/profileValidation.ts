@@ -1,11 +1,12 @@
+import { FormikHelpers } from 'formik';
+
 import {
   CertificateData,
   EducationData,
   ExperienceData,
   LanguageData,
 } from '@/types/profile';
-import { FormikHelpers } from 'formik';
-import { ProfileFormData } from '@/types/authForm';
+import { ProfileFormData } from '@/types/profile';
 
 export function validateProfileForm(values: ProfileFormData) {
   const errors: Partial<ProfileFormData> = {};

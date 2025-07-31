@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import SkillItems from '@/components/ProfileItems/SkillItems';
 import PersonalInfo from '@/components/ProfileItems/PersonalInfo';
@@ -13,34 +13,54 @@ import Languages from '@/components/ProfileItems/Languages';
 import Certificates from '@/components/ProfileItems/Certificates';
 import WorkExperience from '@/components/ProfileItems/WorkExperience';
 import Education from '@/components/ProfileItems/Education';
+import ProfileForm from '@/components/ProfileItems/ProfileForm';
+import MessageBox from '@/components/MessageBox/MessageBox';
 
 import classes from './page.module.css';
 
-import { useAuthStore } from '@/store/authSlice';
 import { logoutUser } from '@/services/userService';
+import { getProfile } from '@/services/jobseekerService';
 
 import { userData } from '@/lib/profile-data';
 import { useModalStore } from '@/store/modalSlice';
-import ProfileForm from '@/components/ProfileItems/ProfileForm';
+import { useAuthStore } from '@/store/authSlice';
+
+import { ProfileFormData } from '@/types/profile';
+import { ApiError } from '@/types/authForm';
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { setIsLogged, setIsConfirmed, setRole, hasProfile } = useAuthStore();
+  const { setIsLogged, setIsConfirmed, setRole } = useAuthStore();
   const openModal = useModalStore((state) => state.openModal);
+  const closeModal = useModalStore((state) => state.closeModal);
+
+  const {
+    data: profileData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<ProfileFormData | null, ApiError>({
+    queryKey: ['profile'],
+    queryFn: getProfile,
+    staleTime: 1000 * 60 * 5,
+    retry: false,
+  });
 
   useEffect(() => {
-    if (!hasProfile) {
+    if (isError && error?.status === 403) {
       openModal(<ProfileForm />, true);
+    } else if (profileData) {
+      closeModal();
     }
-  }, [hasProfile, openModal]);
+  }, [isError, error, profileData, openModal, closeModal]);
 
   const { mutate: logoutMutate } = useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
+      router.push('/sign-in');
       setIsLogged(false);
       setIsConfirmed(false);
       setRole(undefined);
-      router.push('/sign-in');
     },
     onError: (err) => {
       console.error('Logout failed:', err);
@@ -56,40 +76,56 @@ export default function ProfilePage() {
     logoutMutate();
   };
 
+  if (isLoading)
+    return (
+      <div className={classes['profile-message-box']}>
+        <MessageBox type="info">
+          <p>Loading profile...</p>
+        </MessageBox>
+      </div>
+    );
+
+  if (isError && error?.status !== 403)
+    return (
+      <div className={classes['profile-message-box']}>
+        <MessageBox type="error">
+          <p>Error loading profile: {error?.message || 'Unexpected error'}</p>
+        </MessageBox>
+      </div>
+    );
+
+  if (!profileData) return null;
+
   return (
     <div className="container">
-      {hasProfile && (
-        <div className={classes['profile-container']}>
-          <h1 className={classes['page-header']}>Your Next Level Profile</h1>
-          <div className={classes['main-info']}>
-            <Image
-              src="/images/no-avatar.png"
-              alt="avatar-image"
-              width={250}
-              height={250}
-              priority
-            />
-            <div className={classes['main-info-side']}>
-              <SkillItems skills={userData.skills} />
-              <PersonalInfo {...userData.personalInfo} />
-            </div>
-          </div>
-          <Contacts isEditable data={userData.contacts} />
-          <Bio isEditable data={userData.bio} />
-          <WorkExperience isEditable data={userData.experience} />
-
-          <Education isEditable data={userData.education} />
-          <Certificates isEditable data={userData.certificates} />
-
-          <Languages isEditable data={userData.languages} />
-
-          <div className="row-end">
-            <button className={classes['logout-btn']} onClick={handleLogoutAll}>
-              Log out from all devices
-            </button>
+      <div className={classes['profile-container']}>
+        <h1 className={classes['page-header']}>Your Next Level Profile</h1>
+        <div className={classes['main-info']}>
+          <Image
+            src="/images/no-avatar.png"
+            alt="avatar-image"
+            width={250}
+            height={250}
+            priority
+          />
+          <div className={classes['main-info-side']}>
+            <SkillItems skills={userData.skills} />
+            <PersonalInfo {...userData.personalInfo} />
           </div>
         </div>
-      )}
+        <Contacts isEditable data={userData.contacts} />
+        <Bio isEditable data={userData.bio} />
+        <WorkExperience isEditable data={userData.experience} />
+        <Education isEditable data={userData.education} />
+        <Certificates isEditable data={userData.certificates} />
+        <Languages isEditable data={userData.languages} />
+
+        <div className="row-end">
+          <button className={classes['logout-btn']} onClick={handleLogoutAll}>
+            Log out from all devices
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

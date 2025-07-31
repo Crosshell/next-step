@@ -1,15 +1,20 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Formik, Form, Field } from 'formik';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import AnimatedIcon from '../HoveredItem/HoveredItem';
 import MessageBox from '../MessageBox/MessageBox';
 
 import classes from './Profile.module.css';
 
-import { ProfileFormData } from '@/types/authForm';
+import { ProfileFormData } from '@/types/profile';
 import { validateProfileForm } from '@/utils/profileValidation';
+import { createProfile as createProfileFn } from '@/services/jobseekerService';
+import { useModalStore } from '@/store/modalSlice';
 
 const initialValues: ProfileFormData = {
   firstName: '',
@@ -18,8 +23,29 @@ const initialValues: ProfileFormData = {
 };
 
 export default function ProfileForm() {
+  const [requestErrors, setRequestErrors] = useState<string[]>([]);
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const closeModal = useModalStore((state) => state.closeModal);
+
+  const { mutate: createProfile, isPending } = useMutation({
+    mutationFn: createProfileFn,
+    onSuccess: async (result) => {
+      if (result.status === 'error') {
+        setRequestErrors([result.error]);
+        return;
+      }
+
+      setRequestErrors([]);
+      await queryClient.invalidateQueries({ queryKey: ['profile'] });
+      closeModal();
+      router.refresh();
+    },
+  });
+
   const handleSubmit = (values: ProfileFormData) => {
-    console.log(values);
+    createProfile(values);
   };
 
   return (
@@ -78,13 +104,27 @@ export default function ProfileForm() {
               </div>
             )}
 
+            {requestErrors.length > 0 && (
+              <div className={classes['error-container']}>
+                {requestErrors.map((error) => {
+                  return <MessageBox key={error}>{error}</MessageBox>;
+                })}
+              </div>
+            )}
+
             <h5>
               You can change this information anytime in your{' '}
               <span className="font-weight-600">Profile Page</span>
             </h5>
             <div className="row-center">
-              <button className={classes['profile-form-btn']} type="submit">
-                <AnimatedIcon>Create Profile </AnimatedIcon>
+              <button
+                className={classes['profile-form-btn']}
+                type="submit"
+                disabled={isPending}
+              >
+                <AnimatedIcon>
+                  {isPending ? 'Creating...' : 'Create Profile'}
+                </AnimatedIcon>
               </button>
             </div>
           </Form>

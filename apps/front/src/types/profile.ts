@@ -1,3 +1,9 @@
+interface ProfileFormData {
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+}
+
 interface PersonalData {
   name: string;
   birthdate: string;
@@ -41,6 +47,7 @@ interface EducationData {
 }
 
 export {
+  type ProfileFormData,
   type PersonalData,
   type ContactsData,
   type LanguageData,
