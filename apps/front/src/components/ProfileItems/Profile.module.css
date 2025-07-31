@@ -450,3 +450,59 @@
 }
 
 /* Languages */
+
+/* Profile Form */
+
+.profile-form-container {
+  margin: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-form-container h1 {
+  margin-bottom: 15px;
+  font-size: 2.5rem;
+}
+
+.profile-form-container h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.profile-form {
+  margin-bottom: 10px;
+}
+
+.profile-form p {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.profile-form input {
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  font-size: 1.5rem;
+}
+
+.profile-form-btn {
+  border: 0;
+  background-color: transparent;
+}
+
+.profile-form-btn div {
+  padding: 10px 40px;
+  background-color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: #1f1f21;
+}
+
+.profile-form-container h5 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+/* Profile Form */

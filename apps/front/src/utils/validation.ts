@@ -1,8 +1,4 @@
-import {
-  PartialRegistrationFormData,
-  ProfileFormData,
-  LogInFormData,
-} from '@/types/authForm';
+import { PartialRegistrationFormData, LogInFormData } from '@/types/authForm';
 
 export const validateEmail = (email?: string): string | null => {
   if (!email || email.length < 6 || !email.includes('@')) {
@@ -55,20 +51,6 @@ export const validateLogInForm = (data: LogInFormData): string[] => {
 
   const passwordError = validatePassword(data.password);
   if (passwordError) errors.push(passwordError);
-
-  return errors;
-};
-
-export const validateProfileForm = (data: ProfileFormData): string[] => {
-  const errors: string[] = [];
-
-  if (!data['first-name']) {
-    errors.push('Fill the First Name field, please');
-  }
-
-  if (!data['last-name']) {
-    errors.push('Fill the Last Name field, please');
-  }
 
   return errors;
 };

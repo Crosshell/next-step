@@ -8,13 +8,9 @@ interface RegistrationFormData {
 type PartialRegistrationFormData = Partial<RegistrationFormData>;
 
 interface ProfileFormData {
-  'first-name': string;
-  'last-name': string;
-  'birth-date': string;
-  field: string;
-  level: string;
-  university: string;
-  specialty: string;
+  firstName: string;
+  lastName: string;
+  birthDate: string;
 }
 
 interface LogInFormData {

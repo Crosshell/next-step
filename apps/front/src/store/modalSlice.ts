@@ -4,13 +4,16 @@ import { create } from 'zustand';
 interface ModalState {
   isOpen: boolean;
   content: ReactNode | null;
-  openModal: (content: ReactNode) => void;
+  isAbsolute: boolean;
+  openModal: (content: ReactNode, isAbsolute?: boolean) => void;
   closeModal: () => void;
 }
 
 export const useModalStore = create<ModalState>((set) => ({
   isOpen: false,
   content: null,
-  openModal: (content) => set({ isOpen: true, content }),
+  isAbsolute: false,
+  openModal: (content, isAbsolute = false) =>
+    set({ isOpen: true, content, isAbsolute }),
   closeModal: () => set({ isOpen: false, content: null }),
 }));
