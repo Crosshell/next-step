@@ -97,4 +97,15 @@ describe('LanguageService', () => {
       expect(repository.create).not.toHaveBeenCalled();
     });
   });
+
+  describe('findAll', () => {
+    it('should return all languages', async () => {
+      repository.findAll.mockResolvedValue([mockLanguage, mockLanguage]);
+
+      const result = await service.findAll();
+
+      expect(repository.findAll).toHaveBeenCalled();
+      expect(result).toEqual([mockLanguage, mockLanguage]);
+    });
+  });
 });
