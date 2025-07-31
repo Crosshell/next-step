@@ -3,6 +3,7 @@ import { LanguageRepository } from './language.repository';
 import { Language } from '@prisma/client';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
+import { CreateLanguageDto } from './dto/create-language.dto';
 
 describe('LanguageService', () => {
   let service: LanguageService;
@@ -66,6 +67,34 @@ describe('LanguageService', () => {
       expect(repository.count).toHaveBeenCalledWith({
         id: { in: languageIds },
       });
+    });
+  });
+
+  describe('create', () => {
+    const dto: CreateLanguageDto = {
+      name: 'English',
+    };
+
+    it('should create a language', async () => {
+      repository.findOne.mockResolvedValue(null);
+      repository.create.mockResolvedValue(mockLanguage);
+
+      const result = await service.create(dto);
+
+      expect(repository.findOne).toHaveBeenCalledWith({ name: dto.name });
+      expect(repository.create).toHaveBeenCalledWith(dto);
+      expect(result).toEqual(mockLanguage);
+    });
+
+    it('should throw BadRequestException if language already exists', async () => {
+      repository.findOne.mockResolvedValue(mockLanguage);
+
+      await expect(service.create(dto)).rejects.toThrow(
+        new BadRequestException('Language already exists'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith({ name: dto.name });
+      expect(repository.create).not.toHaveBeenCalled();
     });
   });
 });
