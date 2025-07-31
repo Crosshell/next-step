@@ -158,4 +158,32 @@ describe('LanguageService', () => {
       expect(repository.findOne).toHaveBeenCalledWith(where);
     });
   });
+
+  describe('delete', () => {
+    const where: Prisma.LanguageWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+    };
+
+    it('should delete a language', async () => {
+      repository.findOne.mockResolvedValue(mockLanguage);
+      repository.delete.mockResolvedValue(mockLanguage);
+
+      const result = await service.delete(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(repository.delete).toHaveBeenCalledWith(where);
+      expect(result).toEqual(mockLanguage);
+    });
+
+    it('should throw NotFoundException if language does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      await expect(service.delete(where)).rejects.toThrow(
+        new NotFoundException('Language not found'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(repository.delete).not.toHaveBeenCalled();
+    });
+  });
 });
