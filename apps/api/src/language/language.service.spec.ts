@@ -1,8 +1,8 @@
 import { LanguageService } from './language.service';
 import { LanguageRepository } from './language.repository';
-import { Language } from '@prisma/client';
+import { Language, Prisma } from '@prisma/client';
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { CreateLanguageDto } from './dto/create-language.dto';
 
 describe('LanguageService', () => {
@@ -40,7 +40,7 @@ describe('LanguageService', () => {
   });
 
   describe('assertExists', () => {
-    const languageIds = [
+    const languageIds: string[] = [
       '123e4567-e89b-12d3-a456-426614174000',
       '123e4567-e89b-12d3-a456-426614174001',
       '123e4567-e89b-12d3-a456-426614174002',
@@ -104,8 +104,33 @@ describe('LanguageService', () => {
 
       const result = await service.findAll();
 
-      expect(repository.findAll).toHaveBeenCalled();
+      expect(repository.findAll).toHaveBeenCalledWith({ name: 'asc' });
       expect(result).toEqual([mockLanguage, mockLanguage]);
+    });
+  });
+
+  describe('findOneOrThrow', () => {
+    const where: Prisma.LanguageWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+    };
+
+    it('should find a language', async () => {
+      repository.findOne.mockResolvedValue(mockLanguage);
+
+      const result = await service.findOneOrThrow(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(result).toEqual(mockLanguage);
+    });
+
+    it('should throw NotFoundException if language does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      await expect(service.findOneOrThrow(where)).rejects.toThrow(
+        new NotFoundException('Language not found'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
     });
   });
 });
