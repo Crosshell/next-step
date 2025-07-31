@@ -133,4 +133,29 @@ describe('LanguageService', () => {
       expect(repository.findOne).toHaveBeenCalledWith(where);
     });
   });
+
+  describe('assertNotExists', () => {
+    const where: Prisma.LanguageWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174000',
+    };
+
+    it('should not throw if language does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      const result = await service.assertNotExists(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw BadRequestException if language exists', async () => {
+      repository.findOne.mockResolvedValue(mockLanguage);
+
+      await expect(service.assertNotExists(where)).rejects.toThrow(
+        new BadRequestException('Language already exists'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+    });
+  });
 });
