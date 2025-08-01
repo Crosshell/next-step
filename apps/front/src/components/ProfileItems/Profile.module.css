@@ -271,6 +271,23 @@
   border: 0;
 }
 
+.open-to-work div,
+.not-open-to-work div {
+  display: inline-block;
+  padding: 10px 20px;
+
+  background-color: #37aa9c;
+  border: 2px solid #37aa9c;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: white;
+}
+
+.not-open-to-work div {
+  background-color: transparent;
+  border: 2px solid white;
+}
 /* Personal Info */
 
 /* Contacts */

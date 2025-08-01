@@ -27,6 +27,7 @@ import { useAuthStore } from '@/store/authSlice';
 
 import { ProfileData } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
+import OpenToWork from '@/components/ProfileItems/OpenToWork';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -121,11 +122,7 @@ export default function ProfilePage() {
           <div className={classes['main-info-side']}>
             <div className={classes['skills-open-container']}>
               <SkillItems skills={userData.skills} />
-              {profileData.isOpenToWork && (
-                <div className={classes['open-to-work']}>
-                  {profileData.isOpenToWork ? 'Open to Work' : ''}
-                </div>
-              )}
+              <OpenToWork isEditable isOpenToWork={profileData.isOpenToWork} />
             </div>
             <PersonalInfo {...personalInfo} />
           </div>
