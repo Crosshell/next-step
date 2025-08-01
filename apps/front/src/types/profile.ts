@@ -1,13 +1,33 @@
 interface ProfileFormData {
   firstName: string;
   lastName: string;
-  birthDate: string;
+  dateOfBirth: string;
+}
+
+interface ProfileData {
+  id: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl: string | null;
+  bio: string | null;
+  contacts: string | null;
+  dateOfBirth: string | null;
+  expectedSalary: number | null;
+  isOpenToWork: boolean;
+  seniorityLevel: string | null;
+  location: string | null;
+  languages: string[];
+  skills: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface PersonalData {
-  name: string;
-  birthdate: string;
-  address: string;
+  firstName: string;
+  lastName: string;
+  birthdate: string | null;
+  address: string | null;
 }
 
 interface ContactsData {
@@ -48,6 +68,7 @@ interface EducationData {
 
 export {
   type ProfileFormData,
+  type ProfileData,
   type PersonalData,
   type ContactsData,
   type LanguageData,

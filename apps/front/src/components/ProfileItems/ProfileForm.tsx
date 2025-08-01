@@ -19,7 +19,7 @@ import { useModalStore } from '@/store/modalSlice';
 const initialValues: ProfileFormData = {
   firstName: '',
   lastName: '',
-  birthDate: '',
+  dateOfBirth: '',
 };
 
 export default function ProfileForm() {
@@ -89,8 +89,7 @@ export default function ProfileForm() {
                 <p>3. Date of Birth</p>
                 <Field
                   className={classes['form-input']}
-                  id="birthDate"
-                  name="birthDate"
+                  name="dateOfBirth"
                   type="date"
                 />
               </div>

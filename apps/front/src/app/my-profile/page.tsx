@@ -25,7 +25,7 @@ import { userData } from '@/lib/profile-data';
 import { useModalStore } from '@/store/modalSlice';
 import { useAuthStore } from '@/store/authSlice';
 
-import { ProfileFormData } from '@/types/profile';
+import { ProfileData } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
 
 export default function ProfilePage() {
@@ -39,7 +39,7 @@ export default function ProfilePage() {
     isLoading,
     isError,
     error,
-  } = useQuery<ProfileFormData | null, ApiError>({
+  } = useQuery<ProfileData | null, ApiError>({
     queryKey: ['profile'],
     queryFn: getProfile,
     staleTime: 1000 * 60 * 5,
@@ -93,8 +93,18 @@ export default function ProfilePage() {
         </MessageBox>
       </div>
     );
+  let personalInfo;
 
   if (!profileData) return null;
+  else {
+    console.log(profileData);
+    personalInfo = {
+      firstName: profileData.firstName,
+      lastName: profileData.lastName,
+      birthdate: profileData.dateOfBirth,
+      address: profileData.location,
+    };
+  }
 
   return (
     <div className="container">
@@ -109,12 +119,19 @@ export default function ProfilePage() {
             priority
           />
           <div className={classes['main-info-side']}>
-            <SkillItems skills={userData.skills} />
-            <PersonalInfo {...userData.personalInfo} />
+            <div className={classes['skills-open-container']}>
+              <SkillItems skills={userData.skills} />
+              {profileData.isOpenToWork && (
+                <div className={classes['open-to-work']}>
+                  {profileData.isOpenToWork ? 'Open to Work' : ''}
+                </div>
+              )}
+            </div>
+            <PersonalInfo {...personalInfo} />
           </div>
         </div>
         <Contacts isEditable data={userData.contacts} />
-        <Bio isEditable data={userData.bio} />
+        <Bio isEditable data={profileData.bio} />
         <WorkExperience isEditable data={userData.experience} />
         <Education isEditable data={userData.education} />
         <Certificates isEditable data={userData.certificates} />

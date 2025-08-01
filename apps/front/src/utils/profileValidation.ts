@@ -25,16 +25,16 @@ export function validateProfileForm(values: ProfileFormData) {
       'Last name must contain only letters and be 2–30 characters';
   }
 
-  if (!values.birthDate) {
-    errors.birthDate = 'Date of birth is required';
+  if (!values.dateOfBirth) {
+    errors.dateOfBirth = 'Date of birth is required';
   } else {
-    const birthDate = new Date(values.birthDate);
+    const birthDate = new Date(values.dateOfBirth);
     const today = new Date();
     const age = today.getFullYear() - birthDate.getFullYear();
     if (birthDate > today) {
-      errors.birthDate = 'Birth date cannot be in the future';
+      errors.dateOfBirth = 'Birth date cannot be in the future';
     } else if (age < 16) {
-      errors.birthDate = 'You must be at least 16 years old';
+      errors.dateOfBirth = 'You must be at least 16 years old';
     }
   }
 

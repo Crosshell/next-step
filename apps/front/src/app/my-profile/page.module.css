@@ -11,9 +11,9 @@
 
 .main-info {
   display: flex;
-  gap: 5%;
+  gap: 3%;
   position: relative;
-  margin-bottom: 30px;
+  margin-bottom: 2.5rem;
   width: 100%;
 }
 
@@ -26,6 +26,24 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 75vw;
+}
+
+.skills-open-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.open-to-work {
+  display: inline-block;
+  padding: 10px 20px;
+
+  background-color: #37aa9c;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: white;
 }
 
 .edit-info-btn {

@@ -46,7 +46,7 @@ export default function SkillItems({ skills }: Props) {
   };
 
   return (
-    <>
+    <div>
       {!isChanging && (
         <div className={classes.skills}>
           {userSkills.map((skill) => {
@@ -120,6 +120,6 @@ export default function SkillItems({ skills }: Props) {
           </div>
         </form>
       )}
-    </>
+    </div>
   );
 }
