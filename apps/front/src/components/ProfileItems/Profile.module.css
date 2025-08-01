@@ -217,6 +217,10 @@
   margin-bottom: 10px;
 }
 
+.personal-info .address-input {
+  padding: 10px 0;
+}
+
 .edit-personal-info-btn {
   position: absolute;
   bottom: 0;
@@ -253,6 +257,11 @@
 
 .personal-info-btn-cross div {
   padding: 5px 10px;
+}
+
+.info-form .error-container div {
+  padding: 10px 0;
+  border: 0;
 }
 
 /* Personal Info */

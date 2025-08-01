@@ -1,7 +1,7 @@
 interface ProfileFormData {
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
+  dateOfBirth: string | null;
 }
 
 interface ProfileData {
@@ -26,8 +26,8 @@ interface ProfileData {
 interface PersonalData {
   firstName: string;
   lastName: string;
-  birthdate: string | null;
-  address: string | null;
+  dateOfBirth: string | null;
+  location: string | null;
 }
 
 interface ContactsData {

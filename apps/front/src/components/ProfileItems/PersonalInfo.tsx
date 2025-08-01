@@ -9,20 +9,22 @@ import classes from './Profile.module.css';
 
 import { PersonalData } from '@/types/profile';
 import { isoToDate, isoToSimpleDate } from '@/utils/convertData';
+import { validateProfileForm } from '@/utils/profileValidation';
+import MessageBox from '../MessageBox/MessageBox';
 
 export default function PersonalInfo({
   firstName,
   lastName,
-  birthdate,
-  address,
+  dateOfBirth,
+  location,
 }: PersonalData) {
   const [isChanging, setIsChanging] = useState(false);
 
   const data = {
     firstName,
     lastName,
-    birthdate: birthdate ? isoToSimpleDate(birthdate) : '',
-    address: address ? address : '',
+    dateOfBirth: dateOfBirth ? isoToSimpleDate(dateOfBirth) : '',
+    location: location ? location : '',
   };
   const [formData, setFormData] = useState<PersonalData>(data);
 
@@ -45,12 +47,12 @@ export default function PersonalInfo({
               {formData.firstName} {formData.lastName}
             </h2>
             <p>
-              {formData.birthdate
-                ? isoToDate(formData.birthdate)
+              {formData.dateOfBirth
+                ? isoToDate(formData.dateOfBirth)
                 : 'No birthdate information'}
             </p>
             <p>
-              {formData.address ? formData.address : 'No address information'}
+              {formData.location ? formData.location : 'No address information'}
             </p>
           </div>
           <button
@@ -61,8 +63,12 @@ export default function PersonalInfo({
           </button>
         </>
       ) : (
-        <Formik initialValues={formData} onSubmit={handleSubmit}>
-          {() => (
+        <Formik
+          initialValues={formData}
+          validate={validateProfileForm}
+          onSubmit={handleSubmit}
+        >
+          {({ errors }) => (
             <Form className={classes['info-form']}>
               <div className={classes['personal-info']}>
                 <Field
@@ -80,11 +86,25 @@ export default function PersonalInfo({
 
                 <Field
                   className={classes['birthdate-input']}
-                  name="birthdate"
+                  name="dateOfBirth"
                   type="date"
                 />
-                <Field name="address" type="text" placeholder="Address" />
+                <Field
+                  className={classes['address-input']}
+                  name="address"
+                  type="text"
+                  placeholder="Address"
+                />
               </div>
+
+              {Object.keys(errors).length > 0 && (
+                <div className={classes['error-container']}>
+                  {Object.values(errors).map((err) => (
+                    <MessageBox key={err}>{err}</MessageBox>
+                  ))}
+                </div>
+              )}
+
               <div className={classes['personal-info-btn-container']}>
                 <button
                   className={classes['personal-info-btn-cross']}

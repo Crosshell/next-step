@@ -101,8 +101,8 @@ export default function ProfilePage() {
     personalInfo = {
       firstName: profileData.firstName,
       lastName: profileData.lastName,
-      birthdate: profileData.dateOfBirth,
-      address: profileData.location,
+      dateOfBirth: profileData.dateOfBirth,
+      location: profileData.location,
     };
   }
 
