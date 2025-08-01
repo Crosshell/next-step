@@ -2,15 +2,18 @@
 
 import { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import MessageBox from '../MessageBox/MessageBox';
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
 import { faPencil, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import classes from './Profile.module.css';
 
-import { PersonalData } from '@/types/profile';
+import { PersonalData, UpdatedPersonalData } from '@/types/profile';
 import { isoToDate, isoToSimpleDate } from '@/utils/convertData';
 import { validateProfileForm } from '@/utils/profileValidation';
-import MessageBox from '../MessageBox/MessageBox';
+import { updatePersonalData } from '@/services/jobseekerService';
 
 export default function PersonalInfo({
   firstName,
@@ -19,23 +22,36 @@ export default function PersonalInfo({
   location,
 }: PersonalData) {
   const [isChanging, setIsChanging] = useState(false);
+  const [requestErrors, setRequestErrors] = useState<string[]>([]);
 
-  const data = {
-    firstName,
-    lastName,
-    dateOfBirth: dateOfBirth ? isoToSimpleDate(dateOfBirth) : '',
-    location: location ? location : '',
-  };
-  const [formData, setFormData] = useState<PersonalData>(data);
+  const queryClient = useQueryClient();
+
+  const { mutate: updateInfo, isPending } = useMutation({
+    mutationFn: updatePersonalData,
+    onSuccess: async (result) => {
+      if (result.status === 'error') {
+        setRequestErrors([result.error]);
+        return;
+      }
+      setRequestErrors([]);
+      await queryClient.invalidateQueries({ queryKey: ['profile'] });
+      setIsChanging(false);
+    },
+  });
 
   const handleCancel = () => {
     setIsChanging(false);
   };
 
-  const handleSubmit = (values: PersonalData) => {
-    console.log('Updated:', values);
-    setFormData(values);
-    setIsChanging(false);
+  const handleSubmit = async (values: UpdatedPersonalData) => {
+    updateInfo(values);
+  };
+
+  const initialValues: UpdatedPersonalData = {
+    firstName,
+    lastName,
+    dateOfBirth: dateOfBirth ? isoToSimpleDate(dateOfBirth) : '',
+    location: location || '',
   };
 
   return (
@@ -44,16 +60,14 @@ export default function PersonalInfo({
         <>
           <div className={classes['personal-info']}>
             <h2>
-              {formData.firstName} {formData.lastName}
+              {firstName} {lastName}
             </h2>
             <p>
-              {formData.dateOfBirth
-                ? isoToDate(formData.dateOfBirth)
+              {dateOfBirth
+                ? isoToDate(dateOfBirth)
                 : 'No birthdate information'}
             </p>
-            <p>
-              {formData.location ? formData.location : 'No address information'}
-            </p>
+            <p>{location || 'No address information'}</p>
           </div>
           <button
             className={classes['edit-personal-info-btn']}
@@ -64,7 +78,7 @@ export default function PersonalInfo({
         </>
       ) : (
         <Formik
-          initialValues={formData}
+          initialValues={initialValues}
           validate={validateProfileForm}
           onSubmit={handleSubmit}
         >
@@ -83,7 +97,6 @@ export default function PersonalInfo({
                   type="text"
                   placeholder="Last Name"
                 />
-
                 <Field
                   className={classes['birthdate-input']}
                   name="dateOfBirth"
@@ -91,14 +104,14 @@ export default function PersonalInfo({
                 />
                 <Field
                   className={classes['address-input']}
-                  name="address"
+                  name="location"
                   type="text"
                   placeholder="Address"
                 />
               </div>
 
               {Object.keys(errors).length > 0 && (
-                <div className={classes['error-container']}>
+                <div className={classes['personal-info-error-container']}>
                   {Object.values(errors).map((err) => (
                     <MessageBox key={err}>{err}</MessageBox>
                   ))}
@@ -113,13 +126,25 @@ export default function PersonalInfo({
                 >
                   <AnimatedIcon iconType={faXmark} />
                 </button>
-                <button className={classes['personal-info-btn']} type="submit">
+                <button
+                  className={classes['personal-info-btn']}
+                  type="submit"
+                  disabled={isPending}
+                >
                   <AnimatedIcon iconType={faCheck} />
                 </button>
               </div>
             </Form>
           )}
         </Formik>
+      )}
+
+      {requestErrors.length > 0 && (
+        <div className={classes['personal-info-error-container']}>
+          {requestErrors.map((error) => (
+            <MessageBox key={error}>{error}</MessageBox>
+          ))}
+        </div>
       )}
     </>
   );

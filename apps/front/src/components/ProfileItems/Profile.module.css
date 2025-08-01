@@ -110,6 +110,12 @@
   width: 100%;
 }
 
+.request-error-container div {
+  margin-bottom: 0;
+  padding: 0;
+  border: 0;
+}
+
 /* General form styles */
 
 /* Skills */
@@ -259,8 +265,9 @@
   padding: 5px 10px;
 }
 
-.info-form .error-container div {
-  padding: 10px 0;
+.personal-info-error-container div {
+  margin-bottom: 0;
+  padding: 0;
   border: 0;
 }
 

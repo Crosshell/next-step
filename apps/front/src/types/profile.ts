@@ -30,6 +30,18 @@ interface PersonalData {
   location: string | null;
 }
 
+interface UpdatedPersonalData {
+  firstName?: string;
+  lastName?: string;
+  location?: string;
+  bio?: string;
+  avatarUrl?: string;
+  expectedSalary?: number;
+  dateOfBirth?: string;
+  isOpenToWork?: boolean;
+  seniorityLevel?: string;
+}
+
 interface ContactsData {
   linkedinURL: string;
   githubURL: string;
@@ -70,6 +82,7 @@ export {
   type ProfileFormData,
   type ProfileData,
   type PersonalData,
+  type UpdatedPersonalData,
   type ContactsData,
   type LanguageData,
   type CertificateData,
