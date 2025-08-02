@@ -1,10 +1,9 @@
 const languageLevels = [
-  'BEGINNER',
   'ELEMENTARY',
+  'PRE_INTERMEDIATE',
   'INTERMEDIATE',
-  'UPPER-INTERMEDIATE',
+  'UPPER_INTERMEDIATE',
   'ADVANCED',
-  'PROFICIENT',
   'NATIVE',
 ];
 
@@ -19,14 +18,6 @@ const degreeTypes = [
 
 // Profile dummy data
 
-const skillsData = ['Next', 'Nest', 'GitHub'];
-
-const personalInfoData = {
-  name: 'John Doe',
-  birthdate: '20.02.2002',
-  address: 'Kyiv, Maidan Nezalezhnosti, 32',
-};
-
 const contactData = {
   linkedinURL: 'https://www.linkedin.com',
   githubURL: 'https://www.github.com',
@@ -34,9 +25,6 @@ const contactData = {
   telegramURL: 'https://www.telegram.com',
   facebookURL: 'https://www.facebook.com',
 };
-
-const bioData =
-  'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt,non. Consectetur, laborum nesciunt facere atque hic vero. Impedit           animi in, aperiam, asperiores odio quis excepturi ipsum quas  voluptatum incidunt quos!';
 
 const experienceData = [
   {
@@ -84,20 +72,11 @@ const certificatesData = [
   { name: 'JS Course', url: 'https://www.google.com/3', date: '2020-02-27' },
 ];
 
-const languagesData = [
-  { language: 'English', level: 'B1 (Intermediate)' },
-  { language: 'Korean', level: 'B2 (Upper-Intermediate)' },
-];
-
 const userData = {
-  skills: skillsData,
-  personalInfo: personalInfoData,
   contacts: contactData,
-  bio: bioData,
   experience: experienceData,
   education: educationData,
   certificates: certificatesData,
-  languages: languagesData,
 };
 
 export { languageLevels, degreeTypes, userData };

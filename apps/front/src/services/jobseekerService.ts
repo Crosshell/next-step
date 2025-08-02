@@ -5,6 +5,7 @@ import {
   SkillItem,
   UpdatedPersonalData,
   UpdatedSkills,
+  UpdatedUserLanguages,
 } from '@/types/profile';
 
 export async function createProfile(data: ProfileFormData) {
@@ -104,5 +105,20 @@ export async function getLanguages() {
         status: error?.response?.status || 500,
         message,
       };
+    });
+}
+
+export async function updateUserLanguages(data: UpdatedUserLanguages[]) {
+  return api
+    .put('/job-seekers/me/languages', {
+      languages: data,
+    })
+    .then(() => ({ status: 'ok', error: null }))
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Updating skills failed';
+      return { status: 'error', error: message };
     });
 }

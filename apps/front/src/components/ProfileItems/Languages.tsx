@@ -10,10 +10,10 @@ import classes from './Profile.module.css';
 import { LanguageData, UserLanguageData } from '@/types/profile';
 import { languageLevels } from '@/lib/profile-data';
 import { handleLanguagesSubmit } from '@/utils/profileValidation';
-import { getLanguages } from '@/services/jobseekerService';
+import { getLanguages, updateUserLanguages } from '@/services/jobseekerService';
 import { ApiError } from '@/types/authForm';
-import { useQuery } from '@tanstack/react-query';
-import RequestErrors from '../RequestErrors/RequestErrors';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import RequestError from '../RequestErrors/RequestErrors';
 
 interface Props {
   isEditable: boolean;
@@ -21,9 +21,8 @@ interface Props {
 }
 
 export default function Languages({ isEditable, data }: Props) {
-  const [isChanging, setIsChanging] = useState<boolean>(false);
-  const [userLanguages, setLanguages] = useState<UserLanguageData[]>(data);
-  const [tempLanguages, setTempLanguages] = useState<UserLanguageData[]>(data);
+  const [editMode, setEditMode] = useState(false);
+  const queryClient = useQueryClient();
 
   const { data: languagesList = [], error: fetchLangError } = useQuery<
     LanguageData[] | null,
@@ -35,33 +34,46 @@ export default function Languages({ isEditable, data }: Props) {
     retry: false,
   });
 
-  const toggleEdit = () => {
-    setIsChanging((prev) => !prev);
-    setTempLanguages(userLanguages);
-  };
+  const {
+    mutate: updateLanguages,
+    isPending,
+    error: updateLangError,
+  } = useMutation({
+    mutationFn: updateUserLanguages,
+    onSuccess: async (result) => {
+      if (result.status === 'error') return;
+      await queryClient.invalidateQueries({ queryKey: ['profile'] });
 
-  console.log(languagesList);
+      setEditMode(false);
+    },
+  });
+
+  const toggleEdit = () => {
+    setEditMode((prev) => !prev);
+  };
 
   return (
     <InfoBox title="Languages" isEditable={isEditable} onEdit={toggleEdit}>
-      {!isChanging ? (
+      {!editMode ? (
         <>
-          {userLanguages.map((lang) => {
-            return (
-              <p key={lang.language.id} className="row-space-between">
-                <span>{lang.language.name}</span>
-                <span>{lang.level}</span>
-              </p>
-            );
-          })}
+          {data.map((lang) => (
+            <p key={lang.language.id} className="row-space-between">
+              <span>{lang.language.name}</span>
+              <span>{lang.level}</span>
+            </p>
+          ))}
         </>
       ) : (
         <Formik
-          initialValues={{ languages: tempLanguages }}
+          initialValues={{ languages: data }}
           onSubmit={(values, helpers) =>
-            handleLanguagesSubmit(values, helpers, (updatedLanguages) => {
-              setLanguages(updatedLanguages);
-              setIsChanging(false);
+            handleLanguagesSubmit(values, helpers, () => {
+              updateLanguages(
+                values.languages.map((lang) => ({
+                  languageId: lang.language.id,
+                  level: lang.level,
+                }))
+              );
             })
           }
         >
@@ -70,18 +82,18 @@ export default function Languages({ isEditable, data }: Props) {
               <FieldArray name="languages">
                 {({ remove, push }) => (
                   <>
-                    {values.languages.map((_, index) => (
+                    {values.languages.map((lang, index) => (
                       <div key={index} className={classes['language-row']}>
                         <Field
                           as="select"
-                          name={`languages[${index}].language`}
+                          name={`languages[${index}].language.id`}
                           className={classes['form-input']}
                         >
                           <option value="" disabled>
                             Select language
                           </option>
                           {languagesList?.map((lang) => (
-                            <option key={lang.id} value={lang.name}>
+                            <option key={lang.id} value={lang.id}>
                               {lang.name}
                             </option>
                           ))}
@@ -117,13 +129,15 @@ export default function Languages({ isEditable, data }: Props) {
                         <div>{errors.languages}</div>
                       )}
 
-                    <RequestErrors error={fetchLangError?.message} />
+                    <RequestError error={fetchLangError?.message} />
 
                     <div className={classes['add-save-btn-container']}>
                       <button
                         className={classes['info-form-btn']}
                         type="button"
-                        onClick={() => push({ language: '', level: '' })}
+                        onClick={() =>
+                          push({ language: { id: '' }, level: '' })
+                        }
                       >
                         <AnimatedIcon>Add +</AnimatedIcon>
                       </button>
@@ -132,13 +146,14 @@ export default function Languages({ isEditable, data }: Props) {
                         <button
                           className="underline-link"
                           type="button"
-                          onClick={() => setIsChanging(false)}
+                          onClick={() => setEditMode(false)}
                         >
                           <AnimatedIcon>Go Back</AnimatedIcon>
                         </button>
                         <button
                           className={classes['info-form-btn']}
                           type="submit"
+                          disabled={isPending}
                         >
                           <AnimatedIcon>Save changes</AnimatedIcon>
                         </button>
@@ -151,6 +166,7 @@ export default function Languages({ isEditable, data }: Props) {
           )}
         </Formik>
       )}
+      <RequestError error={updateLangError?.message} />
     </InfoBox>
   );
 }

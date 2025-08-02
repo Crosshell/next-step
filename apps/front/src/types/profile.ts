@@ -73,6 +73,11 @@ type UserLanguageData = {
   language: LanguageData;
 };
 
+type UpdatedUserLanguages = {
+  languageId: string;
+  level: string;
+};
+
 type CertificateData = {
   name: string;
   url: string;
@@ -107,6 +112,7 @@ export {
   type ContactsData,
   type LanguageData,
   type UserLanguageData,
+  type UpdatedUserLanguages,
   type CertificateData,
   type ExperienceData,
   type EducationData,
