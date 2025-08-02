@@ -1,10 +1,10 @@
-interface ProfileFormData {
+type ProfileFormData = {
   firstName: string;
   lastName: string;
   dateOfBirth: string | null;
-}
+};
 
-interface ProfileData {
+type ProfileData = {
   id: string;
   userId: string;
   firstName: string;
@@ -21,16 +21,16 @@ interface ProfileData {
   skills: SkillData[];
   createdAt: string;
   updatedAt: string;
-}
+};
 
-interface PersonalData {
+type PersonalData = {
   firstName: string;
   lastName: string;
   dateOfBirth: string | null;
   location: string | null;
-}
+};
 
-interface UpdatedPersonalData {
+type UpdatedPersonalData = {
   firstName?: string;
   lastName?: string;
   location?: string;
@@ -40,54 +40,56 @@ interface UpdatedPersonalData {
   dateOfBirth?: string;
   isOpenToWork?: boolean;
   seniorityLevel?: string;
-}
+};
 
-interface UpdatedSkills {
+type SkillItem = {
+  id: string;
+  name: string;
+};
+
+type UpdatedSkills = {
   skillIds: string[];
-}
+};
 
-interface SkillData {
-  skill: {
-    id: string;
-    name: string;
-  };
-}
+type SkillData = {
+  skill: SkillItem;
+};
 
-interface ContactsData {
+type ContactsData = {
   linkedinURL: string;
   githubURL: string;
   codewarsURL: string;
   telegramURL: string;
   facebookURL: string;
-}
+};
 
-interface LanguageData {
+type LanguageData = {
   language: string;
   level: string;
-}
+};
 
-interface CertificateData {
+type CertificateData = {
   name: string;
   url: string;
   date: string;
-}
+};
 
-interface ExperienceData {
+type ExperienceData = {
   companyName: string;
   startDate: string;
   endDate: string;
   details: string;
   isCurrent: boolean;
-}
+};
 
-interface EducationData {
+type EducationData = {
   universityName: string;
   startDate: string;
   endDate: string;
   field: string;
   degree: string;
   details: string;
-}
+};
 
 export {
   type ProfileFormData,
@@ -95,6 +97,7 @@ export {
   type PersonalData,
   type UpdatedPersonalData,
   type UpdatedSkills,
+  type SkillItem,
   type SkillData,
   type ContactsData,
   type LanguageData,

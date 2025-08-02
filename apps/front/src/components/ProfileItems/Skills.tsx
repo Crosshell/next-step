@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Formik, Form, FieldArray } from 'formik';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import RequestErrors from '../RequestErrors/RequestErrors';
@@ -13,8 +13,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import classes from './Profile.module.css';
 
-import { SkillData } from '@/types/profile';
-import { updateSkills } from '@/services/jobseekerService';
+import { SkillData, SkillItem } from '@/types/profile';
+import {
+  createNewSkill,
+  getSkills,
+  updateSkills,
+} from '@/services/jobseekerService';
+import { ApiError } from '@/types/authForm';
 
 interface Props {
   skills: SkillData[];
@@ -22,18 +27,44 @@ interface Props {
 
 export default function Skills({ skills }: Props) {
   const [editMode, setEditMode] = useState(false);
-  const [requestErrors, setRequestErrors] = useState<string[]>([]);
+  const [requestError, setRequestError] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
+
+  const { data: skillsList = [], error: fetchSkillsError } = useQuery<
+    SkillItem[] | null,
+    ApiError
+  >({
+    queryKey: ['skills'],
+    queryFn: getSkills,
+    staleTime: 1000 * 60 * 5,
+    retry: false,
+  });
+
+  const { mutateAsync: addNewSkill, isPending: addSkillPending } = useMutation({
+    mutationFn: createNewSkill,
+    onSuccess: async (result) => {
+      if (result.status === 'error') {
+        setRequestError(result.error);
+        return;
+      }
+
+      setRequestError(null);
+      await queryClient.invalidateQueries({ queryKey: ['skills'] });
+      const createdSkill = result.data;
+
+      return createdSkill;
+    },
+  });
 
   const { mutate: updateUserSkills, isPending } = useMutation({
     mutationFn: updateSkills,
     onSuccess: async (result) => {
       if (result.status === 'error') {
-        setRequestErrors([result.error]);
+        setRequestError(result.error);
         return;
       }
-      setRequestErrors([]);
+      setRequestError(null);
       await queryClient.invalidateQueries({ queryKey: ['profile'] });
       setEditMode(false);
     },
@@ -60,7 +91,32 @@ export default function Skills({ skills }: Props) {
         <Formik
           enableReinitialize
           initialValues={{ skills: skills, newSkill: '' }}
-          onSubmit={(values) => {
+          onSubmit={async (values) => {
+            const notExistingSkills =
+              skillsList &&
+              values.skills.filter(
+                (formSkill) =>
+                  !skillsList.some(
+                    (available) => formSkill.skill.name === available.name
+                  )
+              );
+
+            if (notExistingSkills?.length) {
+              for (const item of notExistingSkills) {
+                const result = await addNewSkill({ name: item.skill.name });
+
+                if (result.status === 'ok') {
+                  values.skills = values.skills.map((s) =>
+                    s.skill.name === item.skill.name
+                      ? { skill: result.data }
+                      : s
+                  );
+                } else {
+                  setRequestError(result.error);
+                }
+              }
+            }
+
             updateUserSkills({
               skillIds: values.skills.map((s) => s.skill.id),
             });
@@ -100,26 +156,59 @@ export default function Skills({ skills }: Props) {
                       </div>
                     ))}
 
-                    <input
-                      type="text"
-                      name="newSkill"
-                      className={classes['form-input']}
-                      placeholder="Enter new skill"
-                      value={values.newSkill}
-                      onChange={handleChange}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          tryAddSkill();
-                        }
-                      }}
-                    />
+                    <div className={classes['autocomplete-wrapper']}>
+                      <input
+                        type="text"
+                        name="newSkill"
+                        className={classes['form-input']}
+                        placeholder="Search skill"
+                        value={values.newSkill}
+                        onChange={handleChange}
+                        autoComplete="off"
+                      />
+                      {values.newSkill.trim() && (
+                        <ul className={classes['autocomplete-list']}>
+                          {fetchSkillsError?.message && (
+                            <RequestErrors error={fetchSkillsError.message} />
+                          )}
+                          {skillsList &&
+                            skillsList
+                              .filter(
+                                (item) =>
+                                  item.name
+                                    .toLowerCase()
+                                    .includes(
+                                      values.newSkill.trim().toLowerCase()
+                                    ) &&
+                                  !values.skills.some(
+                                    (s) => s.skill.id === item.id
+                                  )
+                              )
+                              .slice(0, 5)
+                              .map((item) => {
+                                return (
+                                  <li
+                                    key={item.id}
+                                    className={classes['autocomplete-item']}
+                                    onClick={() => {
+                                      push({ skill: item });
+                                      setFieldValue('newSkill', '');
+                                    }}
+                                  >
+                                    {item.name}
+                                  </li>
+                                );
+                              })}
+                        </ul>
+                      )}
+                    </div>
 
                     <div className={classes['btn-container']}>
                       <button
                         type="button"
                         className={classes['edit-skills-btn']}
                         onClick={tryAddSkill}
+                        disabled={addSkillPending}
                       >
                         <AnimatedIcon iconType={faPlus} />
                       </button>
@@ -146,7 +235,7 @@ export default function Skills({ skills }: Props) {
           )}
         </Formik>
       )}
-      <RequestErrors errors={requestErrors} />
+      <RequestErrors error={requestError} />
     </div>
   );
 }

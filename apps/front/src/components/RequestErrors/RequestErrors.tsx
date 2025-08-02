@@ -2,17 +2,15 @@ import MessageBox from '../MessageBox/MessageBox';
 import classes from './RequestErrors.module.css';
 
 interface Props {
-  errors: string[];
+  error: string | null;
 }
 
-export default function RequestErrors({ errors }: Props) {
+export default function RequestErrors({ error }: Props) {
   return (
     <>
-      {errors.length > 0 && (
+      {error && (
         <div className={classes['request-error-container']}>
-          {errors.map((error) => (
-            <MessageBox key={error}>{error}</MessageBox>
-          ))}
+          <MessageBox>{error}</MessageBox>
         </div>
       )}
     </>
