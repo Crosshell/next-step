@@ -1,5 +1,9 @@
 import api from './axios';
-import { ProfileFormData, UpdatedPersonalData } from '@/types/profile';
+import {
+  ProfileFormData,
+  UpdatedPersonalData,
+  UpdatedSkills,
+} from '@/types/profile';
 
 export async function createProfile(data: ProfileFormData) {
   return api
@@ -31,6 +35,19 @@ export async function getProfile() {
 export async function updatePersonalData(data: UpdatedPersonalData) {
   return api
     .patch('/job-seekers/me', data)
+    .then(() => ({ status: 'ok', error: null }))
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Updating personal data failed';
+      return { status: 'error', error: message };
+    });
+}
+
+export async function updateSkills(data: UpdatedSkills) {
+  return api
+    .put('/job-seekers/me/skills', data)
     .then(() => ({ status: 'ok', error: null }))
     .catch((error) => {
       const message =

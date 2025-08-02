@@ -18,7 +18,7 @@ interface ProfileData {
   seniorityLevel: string | null;
   location: string | null;
   languages: string[];
-  skills: string[];
+  skills: SkillData[];
   createdAt: string;
   updatedAt: string;
 }
@@ -40,6 +40,17 @@ interface UpdatedPersonalData {
   dateOfBirth?: string;
   isOpenToWork?: boolean;
   seniorityLevel?: string;
+}
+
+interface UpdatedSkills {
+  skillIds: string[];
+}
+
+interface SkillData {
+  skill: {
+    id: string;
+    name: string;
+  };
 }
 
 interface ContactsData {
@@ -83,6 +94,8 @@ export {
   type ProfileData,
   type PersonalData,
   type UpdatedPersonalData,
+  type UpdatedSkills,
+  type SkillData,
   type ContactsData,
   type LanguageData,
   type CertificateData,

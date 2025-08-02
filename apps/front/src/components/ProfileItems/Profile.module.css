@@ -133,10 +133,17 @@
   display: block;
   padding: 10px 30px;
   background-color: white;
+  border: 2px solid white;
   border-radius: 10px;
   font-size: 1.25rem;
   font-weight: 500;
   color: #1f1f21;
+}
+
+.skills .no-skills {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
 }
 
 .btn-container {

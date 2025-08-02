@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import SkillItems from '@/components/ProfileItems/SkillItems';
+import Skills from '@/components/ProfileItems/Skills';
 import PersonalInfo from '@/components/ProfileItems/PersonalInfo';
 import Contacts from '@/components/ProfileItems/Contacts';
 import Bio from '@/components/ProfileItems/Bio';
@@ -121,7 +121,7 @@ export default function ProfilePage() {
           />
           <div className={classes['main-info-side']}>
             <div className={classes['skills-open-container']}>
-              <SkillItems skills={userData.skills} />
+              <Skills skills={profileData.skills} />
               <OpenToWork isEditable isOpenToWork={profileData.isOpenToWork} />
             </div>
             <PersonalInfo {...personalInfo} />

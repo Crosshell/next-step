@@ -28,6 +28,7 @@ export default function OpenToWork({ isEditable, isOpenToWork }: Props) {
       await queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
+  
   const toggleIsOpen = () => {
     updateIsOpen({ isOpenToWork: !isOpenToWork });
   };
