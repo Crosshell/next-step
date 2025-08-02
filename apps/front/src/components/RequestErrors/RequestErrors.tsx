@@ -2,7 +2,7 @@ import MessageBox from '../MessageBox/MessageBox';
 import classes from './RequestErrors.module.css';
 
 interface Props {
-  error: string | null;
+  error: string | undefined | null;
 }
 
 export default function RequestErrors({ error }: Props) {

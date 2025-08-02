@@ -7,24 +7,40 @@ import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import classes from './Profile.module.css';
 
-import { LanguageData } from '@/types/profile';
-import { languageLevels, languagesList } from '@/lib/profile-data';
+import { LanguageData, UserLanguageData } from '@/types/profile';
+import { languageLevels } from '@/lib/profile-data';
 import { handleLanguagesSubmit } from '@/utils/profileValidation';
+import { getLanguages } from '@/services/jobseekerService';
+import { ApiError } from '@/types/authForm';
+import { useQuery } from '@tanstack/react-query';
+import RequestErrors from '../RequestErrors/RequestErrors';
 
 interface Props {
   isEditable: boolean;
-  data: LanguageData[];
+  data: UserLanguageData[];
 }
 
 export default function Languages({ isEditable, data }: Props) {
   const [isChanging, setIsChanging] = useState<boolean>(false);
-  const [userLanguages, setLanguages] = useState<LanguageData[]>(data);
-  const [tempLanguages, setTempLanguages] = useState<LanguageData[]>(data);
+  const [userLanguages, setLanguages] = useState<UserLanguageData[]>(data);
+  const [tempLanguages, setTempLanguages] = useState<UserLanguageData[]>(data);
+
+  const { data: languagesList = [], error: fetchLangError } = useQuery<
+    LanguageData[] | null,
+    ApiError
+  >({
+    queryKey: ['languages'],
+    queryFn: getLanguages,
+    staleTime: 1000 * 60 * 5,
+    retry: false,
+  });
 
   const toggleEdit = () => {
     setIsChanging((prev) => !prev);
     setTempLanguages(userLanguages);
   };
+
+  console.log(languagesList);
 
   return (
     <InfoBox title="Languages" isEditable={isEditable} onEdit={toggleEdit}>
@@ -32,8 +48,8 @@ export default function Languages({ isEditable, data }: Props) {
         <>
           {userLanguages.map((lang) => {
             return (
-              <p key={lang.language} className="row-space-between">
-                <span>{lang.language}</span>
+              <p key={lang.language.id} className="row-space-between">
+                <span>{lang.language.name}</span>
                 <span>{lang.level}</span>
               </p>
             );
@@ -64,9 +80,9 @@ export default function Languages({ isEditable, data }: Props) {
                           <option value="" disabled>
                             Select language
                           </option>
-                          {languagesList.map((lang) => (
-                            <option key={lang} value={lang}>
-                              {lang}
+                          {languagesList?.map((lang) => (
+                            <option key={lang.id} value={lang.name}>
+                              {lang.name}
                             </option>
                           ))}
                         </Field>
@@ -100,6 +116,8 @@ export default function Languages({ isEditable, data }: Props) {
                       typeof errors.languages === 'string' && (
                         <div>{errors.languages}</div>
                       )}
+
+                    <RequestErrors error={fetchLangError?.message} />
 
                     <div className={classes['add-save-btn-container']}>
                       <button

@@ -17,7 +17,7 @@ type ProfileData = {
   isOpenToWork: boolean;
   seniorityLevel: string | null;
   location: string | null;
-  languages: string[];
+  languages: UserLanguageData[];
   skills: SkillData[];
   createdAt: string;
   updatedAt: string;
@@ -64,8 +64,13 @@ type ContactsData = {
 };
 
 type LanguageData = {
-  language: string;
+  id: string;
+  name: string;
+};
+
+type UserLanguageData = {
   level: string;
+  language: LanguageData;
 };
 
 type CertificateData = {
@@ -101,6 +106,7 @@ export {
   type SkillData,
   type ContactsData,
   type LanguageData,
+  type UserLanguageData,
   type CertificateData,
   type ExperienceData,
   type EducationData,

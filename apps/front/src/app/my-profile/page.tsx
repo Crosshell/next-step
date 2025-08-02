@@ -48,12 +48,16 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
+    if (isError && error?.status === 401) {
+      router.push('/sign-in');
+    }
     if (isError && error?.status === 403) {
       openModal(<ProfileForm />, true);
-    } else if (profileData) {
+    }
+    if (profileData) {
       closeModal();
     }
-  }, [isError, error, profileData, openModal, closeModal]);
+  }, [isError, error, profileData, openModal, closeModal, router]);
 
   const { mutate: logoutMutate } = useMutation({
     mutationFn: logoutUser,
@@ -132,7 +136,7 @@ export default function ProfilePage() {
         <WorkExperience isEditable data={userData.experience} />
         <Education isEditable data={userData.education} />
         <Certificates isEditable data={userData.certificates} />
-        <Languages isEditable data={userData.languages} />
+        <Languages isEditable data={profileData.languages} />
 
         <div className="row-end">
           <button className={classes['logout-btn']} onClick={handleLogoutAll}>

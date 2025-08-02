@@ -4,8 +4,8 @@ import {
   CertificateData,
   EducationData,
   ExperienceData,
-  LanguageData,
   UpdatedPersonalData,
+  UserLanguageData,
 } from '@/types/profile';
 import { ProfileFormData } from '@/types/profile';
 
@@ -94,9 +94,9 @@ export function handleCertificatesSubmit(
 }
 
 export function handleLanguagesSubmit(
-  values: { languages: LanguageData[] },
-  helpers: FormikHelpers<{ languages: LanguageData[] }>,
-  onSuccess: (updatedLanguages: LanguageData[]) => void
+  values: { languages: UserLanguageData[] },
+  helpers: FormikHelpers<{ languages: UserLanguageData[] }>,
+  onSuccess: (updatedLanguages: UserLanguageData[]) => void
 ) {
   const seen = new Set();
   const duplicates = values.languages.some((lang) => {

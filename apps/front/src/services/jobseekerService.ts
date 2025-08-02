@@ -2,6 +2,7 @@ import { ApiPostResponse } from '@/types/authForm';
 import api from './axios';
 import {
   ProfileFormData,
+  SkillItem,
   UpdatedPersonalData,
   UpdatedSkills,
 } from '@/types/profile';
@@ -60,8 +61,6 @@ export async function getSkills() {
     });
 }
 
-import { SkillItem } from '@/types/profile';
-
 export async function createNewSkill(data: {
   name: string;
 }): Promise<ApiPostResponse<SkillItem>> {
@@ -91,5 +90,19 @@ export async function updateSkills(data: UpdatedSkills) {
         error?.response?.data?.message ||
         'Updating skills failed';
       return { status: 'error', error: message };
+    });
+}
+
+export async function getLanguages() {
+  return api
+    .get('/languages')
+    .then((res) => res.data)
+    .catch((error) => {
+      const message =
+        error?.response?.data?.message || 'Failed to fetch skills';
+      throw {
+        status: error?.response?.status || 500,
+        message,
+      };
     });
 }
