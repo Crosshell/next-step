@@ -8,12 +8,13 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import classes from './Profile.module.css';
 
 import { LanguageData, UserLanguageData } from '@/types/profile';
-import { languageLevels } from '@/lib/profile-data';
+import { clientLanguageLevels, languageLevels } from '@/lib/profile-data';
 import { handleLanguagesSubmit } from '@/utils/profileValidation';
 import { getLanguages, updateUserLanguages } from '@/services/jobseekerService';
 import { ApiError } from '@/types/authForm';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import RequestError from '../RequestErrors/RequestErrors';
+import { toClientLangLevel } from '@/utils/convertData';
 
 interface Props {
   isEditable: boolean;
@@ -59,7 +60,7 @@ export default function Languages({ isEditable, data }: Props) {
           {data.map((lang) => (
             <p key={lang.language.id} className="row-space-between">
               <span>{lang.language.name}</span>
-              <span>{lang.level}</span>
+              <span>{toClientLangLevel(lang.level)}</span>
             </p>
           ))}
         </>
@@ -107,9 +108,9 @@ export default function Languages({ isEditable, data }: Props) {
                           <option value="" disabled>
                             Select level
                           </option>
-                          {languageLevels.map((level) => (
+                          {languageLevels.map((level, index) => (
                             <option key={level} value={level}>
-                              {level}
+                              {clientLanguageLevels[index]}
                             </option>
                           ))}
                         </Field>

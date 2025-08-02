@@ -7,6 +7,15 @@ const languageLevels = [
   'NATIVE',
 ];
 
+const clientLanguageLevels = [
+  'A2 (Elementary)',
+  'B1 (Pre-Intermediate)',
+  'B2 (Intermediate)',
+  'C1 (Upper-Intermediate)',
+  'C2 (Advanced)',
+  'Native',
+];
+
 const degreeTypes = [
   'Bachelor',
   'Master',
@@ -79,4 +88,4 @@ const userData = {
   certificates: certificatesData,
 };
 
-export { languageLevels, degreeTypes, userData };
+export { languageLevels, clientLanguageLevels, degreeTypes, userData };
