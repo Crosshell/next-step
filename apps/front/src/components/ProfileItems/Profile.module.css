@@ -70,6 +70,11 @@
   margin-top: 10px;
 }
 
+.form-btn-container button {
+  background-color: transparent;
+  border: 0;
+}
+
 .form-btn-container button div {
   padding: 8px 12px;
   font-size: 1.25rem;
@@ -121,6 +126,45 @@
 }
 
 /* General form styles */
+
+/* Avatar */
+
+.avatar-btn img {
+  border: 3px solid #37aa9c;
+  border-radius: 10px;
+}
+
+.avatar-form {
+  padding: 0.5rem;
+}
+
+.avatar-form .validation-error {
+  margin-top: 20px;
+}
+
+.avatar-form-container {
+  display: flex;
+  gap: 3%;
+  width: 40vw;
+}
+
+.avatar-form-container input {
+  margin-bottom: 0;
+}
+
+.avatar-form-container .info-form-btn {
+  background-color: transparent;
+  border: 0;
+}
+
+.avatar-form-container .info-form-btn div {
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* Avatar */
 
 /* Skills */
 

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -29,6 +28,7 @@ import { ProfileData } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
 import OpenToWork from '@/components/ProfileItems/OpenToWork';
 import { isoToDate } from '@/utils/convertData';
+import Avatar from '@/components/ProfileItems/Avatar';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -117,13 +117,7 @@ export default function ProfilePage() {
       <div className={classes['profile-container']}>
         <h1 className={classes['page-header']}>Your Next Level Profile</h1>
         <div className={classes['main-info']}>
-          <Image
-            src="/images/no-avatar.png"
-            alt="avatar-image"
-            width={250}
-            height={250}
-            priority
-          />
+          <Avatar isEditable data={profileData.avatarUrl} />
           <div className={classes['main-info-side']}>
             <div className={classes['skills-open-container']}>
               <Skills skills={profileData.skills} />

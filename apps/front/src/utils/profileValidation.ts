@@ -45,6 +45,22 @@ export function validateProfileForm(values: UpdatedPersonalData) {
   return errors;
 }
 
+export function validateAvatarUrl(values: { avatarUrl: string }) {
+  const errors: { avatarUrl?: string } = {};
+
+  if (!values.avatarUrl) {
+    errors.avatarUrl = 'URL is required';
+  } else {
+    try {
+      new URL(values.avatarUrl);
+    } catch {
+      errors.avatarUrl = 'Invalid URL format';
+    }
+  }
+
+  return errors;
+}
+
 export function validateContacts(values: ContactsData) {
   const errors: Partial<ContactsData> = {};
 

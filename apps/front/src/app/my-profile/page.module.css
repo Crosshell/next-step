@@ -17,11 +17,6 @@
   width: 100%;
 }
 
-.main-info img {
-  border: 3px solid #37aa9c;
-  border-radius: 10px;
-}
-
 .main-info-side {
   display: flex;
   flex-direction: column;
