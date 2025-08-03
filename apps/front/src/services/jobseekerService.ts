@@ -1,6 +1,7 @@
 import { ApiPostResponse } from '@/types/authForm';
 import api from './axios';
 import {
+  ContactsData,
   ProfileFormData,
   SkillItem,
   UpdatedPersonalData,
@@ -113,6 +114,19 @@ export async function updateUserLanguages(data: UpdatedUserLanguages[]) {
     .put('/job-seekers/me/languages', {
       languages: data,
     })
+    .then(() => ({ status: 'ok', error: null }))
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Updating skills failed';
+      return { status: 'error', error: message };
+    });
+}
+
+export async function updateUserContacts(data: ContactsData) {
+  return api
+    .put('/job-seekers/me/contacts', data)
     .then(() => ({ status: 'ok', error: null }))
     .catch((error) => {
       const message =

@@ -27,12 +27,12 @@ const degreeTypes = [
 
 // Profile dummy data
 
-const contactData = {
-  linkedinURL: 'https://www.linkedin.com',
-  githubURL: 'https://www.github.com',
-  codewarsURL: 'https://www.codewars.com',
-  telegramURL: 'https://www.telegram.com',
-  facebookURL: 'https://www.facebook.com',
+const contactsFallbackValues = {
+  githubUrl: '',
+  linkedinUrl: '',
+  telegramUrl: '',
+  publicEmail: '',
+  phoneNumber: '',
 };
 
 const experienceData = [
@@ -82,10 +82,15 @@ const certificatesData = [
 ];
 
 const userData = {
-  contacts: contactData,
   experience: experienceData,
   education: educationData,
   certificates: certificatesData,
 };
 
-export { languageLevels, clientLanguageLevels, degreeTypes, userData };
+export {
+  languageLevels,
+  clientLanguageLevels,
+  degreeTypes,
+  contactsFallbackValues,
+  userData,
+};

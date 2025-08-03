@@ -2,6 +2,7 @@ import { FormikHelpers } from 'formik';
 
 import {
   CertificateData,
+  ContactsData,
   EducationData,
   ExperienceData,
   UpdatedPersonalData,
@@ -42,6 +43,58 @@ export function validateProfileForm(values: UpdatedPersonalData) {
   }
 
   return errors;
+}
+
+export function validateContacts(values: ContactsData) {
+  const errors: Partial<ContactsData> = {};
+
+  const githubPattern = /^https:\/\/github\.com\/.+$/i;
+  const linkedinPattern = /^https:\/\/www\.linkedin\.com\/in\/.+$/;
+  const telegramPattern = /^https:\/\/t\.me\/.+$/;
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phonePattern = /^\+380\d{9}$/;
+
+  if (values.githubUrl && !githubPattern.test(values.githubUrl))
+    errors.githubUrl = 'GitHub URL must match https://github.com/your-username';
+
+  if (values.linkedinUrl && !linkedinPattern.test(values.linkedinUrl))
+    errors.linkedinUrl =
+      'LinkedIn URL must match https://www.linkedin.com/in/your-name';
+
+  if (values.telegramUrl && !telegramPattern.test(values.telegramUrl))
+    errors.telegramUrl = 'Telegram URL must match https://t.me/your_username';
+
+  if (values.publicEmail && !emailPattern.test(values.publicEmail))
+    errors.publicEmail = 'Invalid email format';
+
+  if (values.phoneNumber && !phonePattern.test(values.phoneNumber))
+    errors.phoneNumber = 'Phone number must be in +380XXXXXXXXX format';
+
+  return errors;
+}
+
+export function removeEmpty(values: ContactsData): ContactsData {
+  const updated: ContactsData = { ...values };
+
+  for (const key in updated) {
+    if (updated[key as keyof ContactsData] === '') {
+      updated[key as keyof ContactsData] = null;
+    }
+  }
+
+  return updated;
+}
+
+export function replaceNulls(values: ContactsData): ContactsData {
+  const updated: ContactsData = { ...values };
+
+  for (const key in updated) {
+    if (updated[key as keyof ContactsData] === null) {
+      updated[key as keyof ContactsData] = '';
+    }
+  }
+
+  return updated;
 }
 
 export function handleCertificatesSubmit(

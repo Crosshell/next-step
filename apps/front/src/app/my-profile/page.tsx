@@ -131,7 +131,7 @@ export default function ProfilePage() {
             <PersonalInfo {...personalInfo} />
           </div>
         </div>
-        <Contacts isEditable data={userData.contacts} />
+        <Contacts isEditable data={profileData.contacts} />
         <Bio isEditable data={profileData.bio} />
         <WorkExperience isEditable data={userData.experience} />
         <Education isEditable data={userData.education} />

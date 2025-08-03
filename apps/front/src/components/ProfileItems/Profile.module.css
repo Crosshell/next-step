@@ -116,6 +116,10 @@
   border: 0;
 }
 
+.form-error {
+  margin-bottom: 15px;
+}
+
 /* General form styles */
 
 /* Skills */
@@ -320,12 +324,28 @@
 
 /* Contacts */
 
+.icon-link {
+  position: relative;
+}
+
 .icon-link div {
   padding: 5px 10px;
   background-color: white;
   border-radius: 5px;
   font-size: 1.25rem;
   color: #1f1f21;
+}
+
+.copied-tooltip {
+  position: absolute;
+  top: -20;
+  right: -70;
+  z-index: 10;
+  padding: 5px 10px;
+  background-color: #1f1f21;
+  border: 1px solid white;
+  border-radius: 5px;
+  font-size: 1.25rem;
 }
 
 .contacts {

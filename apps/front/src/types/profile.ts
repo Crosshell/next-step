@@ -11,7 +11,7 @@ type ProfileData = {
   lastName: string;
   avatarUrl: string | null;
   bio: string | null;
-  contacts: string | null;
+  contacts: ContactsData | null;
   dateOfBirth: string | null;
   expectedSalary: number | null;
   isOpenToWork: boolean;
@@ -56,11 +56,12 @@ type SkillData = {
 };
 
 type ContactsData = {
-  linkedinURL: string;
-  githubURL: string;
-  codewarsURL: string;
-  telegramURL: string;
-  facebookURL: string;
+  jobSeekerId?: string | null;
+  githubUrl: string | null;
+  linkedinUrl: string | null;
+  telegramUrl: string | null;
+  publicEmail: string | null;
+  phoneNumber: string | null;
 };
 
 type LanguageData = {
