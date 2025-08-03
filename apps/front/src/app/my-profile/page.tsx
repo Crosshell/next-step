@@ -44,7 +44,7 @@ export default function ProfilePage() {
   } = useQuery<ProfileData | null, ApiError>({
     queryKey: ['profile'],
     queryFn: getProfile,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000,
     retry: false,
   });
 
@@ -117,7 +117,11 @@ export default function ProfilePage() {
       <div className={classes['profile-container']}>
         <h1 className={classes['page-header']}>Your Next Level Profile</h1>
         <div className={classes['main-info']}>
-          <Avatar isEditable data={profileData.avatarUrl} />
+          <Avatar
+            key={`avatar-${profileData.id}`}
+            isEditable
+            data={profileData.avatarUrl}
+          />
           <div className={classes['main-info-side']}>
             <div className={classes['skills-open-container']}>
               <Skills skills={profileData.skills} />
