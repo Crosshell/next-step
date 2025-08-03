@@ -28,6 +28,7 @@ import { useAuthStore } from '@/store/authSlice';
 import { ProfileData } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
 import OpenToWork from '@/components/ProfileItems/OpenToWork';
+import { isoToDate } from '@/utils/convertData';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -138,7 +139,10 @@ export default function ProfilePage() {
         <Certificates isEditable data={userData.certificates} />
         <Languages isEditable data={profileData.languages} />
 
-        <div className="row-end">
+        <div className="row-space-between">
+          <h3 className={classes['created-at']}>
+            With us from: <span>{isoToDate(profileData.createdAt)}</span>
+          </h3>
           <button className={classes['logout-btn']} onClick={handleLogoutAll}>
             Log out from all devices
           </button>

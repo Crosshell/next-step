@@ -63,3 +63,13 @@
 .profile-message-box {
   margin: 2rem;
 }
+
+.created-at {
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.created-at span {
+  font-weight: 500;
+}
