@@ -127,18 +127,29 @@ export default function Skills({ skills }: Props) {
               {({ remove, push }) => {
                 const tryAddSkill = () => {
                   const trimmed = values.newSkill.trim();
-                  const exists = values.skills.some(
+                  if (!trimmed) return;
+
+                  const existsInForm = values.skills.some(
                     (s) => s.skill.name.toLowerCase() === trimmed.toLowerCase()
                   );
-                  if (trimmed && !exists) {
+                  if (existsInForm) return;
+
+                  const existingSkill = skillsList?.find(
+                    (item) => item.name.toLowerCase() === trimmed.toLowerCase()
+                  );
+
+                  if (existingSkill) {
+                    push({ skill: existingSkill });
+                  } else {
                     push({
                       skill: {
                         id: crypto.randomUUID(),
                         name: trimmed,
                       },
                     });
-                    setFieldValue('newSkill', '');
                   }
+
+                  setFieldValue('newSkill', '');
                 };
 
                 return (

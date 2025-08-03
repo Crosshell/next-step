@@ -57,12 +57,16 @@ export default function Languages({ isEditable, data }: Props) {
     <InfoBox title="Languages" isEditable={isEditable} onEdit={toggleEdit}>
       {!editMode ? (
         <>
-          {data.map((lang) => (
-            <p key={lang.language.id} className="row-space-between">
-              <span>{lang.language.name}</span>
-              <span>{toClientLangLevel(lang.level)}</span>
-            </p>
-          ))}
+          {data.length > 0 ? (
+            data.map((lang) => (
+              <p key={lang.language.id} className="row-space-between">
+                <span>{lang.language.name}</span>
+                <span>{toClientLangLevel(lang.level)}</span>
+              </p>
+            ))
+          ) : (
+            <p>No languages there yet</p>
+          )}
         </>
       ) : (
         <Formik
