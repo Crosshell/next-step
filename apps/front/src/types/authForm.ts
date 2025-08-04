@@ -7,16 +7,6 @@ interface RegistrationFormData {
 
 type PartialRegistrationFormData = Partial<RegistrationFormData>;
 
-interface ProfileFormData {
-  'first-name': string;
-  'last-name': string;
-  'birth-date': string;
-  field: string;
-  level: string;
-  university: string;
-  specialty: string;
-}
-
 interface LogInFormData {
   email: string;
   password: string;
@@ -30,11 +20,21 @@ type ApiResponse =
   | { status: 'ok'; error: null }
   | { status: 'error'; error: string };
 
+type ApiPostResponse<T> =
+  | { status: 'ok'; error: null; data: T }
+  | { status: 'error'; error: string };
+
+interface ApiError {
+  status: number;
+  message: string;
+}
+
 export {
   type RegistrationFormData,
   type PartialRegistrationFormData,
   type LogInFormData,
-  type ProfileFormData,
   type ValidationError,
   type ApiResponse,
+  type ApiPostResponse,
+  type ApiError,
 };

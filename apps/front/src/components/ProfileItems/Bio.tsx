@@ -2,20 +2,39 @@
 
 import { useState } from 'react';
 import { Field, Form, Formik } from 'formik';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import InfoBox from './InfoBox';
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
+import MessageBox from '../MessageBox/MessageBox';
 
 import classes from './Profile.module.css';
 
+import { updatePersonalData } from '@/services/jobseekerService';
+
 interface Props {
-  data: string;
+  data: string | null;
   isEditable?: boolean;
 }
 
 export default function Bio({ isEditable, data }: Props) {
   const [isChanging, setIsChanging] = useState<boolean>(false);
-  const [bioData, setBioData] = useState<string>(data);
+  const [requestErrors, setRequestErrors] = useState<string[]>([]);
+
+  const queryClient = useQueryClient();
+
+  const { mutate: updateBio, isPending } = useMutation({
+    mutationFn: updatePersonalData,
+    onSuccess: async (result) => {
+      if (result.status === 'error') {
+        setRequestErrors([result.error]);
+        return;
+      }
+      setRequestErrors([]);
+      await queryClient.invalidateQueries({ queryKey: ['profile'] });
+      setIsChanging(false);
+    },
+  });
 
   const toggleEdit = () => {
     setIsChanging((prev) => !prev);
@@ -24,14 +43,14 @@ export default function Bio({ isEditable, data }: Props) {
   return (
     <InfoBox title="Your info" isEditable={isEditable} onEdit={toggleEdit}>
       {!isChanging ? (
-        <p>{bioData.trim().length === 0 ? 'No bio there yet' : bioData}</p>
+        <p>{!data || data.trim().length === 0 ? 'No bio there yet' : data}</p>
       ) : (
         <Formik
-          initialValues={{ bio: bioData }}
+          initialValues={{ bio: data ?? '' }}
+          enableReinitialize
           onSubmit={(values) => {
             console.log(values);
-            setBioData(values.bio);
-            setIsChanging(false);
+            updateBio(values);
           }}
         >
           {() => (
@@ -40,6 +59,7 @@ export default function Bio({ isEditable, data }: Props) {
                 className={`${classes['form-input']} ${classes['form-details']}`}
                 name="bio"
                 as="textarea"
+                placeholder="Tell us about yourself"
                 rows={10}
               />
 
@@ -51,13 +71,26 @@ export default function Bio({ isEditable, data }: Props) {
                 >
                   <AnimatedIcon scale={1.07}>Go Back</AnimatedIcon>
                 </button>
-                <button className={classes['info-form-btn']} type="submit">
-                  <AnimatedIcon scale={1.07}>Save changes</AnimatedIcon>
+                <button
+                  className={classes['info-form-btn']}
+                  type="submit"
+                  disabled={isPending}
+                >
+                  <AnimatedIcon scale={1.07}>
+                    {!isPending ? 'Save changes' : 'Saving changes...'}
+                  </AnimatedIcon>
                 </button>
               </div>
             </Form>
           )}
         </Formik>
+      )}
+      {requestErrors.length > 0 && (
+        <div className={classes['personal-info-error-container']}>
+          {requestErrors.map((error) => (
+            <MessageBox key={error}>{error}</MessageBox>
+          ))}
+        </div>
       )}
     </InfoBox>
   );

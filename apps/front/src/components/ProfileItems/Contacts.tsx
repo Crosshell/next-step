@@ -14,7 +14,7 @@ import { ContactsData } from '@/types/profile';
 
 interface Props {
   isEditable: boolean;
-  data: ContactsData;
+  data: ContactsData | null;
 }
 
 export default function Contacts({ isEditable, data }: Props) {

@@ -1,10 +1,117 @@
+import { FormikHelpers } from 'formik';
+
 import {
   CertificateData,
+  ContactsData,
   EducationData,
   ExperienceData,
-  LanguageData,
+  UpdatedPersonalData,
+  UserLanguageData,
 } from '@/types/profile';
-import { FormikHelpers } from 'formik';
+import { ProfileFormData } from '@/types/profile';
+
+export function validateProfileForm(values: UpdatedPersonalData) {
+  const errors: Partial<ProfileFormData> = {};
+
+  if (values.firstName) {
+    if (!values.firstName.trim()) {
+      errors.firstName = 'First name is required';
+    } else if (!/^[A-Za-z\s'-]{2,30}$/.test(values.firstName)) {
+      errors.firstName =
+        'First name must contain only letters and be 2–30 characters';
+    }
+  }
+  if (values.lastName) {
+    if (!values.lastName.trim()) {
+      errors.lastName = 'Last name is required';
+    } else if (!/^[A-Za-z\s'-]{2,30}$/.test(values.lastName)) {
+      errors.lastName =
+        'Last name must contain only letters and be 2–30 characters';
+    }
+  }
+  if (!values.dateOfBirth) {
+    errors.dateOfBirth = 'Date of birth is required';
+  } else {
+    const birthDate = new Date(values.dateOfBirth);
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    if (birthDate > today) {
+      errors.dateOfBirth = 'Birth date cannot be in the future';
+    } else if (age < 16) {
+      errors.dateOfBirth = 'You must be at least 16 years old';
+    }
+  }
+
+  return errors;
+}
+
+export function validateAvatarUrl(values: { avatarUrl: string }) {
+  const errors: { avatarUrl?: string } = {};
+
+  if (!values.avatarUrl) {
+    errors.avatarUrl = 'URL is required';
+  } else {
+    try {
+      new URL(values.avatarUrl);
+    } catch {
+      errors.avatarUrl = 'Invalid URL format';
+    }
+  }
+
+  return errors;
+}
+
+export function validateContacts(values: ContactsData) {
+  const errors: Partial<ContactsData> = {};
+
+  const githubPattern = /^https:\/\/github\.com\/.+$/i;
+  const linkedinPattern = /^https:\/\/www\.linkedin\.com\/in\/.+$/;
+  const telegramPattern = /^https:\/\/t\.me\/.+$/;
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phonePattern = /^\+380\d{9}$/;
+
+  if (values.githubUrl && !githubPattern.test(values.githubUrl))
+    errors.githubUrl = 'GitHub URL must match https://github.com/your-username';
+
+  if (values.linkedinUrl && !linkedinPattern.test(values.linkedinUrl))
+    errors.linkedinUrl =
+      'LinkedIn URL must match https://www.linkedin.com/in/your-name';
+
+  if (values.telegramUrl && !telegramPattern.test(values.telegramUrl))
+    errors.telegramUrl = 'Telegram URL must match https://t.me/your_username';
+
+  if (values.publicEmail && !emailPattern.test(values.publicEmail))
+    errors.publicEmail = 'Invalid email format';
+
+  if (values.phoneNumber && !phonePattern.test(values.phoneNumber))
+    errors.phoneNumber = 'Phone number must be in +380XXXXXXXXX format';
+
+  return errors;
+}
+
+export function removeEmpty(values: ContactsData): ContactsData {
+  const updated: ContactsData = { ...values };
+
+  for (const key in updated) {
+    if (updated[key as keyof ContactsData] === '') {
+      updated[key as keyof ContactsData] = null;
+    }
+  }
+
+  return updated;
+}
+
+export function replaceNulls(values: ContactsData): ContactsData {
+  const updated: ContactsData = { ...values };
+
+  for (const key in updated) {
+    if (updated[key as keyof ContactsData] === null) {
+      updated[key as keyof ContactsData] = '';
+    }
+  }
+
+  return updated;
+}
 
 export function handleCertificatesSubmit(
   values: { certs: CertificateData[] },
@@ -56,9 +163,9 @@ export function handleCertificatesSubmit(
 }
 
 export function handleLanguagesSubmit(
-  values: { languages: LanguageData[] },
-  helpers: FormikHelpers<{ languages: LanguageData[] }>,
-  onSuccess: (updatedLanguages: LanguageData[]) => void
+  values: { languages: UserLanguageData[] },
+  helpers: FormikHelpers<{ languages: UserLanguageData[] }>,
+  onSuccess: (updatedLanguages: UserLanguageData[]) => void
 ) {
   const seen = new Set();
   const duplicates = values.languages.some((lang) => {

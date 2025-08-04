@@ -1,16 +1,20 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 
 import AnimatedIcon from '../HoveredItem/HoveredItem';
 
 import {
-  faFacebookF,
   faLinkedinIn,
   faGithub,
   faTelegram,
 } from '@fortawesome/free-brands-svg-icons';
-import { faContactBook, faCode } from '@fortawesome/free-solid-svg-icons';
+import {
+  faContactBook,
+  faPhone,
+  faEnvelope,
+} from '@fortawesome/free-solid-svg-icons';
 
 import classes from './Profile.module.css';
 
@@ -20,11 +24,12 @@ interface Props {
 }
 
 export default function ContactLink({ type, url }: Props) {
+  const [copied, setCopied] = useState(false);
+
   let icon = faContactBook;
+  let isCopyable = false;
+
   switch (type.toLowerCase()) {
-    case 'facebookurl':
-      icon = faFacebookF;
-      break;
     case 'linkedinurl':
       icon = faLinkedinIn;
       break;
@@ -34,15 +39,44 @@ export default function ContactLink({ type, url }: Props) {
     case 'telegramurl':
       icon = faTelegram;
       break;
-    case 'codewarsurl':
-      icon = faCode;
+    case 'publicemail':
+      icon = faEnvelope;
+      isCopyable = true;
+      break;
+    case 'phonenumber':
+      icon = faPhone;
+      isCopyable = true;
       break;
     default:
       return null;
   }
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      alert('Failed to copy');
+    }
+  };
+
+  if (isCopyable) {
+    return (
+      <button
+        type="button"
+        className={classes['icon-link']}
+        onClick={handleCopy}
+        title={`Click to copy ${type}`}
+      >
+        <AnimatedIcon iconType={icon} scale={1.2} />
+        {copied && <span className={classes['copied-tooltip']}>Copied!</span>}
+      </button>
+    );
+  }
+
   return (
-    <Link href={url} className={classes['icon-link']}>
+    <Link href={url} className={classes['icon-link']} target="_blank">
       <AnimatedIcon iconType={icon} scale={1.2} />
     </Link>
   );

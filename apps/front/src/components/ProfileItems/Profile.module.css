@@ -70,6 +70,11 @@
   margin-top: 10px;
 }
 
+.form-btn-container button {
+  background-color: transparent;
+  border: 0;
+}
+
 .form-btn-container button div {
   padding: 8px 12px;
   font-size: 1.25rem;
@@ -110,7 +115,115 @@
   width: 100%;
 }
 
+.request-error-container div {
+  margin-bottom: 0;
+  padding: 0;
+  border: 0;
+}
+
+.form-error {
+  margin-bottom: 15px;
+}
+
 /* General form styles */
+
+/* Profile Container */
+
+.profile-container button {
+  background-color: transparent;
+  border: 0;
+}
+
+.page-header {
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+  font-weight: 500;
+}
+
+.main-info {
+  display: flex;
+  gap: 3%;
+  position: relative;
+  margin-bottom: 2.5rem;
+  width: 100%;
+}
+
+.main-info-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 75vw;
+}
+
+.skills-open-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  background-color: transparent;
+  border: 3px solid #f37199 !important;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  color: #f37199;
+}
+
+.profile-message-box {
+  margin: 2rem;
+}
+
+.created-at {
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.created-at span {
+  font-weight: 500;
+}
+
+/* Profile Container */
+
+/* Avatar */
+
+.avatar-btn img {
+  border: 3px solid #37aa9c;
+  border-radius: 10px;
+}
+
+.avatar-form {
+  padding: 0.5rem;
+}
+
+.avatar-form .validation-error {
+  margin-top: 20px;
+}
+
+.avatar-form-container {
+  display: flex;
+  gap: 3%;
+  width: 40vw;
+}
+
+.avatar-form-container input {
+  margin-bottom: 0;
+}
+
+.avatar-form-container .info-form-btn {
+  background-color: transparent;
+  border: 0;
+}
+
+.avatar-form-container .info-form-btn div {
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* Avatar */
 
 /* Skills */
 
@@ -120,17 +233,45 @@
 }
 
 .skills .form-input {
-  width: 25%;
+  width: 100%;
+}
+
+.skills .autocomplete-wrapper {
+  position: relative;
+}
+
+.skills .autocomplete-list {
+  position: absolute;
+  z-index: 10;
+  margin-top: 10px;
+  width: 100%;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
+}
+
+.skills .autocomplete-item {
+  padding: 7px 10px;
+  width: 100%;
+  border-bottom: 1px solid white;
+  font-size: 1.25rem;
 }
 
 .skills span {
   display: block;
   padding: 10px 30px;
   background-color: white;
+  border: 2px solid white;
   border-radius: 10px;
   font-size: 1.25rem;
   font-weight: 500;
   color: #1f1f21;
+}
+
+.skills .no-skills {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
 }
 
 .btn-container {
@@ -204,12 +345,21 @@
 }
 
 .personal-info .birthdate-input {
-  width: 10vw;
+  width: 15vw;
 }
 
 .personal-info .name-input {
   margin-bottom: 20px;
   font-size: 2.5rem;
+}
+
+.personal-info .name-input:first-of-type {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.personal-info .address-input {
+  padding: 10px 0;
 }
 
 .edit-personal-info-btn {
@@ -250,9 +400,36 @@
   padding: 5px 10px;
 }
 
+.personal-info-error-container div {
+  margin-bottom: 0;
+  padding: 0;
+  border: 0;
+}
+
+.open-to-work div,
+.not-open-to-work div {
+  display: inline-block;
+  padding: 10px 20px;
+
+  background-color: #37aa9c;
+  border: 2px solid #37aa9c;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: white;
+}
+
+.not-open-to-work div {
+  background-color: transparent;
+  border: 2px solid white;
+}
 /* Personal Info */
 
 /* Contacts */
+
+.icon-link {
+  position: relative;
+}
 
 .icon-link div {
   padding: 5px 10px;
@@ -260,6 +437,18 @@
   border-radius: 5px;
   font-size: 1.25rem;
   color: #1f1f21;
+}
+
+.copied-tooltip {
+  position: absolute;
+  top: -20;
+  right: -70;
+  z-index: 10;
+  padding: 5px 10px;
+  background-color: #1f1f21;
+  border: 1px solid white;
+  border-radius: 5px;
+  font-size: 1.25rem;
 }
 
 .contacts {
@@ -361,7 +550,6 @@
 }
 
 .is-current {
-  display: inline-block;
   padding: 10px 20px;
 
   background-color: white;
@@ -450,3 +638,59 @@
 }
 
 /* Languages */
+
+/* Profile Form */
+
+.profile-form-container {
+  margin: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-form-container h1 {
+  margin-bottom: 15px;
+  font-size: 2.5rem;
+}
+
+.profile-form-container h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.profile-form {
+  margin-bottom: 10px;
+}
+
+.profile-form p {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.profile-form input {
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  font-size: 1.5rem;
+}
+
+.profile-form-btn {
+  border: 0;
+  background-color: transparent;
+}
+
+.profile-form-btn div {
+  padding: 10px 40px;
+  background-color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: #1f1f21;
+}
+
+.profile-form-container h5 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+/* Profile Form */
