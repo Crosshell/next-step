@@ -66,4 +66,28 @@ describe('TokenService', () => {
       expect(result).toEqual(token);
     });
   });
+
+  describe('consumeToken', () => {
+    const type: TokenType = TokenType.VERIFY;
+    const token: string = '123e4567-e89b-12d3-a456-426614174000';
+    const key = `${type}:${token}`;
+
+    it('should consume a token', async () => {
+      redis.getdel.mockResolvedValue(token);
+
+      const result = await service.consumeToken(type, token);
+
+      expect(redis.getdel).toHaveBeenCalledWith(key);
+      expect(result).toEqual(token);
+    });
+
+    it('should return null if token does not exist', async () => {
+      redis.getdel.mockResolvedValue(null);
+
+      const result = await service.consumeToken(type, token);
+
+      expect(redis.getdel).toHaveBeenCalledWith(key);
+      expect(result).toEqual(null);
+    });
+  });
 });
