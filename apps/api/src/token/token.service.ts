@@ -10,6 +10,7 @@ export class TokenService {
     private readonly redis: RedisService,
     private readonly config: ConfigService,
   ) {}
+
   async createToken(type: TokenType, email: string): Promise<string> {
     const token = randomUUID();
     const key = this.tokenKey(type, token);
