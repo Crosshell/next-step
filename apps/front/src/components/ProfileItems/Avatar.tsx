@@ -47,7 +47,7 @@ export default function Avatar({ isEditable, data }: Props) {
       }
       disabled={!isEditable}
     >
-      <HoveredItem scale={1.05}>
+      <HoveredItem scale={isEditable ? 1.05 : 1}>
         <img
           src={avatarUrl}
           alt="avatar-image"
@@ -56,6 +56,7 @@ export default function Avatar({ isEditable, data }: Props) {
           style={{
             opacity: isLoaded ? 1 : 0,
             transition: 'opacity 0.5s ease-in-out',
+            cursor: isEditable ? 'pointer' : 'default',
           }}
           className={classes['avatar-img']}
         />

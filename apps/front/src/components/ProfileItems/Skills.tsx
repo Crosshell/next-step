@@ -22,10 +22,11 @@ import {
 import { ApiError } from '@/types/authForm';
 
 interface Props {
+  isEditable: boolean;
   skills: SkillData[];
 }
 
-export default function Skills({ skills }: Props) {
+export default function Skills({ isEditable, skills }: Props) {
   const [editMode, setEditMode] = useState(false);
   const [requestError, setRequestError] = useState<string | null>(null);
 
@@ -79,13 +80,15 @@ export default function Skills({ skills }: Props) {
           ) : (
             <span className={classes['no-skills']}>No skills added</span>
           )}
-          <button
-            type="button"
-            className={classes['edit-skills-btn']}
-            onClick={() => setEditMode(true)}
-          >
-            <AnimatedIcon iconType={faPlus} />
-          </button>
+          {isEditable && (
+            <button
+              type="button"
+              className={classes['edit-skills-btn']}
+              onClick={() => setEditMode(true)}
+            >
+              <AnimatedIcon iconType={faPlus} />
+            </button>
+          )}
         </div>
       ) : (
         <Formik

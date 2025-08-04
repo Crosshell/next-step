@@ -127,6 +127,65 @@
 
 /* General form styles */
 
+/* Profile Container */
+
+.profile-container button {
+  background-color: transparent;
+  border: 0;
+}
+
+.page-header {
+  margin-bottom: 40px;
+  font-size: 2.5rem;
+  font-weight: 500;
+}
+
+.main-info {
+  display: flex;
+  gap: 3%;
+  position: relative;
+  margin-bottom: 2.5rem;
+  width: 100%;
+}
+
+.main-info-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 75vw;
+}
+
+.skills-open-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  background-color: transparent;
+  border: 3px solid #f37199 !important;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  color: #f37199;
+}
+
+.profile-message-box {
+  margin: 2rem;
+}
+
+.created-at {
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.created-at span {
+  font-weight: 500;
+}
+
+/* Profile Container */
+
 /* Avatar */
 
 .avatar-btn img {

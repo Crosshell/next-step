@@ -15,12 +15,12 @@ import { isoToDate, isoToSimpleDate } from '@/utils/convertData';
 import { validateProfileForm } from '@/utils/profileValidation';
 import { updatePersonalData } from '@/services/jobseekerService';
 
-export default function PersonalInfo({
-  firstName,
-  lastName,
-  dateOfBirth,
-  location,
-}: PersonalData) {
+interface Props {
+  isEditable: boolean;
+  data: PersonalData;
+}
+
+export default function PersonalInfo({ isEditable, data }: Props) {
   const [isChanging, setIsChanging] = useState(false);
   const [requestErrors, setRequestErrors] = useState<string[]>([]);
 
@@ -48,10 +48,10 @@ export default function PersonalInfo({
   };
 
   const initialValues: UpdatedPersonalData = {
-    firstName,
-    lastName,
-    dateOfBirth: dateOfBirth ? isoToSimpleDate(dateOfBirth) : '',
-    location: location || '',
+    firstName: data.firstName,
+    lastName: data.lastName,
+    dateOfBirth: data.dateOfBirth ? isoToSimpleDate(data.dateOfBirth) : '',
+    location: data.location || '',
   };
 
   return (
@@ -60,21 +60,23 @@ export default function PersonalInfo({
         <>
           <div className={classes['personal-info']}>
             <h2>
-              {firstName} {lastName}
+              {data.firstName} {data.lastName}
             </h2>
             <p>
-              {dateOfBirth
-                ? isoToDate(dateOfBirth)
+              {data.dateOfBirth
+                ? isoToDate(data.dateOfBirth)
                 : 'No birthdate information'}
             </p>
-            <p>{location || 'No address information'}</p>
+            <p>{data.location || 'No address information'}</p>
           </div>
-          <button
-            className={classes['edit-personal-info-btn']}
-            onClick={() => setIsChanging(true)}
-          >
-            <AnimatedIcon iconType={faPencil} />
-          </button>
+          {isEditable && (
+            <button
+              className={classes['edit-personal-info-btn']}
+              onClick={() => setIsChanging(true)}
+            >
+              <AnimatedIcon iconType={faPencil} />
+            </button>
+          )}
         </>
       ) : (
         <Formik

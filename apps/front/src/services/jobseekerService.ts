@@ -136,3 +136,17 @@ export async function updateUserContacts(data: ContactsData) {
       return { status: 'error', error: message };
     });
 }
+
+export async function getProfileById(id: string) {
+  return api
+    .get(`/job-seekers/${id}`)
+    .then((res) => res.data)
+    .catch((error) => {
+      const message =
+        error?.response?.data?.message || 'Failed to fetch profile';
+      throw {
+        status: error?.response?.status || 500,
+        message,
+      };
+    });
+}

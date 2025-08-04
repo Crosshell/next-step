@@ -28,7 +28,7 @@ export default function OpenToWork({ isEditable, isOpenToWork }: Props) {
       await queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
   });
-  
+
   const toggleIsOpen = () => {
     updateIsOpen({ isOpenToWork: !isOpenToWork });
   };
@@ -39,10 +39,11 @@ export default function OpenToWork({ isEditable, isOpenToWork }: Props) {
         className={
           isOpenToWork ? classes['open-to-work'] : classes['not-open-to-work']
         }
-        disabled={!isEditable && isPending}
+        disabled={!isEditable || isPending}
         onClick={toggleIsOpen}
+        style={{ cursor: isEditable ? 'pointer' : 'default' }}
       >
-        <AnimatedIcon>
+        <AnimatedIcon scale={isEditable ? 1.1 : 1}>
           {isOpenToWork ? 'Open to Work' : 'Do not disturb'}
         </AnimatedIcon>
       </button>

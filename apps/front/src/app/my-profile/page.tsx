@@ -4,14 +4,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import Skills from '@/components/ProfileItems/Skills';
-import PersonalInfo from '@/components/ProfileItems/PersonalInfo';
-import Contacts from '@/components/ProfileItems/Contacts';
-import Bio from '@/components/ProfileItems/Bio';
-import Languages from '@/components/ProfileItems/Languages';
-import Certificates from '@/components/ProfileItems/Certificates';
-import WorkExperience from '@/components/ProfileItems/WorkExperience';
-import Education from '@/components/ProfileItems/Education';
 import ProfileForm from '@/components/ProfileItems/ProfileForm';
 import MessageBox from '@/components/MessageBox/MessageBox';
 
@@ -20,15 +12,12 @@ import classes from './page.module.css';
 import { logoutUser } from '@/services/userService';
 import { getProfile } from '@/services/jobseekerService';
 
-import { userData } from '@/lib/profile-data';
 import { useModalStore } from '@/store/modalSlice';
 import { useAuthStore } from '@/store/authSlice';
 
 import { ProfileData } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
-import OpenToWork from '@/components/ProfileItems/OpenToWork';
-import { isoToDate } from '@/utils/convertData';
-import Avatar from '@/components/ProfileItems/Avatar';
+import ProfileContainer from '@/components/ProfileItems/ProfileContainer';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -99,53 +88,17 @@ export default function ProfilePage() {
         </MessageBox>
       </div>
     );
-  let personalInfo;
 
   if (!profileData) return null;
-  else {
-    console.log(profileData);
-    personalInfo = {
-      firstName: profileData.firstName,
-      lastName: profileData.lastName,
-      dateOfBirth: profileData.dateOfBirth,
-      location: profileData.location,
-    };
-  }
+  else console.log(profileData);
 
   return (
     <div className="container">
-      <div className={classes['profile-container']}>
-        <h1 className={classes['page-header']}>Your Next Level Profile</h1>
-        <div className={classes['main-info']}>
-          <Avatar
-            key={`avatar-${profileData.id}`}
-            isEditable
-            data={profileData.avatarUrl}
-          />
-          <div className={classes['main-info-side']}>
-            <div className={classes['skills-open-container']}>
-              <Skills skills={profileData.skills} />
-              <OpenToWork isEditable isOpenToWork={profileData.isOpenToWork} />
-            </div>
-            <PersonalInfo {...personalInfo} />
-          </div>
-        </div>
-        <Contacts isEditable data={profileData.contacts} />
-        <Bio isEditable data={profileData.bio} />
-        <WorkExperience isEditable data={userData.experience} />
-        <Education isEditable data={userData.education} />
-        <Certificates isEditable data={userData.certificates} />
-        <Languages isEditable data={profileData.languages} />
-
-        <div className="row-space-between">
-          <h3 className={classes['created-at']}>
-            With us from: <span>{isoToDate(profileData.createdAt)}</span>
-          </h3>
-          <button className={classes['logout-btn']} onClick={handleLogoutAll}>
-            Log out from all devices
-          </button>
-        </div>
-      </div>
+      <ProfileContainer
+        isEditable
+        profileData={profileData}
+        logoutFn={handleLogoutAll}
+      />
     </div>
   );
 }
