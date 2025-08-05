@@ -15,9 +15,10 @@ import { updatePersonalData } from '@/services/jobseekerService';
 interface Props {
   data: string | null;
   isEditable?: boolean;
+  title?: string;
 }
 
-export default function Bio({ isEditable, data }: Props) {
+export default function Bio({ isEditable, data, title = 'Bio' }: Props) {
   const [isChanging, setIsChanging] = useState<boolean>(false);
   const [requestErrors, setRequestErrors] = useState<string[]>([]);
 
@@ -41,9 +42,13 @@ export default function Bio({ isEditable, data }: Props) {
   };
 
   return (
-    <InfoBox title="Your info" isEditable={isEditable} onEdit={toggleEdit}>
+    <InfoBox
+      title={isEditable ? 'Your ' + title : title}
+      isEditable={isEditable}
+      onEdit={toggleEdit}
+    >
       {!isChanging ? (
-        <p>{!data || data.trim().length === 0 ? 'No bio there yet' : data}</p>
+        <p>{!data || data.trim().length === 0 ? 'No data there yet' : data}</p>
       ) : (
         <Formik
           initialValues={{ bio: data ?? '' }}

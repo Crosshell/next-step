@@ -1,9 +1,9 @@
 import Avatar from '@/components/ProfileItems/Avatar';
-import OpenToWork from '@/components/ProfileItems/OpenToWork';
+import OpenToWork from '@/components/ProfileItems/StatusController';
 import Skills from '@/components/ProfileItems/Skills';
 import PersonalInfo from '@/components/ProfileItems/PersonalInfo';
 import Contacts from '@/components/ProfileItems/Contacts';
-import Bio from '@/components/ProfileItems/Bio';
+import Bio from '@/components/ProfileItems/Description';
 import Languages from '@/components/ProfileItems/Languages';
 import Certificates from '@/components/ProfileItems/Certificates';
 import WorkExperience from '@/components/ProfileItems/WorkExperience';
@@ -12,18 +12,16 @@ import Education from '@/components/ProfileItems/Education';
 import classes from './Profile.module.css';
 import { ProfileData } from '@/types/profile';
 import { userData } from '@/lib/profile-data';
-import { isoToDate } from '@/utils/convertData';
+import BottomRow from './BottomRow';
 
 interface Props {
   isEditable?: boolean;
   profileData: ProfileData;
-  logoutFn?: () => void;
 }
 
 export default function ProfileContainer({
   isEditable = false,
   profileData,
-  logoutFn,
 }: Props) {
   const personalInfo = {
     firstName: profileData.firstName,
@@ -46,7 +44,7 @@ export default function ProfileContainer({
             <Skills isEditable={isEditable} skills={profileData.skills} />
             <OpenToWork
               isEditable={isEditable}
-              isOpenToWork={profileData.isOpenToWork}
+              isTrue={profileData.isOpenToWork}
             />
           </div>
           <PersonalInfo isEditable={isEditable} data={personalInfo} />
@@ -58,17 +56,7 @@ export default function ProfileContainer({
       <Education isEditable={isEditable} data={userData.education} />
       <Certificates isEditable={isEditable} data={userData.certificates} />
       <Languages isEditable={isEditable} data={profileData.languages} />
-
-      <div className="row-space-between">
-        <h3 className={classes['created-at']}>
-          With us from: <span>{isoToDate(profileData.createdAt)}</span>
-        </h3>
-        {isEditable && logoutFn && (
-          <button className={classes['logout-btn']} onClick={logoutFn}>
-            Log out from all devices
-          </button>
-        )}
-      </div>
+      <BottomRow isEditable={isEditable} data={profileData.createdAt} />
     </div>
   );
 }

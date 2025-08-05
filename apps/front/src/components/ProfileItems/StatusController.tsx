@@ -10,10 +10,15 @@ import { updatePersonalData } from '@/services/jobseekerService';
 
 interface Props {
   isEditable: boolean;
-  isOpenToWork: boolean;
+  isTrue: boolean;
+  type?: 'isOpen' | 'isVerified';
 }
 
-export default function OpenToWork({ isEditable, isOpenToWork }: Props) {
+export default function OpenToWork({
+  isEditable,
+  isTrue,
+  type = 'isOpen',
+}: Props) {
   const [requestErrors, setRequestErrors] = useState<string[]>([]);
 
   const queryClient = useQueryClient();
@@ -30,21 +35,27 @@ export default function OpenToWork({ isEditable, isOpenToWork }: Props) {
   });
 
   const toggleIsOpen = () => {
-    updateIsOpen({ isOpenToWork: !isOpenToWork });
+    updateIsOpen({ isOpenToWork: !isTrue });
   };
+
+  const isOpenVariants = ['Open to Work', 'Do not disturb'];
+  const isVerifiedVariants = ['Is verified', 'Not Verified'];
+
+  const variants =
+    type === 'isOpen' ? [...isOpenVariants] : [...isVerifiedVariants];
 
   return (
     <>
       <button
         className={
-          isOpenToWork ? classes['open-to-work'] : classes['not-open-to-work']
+          isTrue ? classes['open-to-work'] : classes['not-open-to-work']
         }
         disabled={!isEditable || isPending}
         onClick={toggleIsOpen}
         style={{ cursor: isEditable ? 'pointer' : 'default' }}
       >
         <AnimatedIcon scale={isEditable ? 1.1 : 1}>
-          {isOpenToWork ? 'Open to Work' : 'Do not disturb'}
+          {isTrue ? variants[0] : variants[1]}
         </AnimatedIcon>
       </button>
       {requestErrors.length > 0 && (

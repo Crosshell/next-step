@@ -136,7 +136,7 @@
 
 .page-header {
   margin-bottom: 40px;
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 500;
 }
 
@@ -187,7 +187,9 @@
 /* Profile Container */
 
 /* Avatar */
-
+.avatar-btn {
+  height: 100%;
+}
 .avatar-btn img {
   border: 3px solid #37aa9c;
   border-radius: 10px;

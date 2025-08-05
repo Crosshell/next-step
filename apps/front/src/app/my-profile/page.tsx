@@ -2,18 +2,16 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import ProfileForm from '@/components/ProfileItems/ProfileForm';
 import MessageBox from '@/components/MessageBox/MessageBox';
 
 import classes from './page.module.css';
 
-import { logoutUser } from '@/services/userService';
 import { getProfile } from '@/services/jobseekerService';
 
 import { useModalStore } from '@/store/modalSlice';
-import { useAuthStore } from '@/store/authSlice';
 
 import { ProfileData } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
@@ -21,7 +19,6 @@ import ProfileContainer from '@/components/ProfileItems/ProfileContainer';
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { setIsLogged, setIsConfirmed, setRole } = useAuthStore();
   const openModal = useModalStore((state) => state.openModal);
   const closeModal = useModalStore((state) => state.closeModal);
 
@@ -49,28 +46,6 @@ export default function ProfilePage() {
     }
   }, [isError, error, profileData, openModal, closeModal, router]);
 
-  const { mutate: logoutMutate } = useMutation({
-    mutationFn: logoutUser,
-    onSuccess: () => {
-      router.push('/sign-in');
-      setIsLogged(false);
-      setIsConfirmed(false);
-      setRole(undefined);
-    },
-    onError: (err) => {
-      console.error('Logout failed:', err);
-    },
-  });
-
-  const handleLogoutAll = () => {
-    const confirmLogout = window.confirm(
-      'Are you sure you want to log out from all devices?'
-    );
-    if (!confirmLogout) return;
-
-    logoutMutate();
-  };
-
   if (isLoading)
     return (
       <div className={classes['profile-message-box']}>
@@ -94,11 +69,7 @@ export default function ProfilePage() {
 
   return (
     <div className="container">
-      <ProfileContainer
-        isEditable
-        profileData={profileData}
-        logoutFn={handleLogoutAll}
-      />
+      <ProfileContainer isEditable profileData={profileData} />
     </div>
   );
 }
