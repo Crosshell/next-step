@@ -13,16 +13,6 @@ describe('UserService', () => {
   let service: UserService;
   let repository: jest.Mocked<UserRepository>;
 
-  const mockUser: User = {
-    id: '123e4567-e89b-12d3-a456-426614174000',
-    email: 'test@example.com',
-    password: 'hashedPassword',
-    type: 'COMPANY',
-    isEmailVerified: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
   const mockUserWithoutPassword: UserWithoutPassword = {
     id: '123e4567-e89b-12d3-a456-426614174000',
     email: 'test@example.com',
@@ -30,6 +20,11 @@ describe('UserService', () => {
     isEmailVerified: false,
     createdAt: new Date(),
     updatedAt: new Date(),
+  };
+
+  const mockUser: User = {
+    ...mockUserWithoutPassword,
+    password: 'hashedPassword',
   };
 
   beforeEach(async () => {

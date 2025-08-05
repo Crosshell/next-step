@@ -39,7 +39,7 @@ export class UserService {
 
   async findOneOrThrow(
     where: Prisma.UserWhereUniqueInput,
-  ): Promise<UserWithoutPassword | User> {
+  ): Promise<UserWithoutPassword> {
     const user = await this.repository.findOne(where);
     if (!user) throw new BadRequestException('User not found');
     return user;

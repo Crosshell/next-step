@@ -29,9 +29,7 @@ export class AuthService {
 
   async validateCredentials(dto: LoginDto): Promise<UserWithoutPassword> {
     const user = (await this.userService.findOne(
-      {
-        email: dto.email,
-      },
+      { email: dto.email },
       false,
     )) as User | null;
 
