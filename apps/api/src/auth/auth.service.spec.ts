@@ -8,7 +8,7 @@ import { LoginDto } from './dto/login.dto';
 import { User } from '@prisma/client';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
 import * as argon2 from 'argon2';
-import { UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 
 jest.mock('argon2');
 const mockedArgon2 = argon2 as jest.Mocked<typeof argon2>;
@@ -24,7 +24,7 @@ describe('AuthService', () => {
     id: '123e4567-e89b-12d3-a456-426614174000',
     email: 'test@example.com',
     type: 'COMPANY',
-    isEmailVerified: false,
+    isEmailVerified: true,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -142,6 +142,38 @@ describe('AuthService', () => {
         mockUser.password,
         dto.password,
       );
+    });
+  });
+
+  describe('login', () => {
+    const ua: string = 'Safari/537.36';
+    const ip: string = '127.0.0.1';
+    const sid: string = '123e4567-e89b-12d3-a456-426614174102';
+
+    it('should login by creating a session and returning a token', async () => {
+      sessionService.createSession.mockResolvedValue(sid);
+
+      const result = await service.login(mockUserWithoutPassword, ua, ip);
+
+      expect(sessionService.createSession).toHaveBeenCalledWith(
+        mockUserWithoutPassword.id,
+        ua,
+        ip,
+      );
+      expect(result).toEqual(sid);
+    });
+
+    it('should throw ForbiddenException if user email is not verified', async () => {
+      const unverifiedUser: UserWithoutPassword = {
+        ...mockUserWithoutPassword,
+        isEmailVerified: false,
+      };
+
+      await expect(service.login(unverifiedUser, ua, ip)).rejects.toThrow(
+        new ForbiddenException('Verify your email address first'),
+      );
+
+      expect(sessionService.createSession).not.toHaveBeenCalled();
     });
   });
 });
