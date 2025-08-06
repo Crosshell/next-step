@@ -8,7 +8,11 @@ import { LoginDto } from './dto/login.dto';
 import { User } from '@prisma/client';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
 import * as argon2 from 'argon2';
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { TokenType } from '../token/enums/token-type.enum';
 
@@ -232,7 +236,43 @@ describe('AuthService', () => {
       expect(result).toBeUndefined();
     });
   });
-  // describe('verifyEmail', () => {});
+
+  describe('verifyEmail', () => {
+    const token: string = '123e4567-e89b-12d3-a456-426614174102';
+    const email = 'test@example.com';
+
+    it('should verify email', async () => {
+      tokenService.consumeToken.mockResolvedValue(email);
+      userService.update.mockResolvedValue(mockUserWithoutPassword);
+
+      const result = await service.verifyEmail(token);
+
+      expect(tokenService.consumeToken).toHaveBeenCalledWith(
+        TokenType.VERIFY,
+        token,
+      );
+      expect(userService.update).toHaveBeenCalledWith(
+        { email },
+        { isEmailVerified: true },
+      );
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw BadRequestException if token is invalid', async () => {
+      tokenService.consumeToken.mockResolvedValue(null);
+
+      await expect(service.verifyEmail(token)).rejects.toThrow(
+        new BadRequestException('Invalid or expired verify token'),
+      );
+
+      expect(tokenService.consumeToken).toHaveBeenCalledWith(
+        TokenType.VERIFY,
+        token,
+      );
+      expect(userService.update).not.toHaveBeenCalled();
+    });
+  });
+
   // describe('resendVerification', () => {});
   // describe('forgotPassword', () => {});
   // describe('resetPassword', () => {});
