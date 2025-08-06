@@ -9,6 +9,8 @@ import { User } from '@prisma/client';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
 import * as argon2 from 'argon2';
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import { RegisterDto } from './dto/register.dto';
+import { TokenType } from '../token/enums/token-type.enum';
 
 jest.mock('argon2');
 const mockedArgon2 = argon2 as jest.Mocked<typeof argon2>;
@@ -86,7 +88,7 @@ describe('AuthService', () => {
 
   describe('validateCredentials', () => {
     const dto: LoginDto = {
-      email: 'test@gmail.com',
+      email: 'test@example.com',
       password: '12345678',
     };
 
@@ -176,4 +178,40 @@ describe('AuthService', () => {
       expect(sessionService.createSession).not.toHaveBeenCalled();
     });
   });
+
+  describe('register', () => {
+    const dto: RegisterDto = {
+      email: 'test@example.com',
+      password: '12345678',
+      type: 'COMPANY',
+    };
+
+    const token = '123e4567-e89b-12d3-a456-426614174102';
+
+    it('should register a user', async () => {
+      userService.create.mockResolvedValue(mockUserWithoutPassword);
+      tokenService.createToken.mockResolvedValue(token);
+      emailService.sendVerificationEmail.mockResolvedValue(undefined);
+
+      const result = await service.register(dto);
+
+      expect(userService.create).toHaveBeenCalledWith(dto);
+      expect(tokenService.createToken).toHaveBeenCalledWith(
+        TokenType.VERIFY,
+        dto.email,
+      );
+      expect(emailService.sendVerificationEmail).toHaveBeenCalledWith(
+        dto.email,
+        token,
+      );
+      expect(result).toBeUndefined();
+    });
+  });
+
+  // describe('logout', () => {});
+  // describe('logoutAll', () => {});
+  // describe('verifyEmail', () => {});
+  // describe('resendVerification', () => {});
+  // describe('forgotPassword', () => {});
+  // describe('resetPassword', () => {});
 });
