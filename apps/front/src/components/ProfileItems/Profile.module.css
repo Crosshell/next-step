@@ -2,6 +2,7 @@
   position: relative;
   padding: 25px 30px;
   margin-bottom: 30px;
+  width: 100%;
   background-color: #1f1f21;
   border: 3px solid #37aa9c;
   border-radius: 10px;
@@ -530,6 +531,11 @@
   background-color: white;
   border: 2px solid white;
   color: #1f1f21;
+}
+
+.bio-p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 /* Bio */

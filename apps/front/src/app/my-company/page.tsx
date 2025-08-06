@@ -25,7 +25,7 @@ export default function CompanyProfilePage() {
     isError,
     error,
   } = useQuery<CompanyProfileData | null, ApiError>({
-    queryKey: ['profile'],
+    queryKey: ['company-profile'],
     queryFn: getMyCompanyProfile,
     staleTime: 1000,
     retry: false,

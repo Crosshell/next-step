@@ -11,14 +11,15 @@ import MessageBox from '../MessageBox/MessageBox';
 import classes from './Profile.module.css';
 
 import { updatePersonalData } from '@/services/jobseekerService';
+import { updateCompanyProfile } from '@/services/companyProfileService';
 
 interface Props {
   data: string | null;
   isEditable?: boolean;
-  title?: string;
+  type?: 'bio' | 'description';
 }
 
-export default function Bio({ isEditable, data, title = 'Bio' }: Props) {
+export default function Bio({ isEditable, data, type = 'bio' }: Props) {
   const [isChanging, setIsChanging] = useState<boolean>(false);
   const [requestErrors, setRequestErrors] = useState<string[]>([]);
 
@@ -37,9 +38,24 @@ export default function Bio({ isEditable, data, title = 'Bio' }: Props) {
     },
   });
 
+  const { mutate: updateDescription } = useMutation({
+    mutationFn: updateCompanyProfile,
+    onSuccess: async (result) => {
+      if (result.status === 'error') {
+        setRequestErrors([result.error]);
+        return;
+      }
+      setRequestErrors([]);
+      await queryClient.invalidateQueries({ queryKey: ['company-profile'] });
+      setIsChanging(false);
+    },
+  });
+
   const toggleEdit = () => {
     setIsChanging((prev) => !prev);
   };
+
+  const title = type === 'bio' ? 'Bio' : 'Description';
 
   return (
     <InfoBox
@@ -48,21 +64,25 @@ export default function Bio({ isEditable, data, title = 'Bio' }: Props) {
       onEdit={toggleEdit}
     >
       {!isChanging ? (
-        <p>{!data || data.trim().length === 0 ? 'No data there yet' : data}</p>
+        <p className={classes['bio-p']}>
+          {!data || data.trim().length === 0 ? 'No data there yet' : data}
+        </p>
       ) : (
         <Formik
-          initialValues={{ bio: data ?? '' }}
+          initialValues={
+            type === 'bio' ? { bio: data ?? '' } : { description: data ?? '' }
+          }
           enableReinitialize
           onSubmit={(values) => {
-            console.log(values);
-            updateBio(values);
+            if (type === 'bio') updateBio(values);
+            else updateDescription(values);
           }}
         >
           {() => (
             <Form className={classes['bio-form']}>
               <Field
                 className={`${classes['form-input']} ${classes['form-details']}`}
-                name="bio"
+                name={type === 'bio' ? 'bio' : 'description'}
                 as="textarea"
                 placeholder="Tell us about yourself"
                 rows={10}

@@ -52,7 +52,7 @@ export default function CompanyProfileContainer({
       <Bio
         isEditable={isEditable}
         data={companyData.description}
-        title="Description"
+        type="description"
       />
       <BottomRow isEditable={isEditable} data={companyData.createdAt} />
     </div>

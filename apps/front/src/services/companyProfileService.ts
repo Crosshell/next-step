@@ -1,3 +1,4 @@
+import { UpdCompanyProfileData } from '@/types/companyProfile';
 import api from './axios';
 
 export async function getMyCompanyProfile() {
@@ -6,10 +7,23 @@ export async function getMyCompanyProfile() {
     .then((res) => res.data)
     .catch((error) => {
       const message =
-        error?.response?.data?.message || 'Failed to fetch profile';
+        error?.response?.data?.message || 'Failed to fetch company profile';
       throw {
         status: error?.response?.status || 500,
         message,
       };
+    });
+}
+
+export async function updateCompanyProfile(data: UpdCompanyProfileData) {
+  return api
+    .patch('/companies/me', data)
+    .then(() => ({ status: 'ok', error: null }))
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Updating company profile data failed';
+      return { status: 'error', error: message };
     });
 }

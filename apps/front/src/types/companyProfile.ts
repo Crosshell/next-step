@@ -14,4 +14,15 @@ type MainInfoData = {
   url: string;
 };
 
-export { type CompanyProfileData, type MainInfoData };
+type UpdCompanyProfileData = {
+  name?: string;
+  description?: string;
+  url?: string;
+  logoUrl?: string;
+};
+
+export {
+  type CompanyProfileData,
+  type MainInfoData,
+  type UpdCompanyProfileData,
+};
