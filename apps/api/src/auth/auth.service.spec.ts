@@ -210,7 +210,7 @@ describe('AuthService', () => {
 
   describe('logout', () => {
     const sid: string = '123e4567-e89b-12d3-a456-426614174102';
-    it('should logout by deleting a session', async () => {
+    it('should logout user', async () => {
       sessionService.deleteSession.mockResolvedValue(undefined);
 
       const result = await service.logout(sid);
@@ -220,7 +220,18 @@ describe('AuthService', () => {
     });
   });
 
-  // describe('logoutAll', () => {});
+  describe('logoutAll', () => {
+    const userId: string = '123e4567-e89b-12d3-a456-426614174102';
+
+    it('should logout all user sessions', async () => {
+      sessionService.deleteAllSessions.mockResolvedValue(undefined);
+
+      const result = await service.logoutAll(userId);
+
+      expect(sessionService.deleteAllSessions).toHaveBeenCalledWith(userId);
+      expect(result).toBeUndefined();
+    });
+  });
   // describe('verifyEmail', () => {});
   // describe('resendVerification', () => {});
   // describe('forgotPassword', () => {});
