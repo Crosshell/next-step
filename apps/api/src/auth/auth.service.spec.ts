@@ -16,6 +16,7 @@ import {
 import { RegisterDto } from './dto/register.dto';
 import { TokenType } from '../token/enums/token-type.enum';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 jest.mock('argon2');
 const mockedArgon2 = argon2 as jest.Mocked<typeof argon2>;
@@ -320,6 +321,33 @@ describe('AuthService', () => {
     });
   });
 
-  // describe('forgotPassword', () => {});
+  describe('forgotPassword', () => {
+    const dto: ForgotPasswordDto = {
+      email: 'test@example.com',
+    };
+    const token = '123e4567-e89b-12d3-a456-426614174102';
+
+    it('should send reset password email', async () => {
+      userService.findOneOrThrow.mockResolvedValue(mockUserWithoutPassword);
+      tokenService.createToken.mockResolvedValue(token);
+      emailService.sendResetPasswordEmail.mockResolvedValue(undefined);
+
+      const result = await service.forgotPassword(dto);
+
+      expect(userService.findOneOrThrow).toHaveBeenCalledWith({
+        email: dto.email,
+      });
+      expect(tokenService.createToken).toHaveBeenCalledWith(
+        TokenType.RESET,
+        dto.email,
+      );
+      expect(emailService.sendResetPasswordEmail).toHaveBeenCalledWith(
+        dto.email,
+        token,
+      );
+      expect(result).toBeUndefined();
+    });
+  });
+
   // describe('resetPassword', () => {});
 });
