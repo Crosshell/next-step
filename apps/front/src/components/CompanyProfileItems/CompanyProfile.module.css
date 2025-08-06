@@ -48,4 +48,13 @@
   color: #37aa9c;
 }
 
+.main-info-side .name-input {
+  margin-bottom: 2rem;
+  font-size: 3rem;
+}
+
+.main-info-side .url-input {
+  font-size: 2rem;
+}
+
 /* Main info */

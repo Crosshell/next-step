@@ -9,6 +9,7 @@ import {
   UserLanguageData,
 } from '@/types/profile';
 import { ProfileFormData } from '@/types/profile';
+import { MainInfoData } from '@/types/companyProfile';
 
 export function validateProfileForm(values: UpdatedPersonalData) {
   const errors: Partial<ProfileFormData> = {};
@@ -280,4 +281,21 @@ export function handleEducationSubmit(
   }
 
   onSuccess(values.education);
+}
+
+export function validateCompanyInfoData(values: MainInfoData) {
+  const errors: Partial<MainInfoData> = {};
+
+  if (!values.name.trim()) {
+    errors.name = 'Company name is required.';
+  }
+
+  if (values.url.trim()) {
+    const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w-]*)*\/?$/i;
+    if (!urlPattern.test(values.url)) {
+      errors.url = 'Invalid URL format.';
+    }
+  }
+
+  return errors;
 }
