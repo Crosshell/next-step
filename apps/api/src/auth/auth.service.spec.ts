@@ -17,6 +17,7 @@ import { RegisterDto } from './dto/register.dto';
 import { TokenType } from '../token/enums/token-type.enum';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 jest.mock('argon2');
 const mockedArgon2 = argon2 as jest.Mocked<typeof argon2>;
@@ -349,5 +350,42 @@ describe('AuthService', () => {
     });
   });
 
-  // describe('resetPassword', () => {});
+  describe('resetPassword', () => {
+    const dto: ResetPasswordDto = {
+      password: '12345678',
+    };
+    const token = '123e4567-e89b-12d3-a456-426614174102';
+    const email = 'test@example.com';
+
+    it('should reset password', async () => {
+      tokenService.consumeToken.mockResolvedValue(email);
+      userService.update.mockResolvedValue(mockUserWithoutPassword);
+
+      const result = await service.resetPassword(token, dto);
+
+      expect(tokenService.consumeToken).toHaveBeenCalledWith(
+        TokenType.RESET,
+        token,
+      );
+      expect(userService.update).toHaveBeenCalledWith(
+        { email },
+        { password: dto.password },
+      );
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw BadRequestException if token is invalid', async () => {
+      tokenService.consumeToken.mockResolvedValue(null);
+
+      await expect(service.resetPassword(token, dto)).rejects.toThrow(
+        new BadRequestException('Invalid or expired reset token'),
+      );
+
+      expect(tokenService.consumeToken).toHaveBeenCalledWith(
+        TokenType.RESET,
+        token,
+      );
+      expect(userService.update).not.toHaveBeenCalled();
+    });
+  });
 });
