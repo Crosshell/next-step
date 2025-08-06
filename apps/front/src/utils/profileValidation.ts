@@ -8,7 +8,6 @@ import {
   UserLanguageData,
 } from '@/types/profile';
 import { ProfileFormData } from '@/types/profile';
-import { MainInfoData } from '@/types/companyProfile';
 
 export function validateProfileForm(values: ProfileFormData) {
   const errors: Partial<ProfileFormData> = {};
@@ -46,9 +45,7 @@ export function validateProfileForm(values: ProfileFormData) {
 export function validateAvatarUrl(values: { url: string }) {
   const errors: { url?: string } = {};
 
-  if (!values.url) {
-    values.url = 'URL is required';
-  } else {
+  if (values.url) {
     try {
       new URL(values.url);
     } catch {

@@ -51,8 +51,14 @@ export default function AvatarModal({ url, type }: Props) {
       initialValues={{ url: url ?? '' }}
       validate={validateAvatarUrl}
       onSubmit={(values) => {
-        if (type === 'job-seeker') updateAvatar({ avatarUrl: values.url });
-        else updateCompanyAvatar({ logoUrl: values.url });
+        if (type === 'job-seeker')
+          updateAvatar({
+            avatarUrl: values.url?.trim() === '' ? null : values.url?.trim(),
+          });
+        else
+          updateCompanyAvatar({
+            logoUrl: values.url?.trim() === '' ? null : values.url?.trim(),
+          });
       }}
     >
       {({ errors, touched }) => (
