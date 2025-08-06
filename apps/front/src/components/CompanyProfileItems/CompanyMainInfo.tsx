@@ -8,10 +8,11 @@ import { faCheck, faPencil, faXmark } from '@fortawesome/free-solid-svg-icons';
 import classes from './CompanyProfile.module.css';
 import profileClasses from '../ProfileItems/Profile.module.css';
 
-import { MainInfoData } from '@/types/companyProfile';
+import { MainInfoData, UpdCompanyProfileData } from '@/types/companyProfile';
 import { validateCompanyInfoData } from '@/utils/companyProfileValidation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateCompanyProfile } from '@/services/companyProfileService';
+import Link from 'next/link';
 
 interface Props {
   isEditable?: boolean;
@@ -37,6 +38,11 @@ export default function CompanyMainInfo({ isEditable, data }: Props) {
     },
   });
 
+  const formData = {
+    name: data.name,
+    url: data.url ? data.url : '',
+  };
+
   return (
     <>
       {!isChanging ? (
@@ -44,9 +50,13 @@ export default function CompanyMainInfo({ isEditable, data }: Props) {
           <h2>{data.name}</h2>
           <p>
             {isEditable ? 'Your w' : 'W'}ebsite:{' '}
-            <span className="underline-link">
+            <Link
+              href={data.url ? data.url : ''}
+              className={data.url ? 'underline-link' : ''}
+              style={data.url ? { cursor: 'pointer' } : { cursor: 'default' }}
+            >
               {data.url ? data.url : 'no url there yet'}
-            </span>
+            </Link>
           </p>
 
           {isEditable && (
@@ -60,11 +70,14 @@ export default function CompanyMainInfo({ isEditable, data }: Props) {
         </div>
       ) : (
         <Formik
-          initialValues={data}
+          initialValues={formData}
           validate={validateCompanyInfoData}
           onSubmit={(values) => {
-            console.log(values);
-            updateInfo(values);
+            const payload: UpdCompanyProfileData = {
+              name: values.name ?? undefined,
+              url: values.url?.trim() === '' ? null : values.url?.trim(),
+            };
+            updateInfo(payload);
           }}
         >
           {({ errors }) => (

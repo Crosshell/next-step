@@ -16,9 +16,9 @@ type MainInfoData = {
 
 type UpdCompanyProfileData = {
   name?: string;
-  description?: string;
-  url?: string;
-  logoUrl?: string;
+  description?: string | null;
+  url?: string | null;
+  logoUrl?: string | null;
 };
 
 export {
