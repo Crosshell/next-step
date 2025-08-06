@@ -1,6 +1,6 @@
 import { CompanyProfileData } from '@/types/companyProfile';
 
-import OpenToWork from '../ProfileItems/StatusController';
+import IsVerified from '../ProfileItems/StatusController';
 import Avatar from '../ProfileItems/Avatar';
 
 import classes from './CompanyProfile.module.css';
@@ -40,7 +40,7 @@ export default function CompanyProfileContainer({
           <div className={classes['main-info-side']}>
             <CompanyMainInfo isEditable={isEditable} data={mainInfoData} />
             <div className={profileClasses['skills-open-container']}>
-              <OpenToWork
+              <IsVerified
                 isEditable={isEditable}
                 isTrue={companyData.isVerified}
                 type="isVerified"

@@ -35,7 +35,7 @@ export default function OpenToWork({
   });
 
   const toggleIsOpen = () => {
-    updateIsOpen({ isOpenToWork: !isTrue });
+    if (type === 'isOpen') updateIsOpen({ isOpenToWork: !isTrue });
   };
 
   const isOpenVariants = ['Open to Work', 'Do not disturb'];
@@ -50,11 +50,13 @@ export default function OpenToWork({
         className={
           isTrue ? classes['open-to-work'] : classes['not-open-to-work']
         }
-        disabled={!isEditable || isPending}
+        disabled={!isEditable || isPending || type === 'isVerified'}
         onClick={toggleIsOpen}
-        style={{ cursor: isEditable ? 'pointer' : 'default' }}
+        style={{
+          cursor: isEditable && type === 'isOpen' ? 'pointer' : 'default',
+        }}
       >
-        <AnimatedIcon scale={isEditable ? 1.1 : 1}>
+        <AnimatedIcon scale={isEditable && type === 'isOpen' ? 1.1 : 1}>
           {isTrue ? variants[0] : variants[1]}
         </AnimatedIcon>
       </button>
