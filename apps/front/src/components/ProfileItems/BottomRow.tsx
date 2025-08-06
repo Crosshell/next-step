@@ -1,9 +1,10 @@
 import { isoToDate } from '@/utils/convertData';
 import classes from './Profile.module.css';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { logoutUser } from '@/services/userService';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authSlice';
+import Cookies from 'js-cookie';
 
 interface Props {
   isEditable: boolean;
@@ -13,11 +14,15 @@ interface Props {
 export default function BottomRow({ isEditable, data }: Props) {
   const router = useRouter();
   const { setIsLogged, setIsConfirmed } = useAuthStore();
+  const queryClient = useQueryClient();
 
   const { mutate: logoutMutate } = useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
       router.push('/sign-in');
+      Cookies.remove('role');
+      Cookies.remove('sid');
+      queryClient.clear();
       setIsLogged(false);
       setIsConfirmed(false);
     },

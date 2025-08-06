@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,6 +21,7 @@ import Cookies from 'js-cookie';
 export default function MainHeader() {
   const pathname = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { isLogged, setIsLogged, setIsConfirmed } = useAuthStore();
 
@@ -33,6 +35,9 @@ export default function MainHeader() {
       await logoutUser();
       setIsLogged(false);
       setIsConfirmed(false);
+      Cookies.remove('role');
+      Cookies.remove('sid');
+      queryClient.clear();
       router.push('/');
     } catch (err) {
       console.error('Logout error:', err);

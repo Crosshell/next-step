@@ -34,12 +34,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <FontAwesomeConfig />
       </head>
       <body className={workSansFont.className}>
-        <header>
-          <MainHeader />
-        </header>
-        <main>
-          <Providers>{children}</Providers>
-        </main>
+        <Providers>
+          <header>
+            <MainHeader />
+          </header>
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );
