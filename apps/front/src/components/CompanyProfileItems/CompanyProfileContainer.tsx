@@ -35,6 +35,7 @@ export default function CompanyProfileContainer({
           key={`avatar-${companyData.id}`}
           isEditable={isEditable}
           data={companyData.logoUrl}
+          type="company"
         />
         <div className="align-center">
           <div className={classes['main-info-side']}>

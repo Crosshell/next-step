@@ -8,9 +8,14 @@ import AvatarModal from './AvatarModal';
 interface Props {
   isEditable: boolean;
   data: string | null;
+  type?: 'job-seeker' | 'company';
 }
 
-export default function Avatar({ isEditable, data }: Props) {
+export default function Avatar({
+  isEditable,
+  data,
+  type = 'job-seeker',
+}: Props) {
   const openModal = useModalStore((state) => state.openModal);
   const [avatarUrl, setAvatarUrl] = useState('/images/no-avatar.png');
   const [isLoaded, setIsLoaded] = useState(false);
@@ -41,7 +46,7 @@ export default function Avatar({ isEditable, data }: Props) {
       onClick={() =>
         openModal(
           <AnimatePresence>
-            <AvatarModal url={data ?? ''} />
+            <AvatarModal url={data ?? ''} type={type} />
           </AnimatePresence>
         )
       }

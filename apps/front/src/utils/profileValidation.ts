@@ -45,16 +45,16 @@ export function validateProfileForm(values: UpdatedPersonalData) {
   return errors;
 }
 
-export function validateAvatarUrl(values: { avatarUrl: string }) {
-  const errors: { avatarUrl?: string } = {};
+export function validateAvatarUrl(values: { url: string }) {
+  const errors: { url?: string } = {};
 
-  if (!values.avatarUrl) {
-    errors.avatarUrl = 'URL is required';
+  if (!values.url) {
+    values.url = 'URL is required';
   } else {
     try {
-      new URL(values.avatarUrl);
+      new URL(values.url);
     } catch {
-      errors.avatarUrl = 'Invalid URL format';
+      errors.url = 'Invalid URL format';
     }
   }
 
