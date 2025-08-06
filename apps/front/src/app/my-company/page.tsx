@@ -13,6 +13,7 @@ import { ApiError } from '@/types/authForm';
 import { CompanyProfileData } from '@/types/companyProfile';
 import { useModalStore } from '@/store/modalSlice';
 import { getMyCompanyProfile } from '@/services/companyProfileService';
+import Cookies from 'js-cookie';
 
 export default function CompanyProfilePage() {
   const router = useRouter();
@@ -38,6 +39,7 @@ export default function CompanyProfilePage() {
       openModal(<ProfileForm role="company" />, true);
     }
     if (companyData) {
+      Cookies.set('role', 'COMPANY');
       closeModal();
     }
   }, [isError, error, companyData, openModal, closeModal, router]);

@@ -6,16 +6,15 @@ import { useQuery } from '@tanstack/react-query';
 
 import ProfileForm from '@/components/ProfileItems/ProfileForm';
 import MessageBox from '@/components/MessageBox/MessageBox';
+import ProfileContainer from '@/components/ProfileItems/ProfileContainer';
 
 import classes from './page.module.css';
 
-import { getProfile } from '@/services/jobseekerService';
-
-import { useModalStore } from '@/store/modalSlice';
-
 import { ProfileData } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
-import ProfileContainer from '@/components/ProfileItems/ProfileContainer';
+import { useModalStore } from '@/store/modalSlice';
+import { getProfile } from '@/services/jobseekerService';
+import Cookies from 'js-cookie';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -41,6 +40,7 @@ export default function ProfilePage() {
       openModal(<ProfileForm role="job-seeker" />, true);
     }
     if (profileData) {
+      Cookies.set('role', 'JOB_SEEKER');
       closeModal();
     }
   }, [isError, error, profileData, openModal, closeModal, router]);

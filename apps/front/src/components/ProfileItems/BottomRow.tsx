@@ -12,7 +12,7 @@ interface Props {
 
 export default function BottomRow({ isEditable, data }: Props) {
   const router = useRouter();
-  const { setIsLogged, setIsConfirmed, setRole } = useAuthStore();
+  const { setIsLogged, setIsConfirmed } = useAuthStore();
 
   const { mutate: logoutMutate } = useMutation({
     mutationFn: logoutUser,
@@ -20,7 +20,6 @@ export default function BottomRow({ isEditable, data }: Props) {
       router.push('/sign-in');
       setIsLogged(false);
       setIsConfirmed(false);
-      setRole(undefined);
     },
     onError: (err) => {
       console.error('Logout failed:', err);
