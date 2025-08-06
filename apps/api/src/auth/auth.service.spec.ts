@@ -15,6 +15,7 @@ import {
 } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { TokenType } from '../token/enums/token-type.enum';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
 
 jest.mock('argon2');
 const mockedArgon2 = argon2 as jest.Mocked<typeof argon2>;
@@ -273,7 +274,52 @@ describe('AuthService', () => {
     });
   });
 
-  // describe('resendVerification', () => {});
+  describe('resendVerification', () => {
+    const dto: ResendVerificationDto = {
+      email: 'test@example.com',
+    };
+    const token: string = '123e4567-e89b-12d3-a456-426614174102';
+    const unverifiedUser: UserWithoutPassword = {
+      ...mockUserWithoutPassword,
+      isEmailVerified: false,
+    };
+
+    it('should resend verification email', async () => {
+      userService.findOneOrThrow.mockResolvedValue(unverifiedUser);
+      tokenService.createToken.mockResolvedValue(token);
+      emailService.sendVerificationEmail.mockResolvedValue(undefined);
+
+      const result = await service.resendVerification(dto);
+
+      expect(userService.findOneOrThrow).toHaveBeenCalledWith({
+        email: dto.email,
+      });
+      expect(tokenService.createToken).toHaveBeenCalledWith(
+        TokenType.VERIFY,
+        dto.email,
+      );
+      expect(emailService.sendVerificationEmail).toHaveBeenCalledWith(
+        dto.email,
+        token,
+      );
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw BadRequestException if email is already verified', async () => {
+      userService.findOneOrThrow.mockResolvedValue(mockUserWithoutPassword);
+
+      await expect(service.resendVerification(dto)).rejects.toThrow(
+        new BadRequestException('Email already verified'),
+      );
+
+      expect(userService.findOneOrThrow).toHaveBeenCalledWith({
+        email: dto.email,
+      });
+      expect(tokenService.createToken).not.toHaveBeenCalled();
+      expect(emailService.sendVerificationEmail).not.toHaveBeenCalled();
+    });
+  });
+
   // describe('forgotPassword', () => {});
   // describe('resetPassword', () => {});
 });
