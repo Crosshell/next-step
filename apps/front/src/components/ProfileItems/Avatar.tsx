@@ -21,7 +21,16 @@ export default function Avatar({
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (!data) return;
+    if (!data) {
+      setAvatarUrl(
+        type === 'job-seeker'
+          ? '/images/no-avatar.png'
+          : '/images/company-no-logo.png'
+      );
+      setIsLoaded(true);
+      return;
+    }
+    setIsLoaded(false);
 
     const img = new Image();
     img.src = data;
@@ -33,10 +42,6 @@ export default function Avatar({
       setAvatarUrl('/images/no-avatar.png');
       setIsLoaded(true);
     };
-  }, [data]);
-
-  useEffect(() => {
-    setIsLoaded(false);
   }, [data]);
 
   return (
