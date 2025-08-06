@@ -208,7 +208,18 @@ describe('AuthService', () => {
     });
   });
 
-  // describe('logout', () => {});
+  describe('logout', () => {
+    const sid: string = '123e4567-e89b-12d3-a456-426614174102';
+    it('should logout by deleting a session', async () => {
+      sessionService.deleteSession.mockResolvedValue(undefined);
+
+      const result = await service.logout(sid);
+
+      expect(sessionService.deleteSession).toHaveBeenCalledWith(sid);
+      expect(result).toBeUndefined();
+    });
+  });
+
   // describe('logoutAll', () => {});
   // describe('verifyEmail', () => {});
   // describe('resendVerification', () => {});
