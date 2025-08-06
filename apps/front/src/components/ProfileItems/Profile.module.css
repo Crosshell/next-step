@@ -129,6 +129,11 @@
 /* General form styles */
 
 /* Profile Container */
+.profile-form-container .link {
+  padding: 10px 20px;
+  font-size: 1.5rem;
+  text-decoration: underline;
+}
 
 .profile-container button {
   background-color: transparent;

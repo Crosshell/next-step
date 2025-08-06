@@ -10,8 +10,8 @@ type CompanyProfileData = {
 };
 
 type MainInfoData = {
-  name: string;
-  url: string;
+  name: string | null;
+  url: string | null;
 };
 
 type UpdCompanyProfileData = {

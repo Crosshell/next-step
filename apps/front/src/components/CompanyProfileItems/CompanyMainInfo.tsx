@@ -9,7 +9,7 @@ import classes from './CompanyProfile.module.css';
 import profileClasses from '../ProfileItems/Profile.module.css';
 
 import { MainInfoData } from '@/types/companyProfile';
-import { validateCompanyInfoData } from '@/utils/profileValidation';
+import { validateCompanyInfoData } from '@/utils/companyProfileValidation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateCompanyProfile } from '@/services/companyProfileService';
 
@@ -43,7 +43,10 @@ export default function CompanyMainInfo({ isEditable, data }: Props) {
         <div className={classes['main-info-data']}>
           <h2>{data.name}</h2>
           <p>
-            {isEditable ? 'Your w' : 'W'}ebsite: {data.url}
+            {isEditable ? 'Your w' : 'W'}ebsite:{' '}
+            <span className="underline-link">
+              {data.url ? data.url : 'no url there yet'}
+            </span>
           </p>
 
           {isEditable && (

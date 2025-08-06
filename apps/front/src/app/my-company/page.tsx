@@ -21,7 +21,6 @@ export default function CompanyProfilePage() {
 
   const {
     data: companyData,
-    isLoading,
     isError,
     error,
   } = useQuery<CompanyProfileData | null, ApiError>({
@@ -36,21 +35,12 @@ export default function CompanyProfilePage() {
       router.push('/sign-in');
     }
     if (isError && error?.status === 403) {
-      openModal(<ProfileForm />, true);
+      openModal(<ProfileForm role="company" />, true);
     }
     if (companyData) {
       closeModal();
     }
   }, [isError, error, companyData, openModal, closeModal, router]);
-
-  if (isLoading)
-    return (
-      <div className={classes['profile-message-box']}>
-        <MessageBox type="info">
-          <p>Loading profile...</p>
-        </MessageBox>
-      </div>
-    );
 
   if (isError && error?.status !== 403)
     return (

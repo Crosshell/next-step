@@ -1,4 +1,4 @@
-import { UpdCompanyProfileData } from '@/types/companyProfile';
+import { MainInfoData, UpdCompanyProfileData } from '@/types/companyProfile';
 import api from './axios';
 
 export async function getMyCompanyProfile() {
@@ -24,6 +24,19 @@ export async function updateCompanyProfile(data: UpdCompanyProfileData) {
         error?.response?.data?.errors?.[0] ||
         error?.response?.data?.message ||
         'Updating company profile data failed';
+      return { status: 'error', error: message };
+    });
+}
+
+export async function createCompanyProfile(data: MainInfoData) {
+  return api
+    .post('/companies', data)
+    .then(() => ({ status: 'ok', error: null }))
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Creating company profile failed';
       return { status: 'error', error: message };
     });
 }
