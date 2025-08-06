@@ -32,7 +32,9 @@ export default function ProfileContainer({
 
   return (
     <div className={classes['profile-container']}>
-      <h1 className={classes['page-header']}>Your Next Level Profile</h1>
+      {isEditable && (
+        <h1 className={classes['page-header']}>Your Next Level Profile</h1>
+      )}
       <div className={classes['main-info']}>
         <Avatar
           key={`avatar-${profileData.id}`}

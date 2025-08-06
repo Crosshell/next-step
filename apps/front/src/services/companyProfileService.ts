@@ -40,3 +40,17 @@ export async function createCompanyProfile(data: MainInfoData) {
       return { status: 'error', error: message };
     });
 }
+
+export async function getCompanyProfileById(id: string) {
+  return api
+    .get(`/companies/${id}`)
+    .then((res) => res.data)
+    .catch((error) => {
+      const message =
+        error?.response?.data?.message || 'Failed to fetch company profile';
+      throw {
+        status: error?.response?.status || 500,
+        message,
+      };
+    });
+}
