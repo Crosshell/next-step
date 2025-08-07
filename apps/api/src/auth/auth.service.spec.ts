@@ -91,6 +91,7 @@ describe('AuthService', () => {
     tokenService = module.get(TokenService);
 
     jest.clearAllMocks();
+    mockedArgon2.hash.mockClear();
   });
 
   describe('validateCredentials', () => {
