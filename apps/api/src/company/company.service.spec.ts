@@ -3,9 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { CompanyService } from './company.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateCompanyDto } from './dto/create-company.dto';
-import { Company } from '@prisma/client';
-import { BadRequestException } from '@nestjs/common';
+import { Company, Prisma } from '@prisma/client';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { getPaginationByPage } from '@common/utils';
+import { UpdateCompanyDto } from './dto/update-company.dto';
 
 jest.mock('@common/utils');
 const mockedGetPaginationByPage = getPaginationByPage as jest.Mocked<
@@ -91,6 +92,90 @@ describe('CompanyService', () => {
 
       expect(repository.findOne).toHaveBeenCalledWith({ userId });
       expect(repository.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('findOne', () => {
+    const where: Prisma.CompanyWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174001',
+    };
+
+    it('should return company', async () => {
+      repository.findOne.mockResolvedValue(mockCompany);
+
+      const result = await service.findOne(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(result).toEqual(mockCompany);
+    });
+  });
+
+  describe('findOneOrThrow', () => {
+    const where: Prisma.CompanyWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174001',
+    };
+
+    it('should return company', async () => {
+      repository.findOne.mockResolvedValue(mockCompany);
+
+      const result = await service.findOneOrThrow(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(result).toEqual(mockCompany);
+    });
+
+    it('should throw NotFoundException if company does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      await expect(service.findOneOrThrow(where)).rejects.toThrow(
+        new NotFoundException('Company not found'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+    });
+  });
+
+  describe('assertNotExists', () => {
+    const where: Prisma.CompanyWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174001',
+    };
+
+    it('should not throw if company does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      const result = await service.assertNotExists(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw BadRequestException if company exists', async () => {
+      repository.findOne.mockResolvedValue(mockCompany);
+
+      await expect(service.assertNotExists(where)).rejects.toThrow(
+        new BadRequestException('Company already exists'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+    });
+  });
+
+  describe('update', () => {
+    const id: string = '123e4567-e89b-12d3-a456-426614174001';
+    const dto: UpdateCompanyDto = {
+      name: 'Company',
+      description: 'Description',
+      url: 'https://example.com',
+      logoUrl: 'https://example.com/logo.png',
+    };
+
+    it('should update a company', async () => {
+      repository.update.mockResolvedValue(mockCompany);
+
+      const result = await service.update(id, dto);
+
+      expect(repository.update).toHaveBeenCalledWith({ id }, dto);
+      expect(result).toEqual(mockCompany);
     });
   });
 });
