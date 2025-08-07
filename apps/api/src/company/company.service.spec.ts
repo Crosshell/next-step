@@ -7,16 +7,19 @@ import { Company, Prisma } from '@prisma/client';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { getPaginationByPage } from '@common/utils';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { SearchCompanyDto } from './dto/search-company.dto';
 
-jest.mock('@common/utils');
-const mockedGetPaginationByPage = getPaginationByPage as jest.Mocked<
+jest.mock('@common/utils', () => ({
+  getPaginationByPage: jest.fn(),
+}));
+
+const mockedGetPaginationByPage = getPaginationByPage as jest.MockedFunction<
   typeof getPaginationByPage
 >;
 
 describe('CompanyService', () => {
   let service: CompanyService;
   let repository: jest.Mocked<CompanyRepository>;
-  let config: jest.Mocked<ConfigService>;
 
   const mockCompany: Company = {
     id: '123e4567-e89b-12d3-a456-426614174000',
@@ -42,6 +45,8 @@ describe('CompanyService', () => {
       getOrThrow: jest.fn(),
     };
 
+    mockConfigService.getOrThrow.mockReturnValue(10);
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CompanyService,
@@ -58,7 +63,6 @@ describe('CompanyService', () => {
 
     service = module.get<CompanyService>(CompanyService);
     repository = module.get(CompanyRepository);
-    config = module.get(ConfigService);
 
     jest.clearAllMocks();
   });
@@ -157,6 +161,53 @@ describe('CompanyService', () => {
       );
 
       expect(repository.findOne).toHaveBeenCalledWith(where);
+    });
+  });
+
+  describe('search', () => {
+    const dto: SearchCompanyDto = {
+      name: 'Company',
+      page: 2,
+    };
+    const pagination = { skip: 10, take: 10 };
+    const where: Prisma.CompanyWhereInput = {
+      name: { contains: dto.name, mode: 'insensitive' },
+    };
+
+    it('should return companies', async () => {
+      mockedGetPaginationByPage.mockReturnValue(pagination);
+      repository.findMany.mockResolvedValue([mockCompany]);
+
+      const result = await service.search(dto);
+
+      expect(mockedGetPaginationByPage).toHaveBeenCalledWith(dto.page, 10);
+      expect(repository.findMany).toHaveBeenCalledWith({
+        where,
+        ...pagination,
+      });
+      expect(result).toEqual([mockCompany]);
+    });
+
+    it('should search without name filter', async () => {
+      const dtoWithoutName: SearchCompanyDto = {
+        page: 3,
+      };
+      const whereWithoutName: Prisma.CompanyWhereInput = {};
+
+      mockedGetPaginationByPage.mockReturnValue(pagination);
+      repository.findMany.mockResolvedValue([mockCompany]);
+
+      const result = await service.search(dtoWithoutName);
+
+      expect(mockedGetPaginationByPage).toHaveBeenCalledWith(
+        dtoWithoutName.page,
+        10,
+      );
+      expect(repository.findMany).toHaveBeenCalledWith({
+        where: whereWithoutName,
+        ...pagination,
+      });
+      expect(result).toEqual([mockCompany]);
     });
   });
 
