@@ -23,7 +23,7 @@ export default function MainHeader() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { isLogged, setIsLogged, setIsConfirmed } = useAuthStore();
+  const { isLogged, setIsLogged } = useAuthStore();
 
   const { mutate: logout } = useMutation({
     mutationFn: logoutUser,
@@ -37,13 +37,11 @@ export default function MainHeader() {
         Cookies.remove('sid');
         queryClient.clear();
         setIsLogged(false);
-        setIsConfirmed(false);
       }
     },
   });
 
   const role = Cookies.get('role');
-
   const handleLogout = async () => {
     const confirmLogout = window.confirm('Are you sure you want to log out?');
     if (!confirmLogout) return;

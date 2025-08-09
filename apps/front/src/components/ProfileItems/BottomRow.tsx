@@ -13,7 +13,7 @@ interface Props {
 
 export default function BottomRow({ isEditable, data }: Props) {
   const router = useRouter();
-  const { setIsLogged, setIsConfirmed } = useAuthStore();
+  const { setIsLogged } = useAuthStore();
   const queryClient = useQueryClient();
 
   const { mutate: logoutMutate } = useMutation({
@@ -24,7 +24,6 @@ export default function BottomRow({ isEditable, data }: Props) {
       Cookies.remove('sid');
       queryClient.clear();
       setIsLogged(false);
-      setIsConfirmed(false);
     },
     onError: (err) => {
       console.error('Logout failed:', err);
