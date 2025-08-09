@@ -20,7 +20,6 @@ export default function BottomRow({ isEditable, data }: Props) {
     mutationFn: logoutUser,
     onSuccess: () => {
       router.push('/sign-in');
-      Cookies.remove('role');
       Cookies.remove('sid');
       queryClient.clear();
       setIsLogged(false);

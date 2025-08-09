@@ -7,6 +7,8 @@ import HoveredItem from '../HoveredItem/HoveredItem';
 
 import classes from './SignUpItems.module.css';
 
+import Cookies from 'js-cookie';
+
 interface Props {
   isVisible: boolean;
 }
@@ -15,6 +17,7 @@ export default function RoleFormItem({ isVisible }: Props) {
   const router = useRouter();
 
   const stepUpHandler = (role: string) => {
+    Cookies.set('role', role);
     router.push('/sign-up?step=account');
   };
 

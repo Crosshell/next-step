@@ -33,7 +33,6 @@ export default function MainHeader() {
         return;
       } else {
         router.push('/sign-in');
-        Cookies.remove('role');
         Cookies.remove('sid');
         queryClient.clear();
         setIsLogged(false);

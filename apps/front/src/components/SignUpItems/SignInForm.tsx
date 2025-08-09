@@ -15,6 +15,7 @@ import { validateEmail, validateLogInForm } from '@/utils/validation';
 import { forgetPass, loginUser } from '@/services/userService';
 
 import { useAuthStore } from '@/store/authSlice';
+import Cookies from 'js-cookie';
 
 export default function SignInForm() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -28,6 +29,8 @@ export default function SignInForm() {
 
   const setIsLogged = useAuthStore((state) => state.setIsLogged);
 
+  const role = Cookies.get('role');
+
   const { mutate: loginMutate } = useMutation({
     mutationFn: loginUser,
     onSuccess: (result) => {
@@ -37,7 +40,9 @@ export default function SignInForm() {
         return;
       }
       setIsLogged(true);
-      router.push('/my-profile');
+      if (role) {
+        router.push(role === 'JOB_SEEKER' ? '/my-profile' : '/my-company');
+      }
     },
   });
 
