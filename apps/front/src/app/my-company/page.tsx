@@ -1,33 +1,32 @@
 'use client';
-
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 
+import CompanyProfileContainer from '@/components/CompanyProfileItems/CompanyProfileContainer';
 import ProfileForm from '@/components/ProfileItems/ProfileForm';
 import MessageBox from '@/components/MessageBox/MessageBox';
-import ProfileContainer from '@/components/ProfileItems/ProfileContainer';
 
 import classes from './page.module.css';
 
-import { ProfileData } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
+import { CompanyProfileData } from '@/types/companyProfile';
 import { useModalStore } from '@/store/modalSlice';
-import { getProfile } from '@/services/jobseekerService';
+import { getMyCompanyProfile } from '@/services/companyProfileService';
 import Cookies from 'js-cookie';
 
-export default function ProfilePage() {
+export default function CompanyProfilePage() {
   const router = useRouter();
   const openModal = useModalStore((state) => state.openModal);
   const closeModal = useModalStore((state) => state.closeModal);
 
   const {
-    data: profileData,
+    data: companyData,
     isError,
     error,
-  } = useQuery<ProfileData | null, ApiError>({
-    queryKey: ['profile'],
-    queryFn: getProfile,
+  } = useQuery<CompanyProfileData | null, ApiError>({
+    queryKey: ['company-profile'],
+    queryFn: getMyCompanyProfile,
     staleTime: 1000,
     retry: false,
   });
@@ -37,13 +36,13 @@ export default function ProfilePage() {
       router.push('/sign-in');
     }
     if (isError && error?.status === 403) {
-      openModal(<ProfileForm role="job-seeker" />, true);
+      openModal(<ProfileForm role="company" />, true);
     }
-    if (profileData) {
-      Cookies.set('role', 'JOB_SEEKER');
+    if (companyData) {
+      Cookies.set('role', 'COMPANY');
       closeModal();
     }
-  }, [isError, error, profileData, openModal, closeModal, router]);
+  }, [isError, error, companyData, openModal, closeModal, router]);
 
   if (isError && error?.status !== 403)
     return (
@@ -54,12 +53,12 @@ export default function ProfilePage() {
       </div>
     );
 
-  if (!profileData) return null;
-  else console.log(profileData);
+  if (!companyData) return null;
+  else console.log(companyData);
 
   return (
     <div className="container">
-      <ProfileContainer isEditable profileData={profileData} />
+      <CompanyProfileContainer isEditable companyData={companyData} />
     </div>
   );
 }

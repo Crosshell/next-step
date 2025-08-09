@@ -5,30 +5,27 @@ import {
   ContactsData,
   EducationData,
   ExperienceData,
-  UpdatedPersonalData,
   UserLanguageData,
 } from '@/types/profile';
 import { ProfileFormData } from '@/types/profile';
 
-export function validateProfileForm(values: UpdatedPersonalData) {
+export function validateProfileForm(values: ProfileFormData) {
   const errors: Partial<ProfileFormData> = {};
 
-  if (values.firstName) {
-    if (!values.firstName.trim()) {
-      errors.firstName = 'First name is required';
-    } else if (!/^[A-Za-z\s'-]{2,30}$/.test(values.firstName)) {
-      errors.firstName =
-        'First name must contain only letters and be 2–30 characters';
-    }
+  if (!values.firstName?.trim()) {
+    errors.firstName = 'First name is required';
+  } else if (!/^[A-Za-z\s'-]{2,30}$/.test(values.firstName)) {
+    errors.firstName =
+      'First name must contain only letters and be 2–30 characters';
   }
-  if (values.lastName) {
-    if (!values.lastName.trim()) {
-      errors.lastName = 'Last name is required';
-    } else if (!/^[A-Za-z\s'-]{2,30}$/.test(values.lastName)) {
-      errors.lastName =
-        'Last name must contain only letters and be 2–30 characters';
-    }
+
+  if (!values.lastName?.trim()) {
+    errors.lastName = 'Last name is required';
+  } else if (!/^[A-Za-z\s'-]{2,30}$/.test(values.lastName)) {
+    errors.lastName =
+      'Last name must contain only letters and be 2–30 characters';
   }
+
   if (!values.dateOfBirth) {
     errors.dateOfBirth = 'Date of birth is required';
   } else {
@@ -45,16 +42,14 @@ export function validateProfileForm(values: UpdatedPersonalData) {
   return errors;
 }
 
-export function validateAvatarUrl(values: { avatarUrl: string }) {
-  const errors: { avatarUrl?: string } = {};
+export function validateAvatarUrl(values: { url: string }) {
+  const errors: { url?: string } = {};
 
-  if (!values.avatarUrl) {
-    errors.avatarUrl = 'URL is required';
-  } else {
+  if (values.url) {
     try {
-      new URL(values.avatarUrl);
+      new URL(values.url);
     } catch {
-      errors.avatarUrl = 'Invalid URL format';
+      errors.url = 'Invalid URL format';
     }
   }
 

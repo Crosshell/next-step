@@ -35,7 +35,7 @@ type UpdatedPersonalData = {
   lastName?: string;
   location?: string;
   bio?: string;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
   expectedSalary?: number;
   dateOfBirth?: string;
   isOpenToWork?: boolean;

@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -10,25 +9,16 @@ import { motion } from 'framer-motion';
 import classes from './page.module.css';
 
 import { checkUserConfirmed } from '@/services/userService';
-import { useAuthStore } from '@/store/authSlice';
 
 export default function ConfirmPage() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
-
-  const setIsConfirmed = useAuthStore((state) => state.setIsConfirmed);
 
   const { isSuccess, isLoading, isError } = useQuery({
     queryKey: ['checkUserConfirmed', token],
     queryFn: ({ queryKey }) => checkUserConfirmed(queryKey[1]),
     enabled: !!token,
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      setIsConfirmed(true);
-    }
-  }, [isSuccess, setIsConfirmed]);
 
   let message;
   let imageUrl = '/images/';

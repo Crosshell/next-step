@@ -76,7 +76,7 @@ export default function ContactLink({ type, url }: Props) {
   }
 
   return (
-    <Link href={url} className={classes['icon-link']} target="_blank">
+    <Link href={url} className={classes['icon-link']}>
       <AnimatedIcon iconType={icon} scale={1.2} />
     </Link>
   );

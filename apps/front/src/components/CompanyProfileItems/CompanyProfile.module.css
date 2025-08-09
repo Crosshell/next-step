@@ -1,0 +1,60 @@
+/* Main info */
+
+.main-info-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 75vw;
+}
+
+.main-info-data {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.main-info-data h2 {
+  font-size: 3rem;
+}
+
+.main-info-data p {
+  margin-bottom: 1.25rem;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.main-info-data input {
+  display: block;
+  margin-bottom: 15px;
+  width: 30vw;
+  background-color: transparent;
+  border: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.main-info-data .edit-main-info-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border: 0;
+}
+
+.edit-main-info-btn div {
+  padding: 5px 8px;
+  border: 3px solid #37aa9c;
+  font-size: 2rem;
+  color: #37aa9c;
+}
+
+.main-info-side .name-input {
+  margin-bottom: 2rem;
+  font-size: 3rem;
+}
+
+.main-info-side .url-input {
+  font-size: 2rem;
+}
+
+/* Main info */

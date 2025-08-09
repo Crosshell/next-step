@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 import HoveredItem from '../HoveredItem/HoveredItem';
 
 import classes from './SignUpItems.module.css';
-import { useAuthStore } from '@/store/authSlice';
+
+import Cookies from 'js-cookie';
 
 interface Props {
   isVisible: boolean;
@@ -14,10 +15,9 @@ interface Props {
 
 export default function RoleFormItem({ isVisible }: Props) {
   const router = useRouter();
-  const setRole = useAuthStore((state) => state.setRole);
 
   const stepUpHandler = (role: string) => {
-    setRole(role);
+    Cookies.set('role', role);
     router.push('/sign-up?step=account');
   };
 
