@@ -77,12 +77,17 @@ export async function resendEmail(data: { email: string }) {
 }
 
 export async function logoutUser() {
-  try {
-    const response = await api.post('/auth/logout');
-    return response.data;
-  } catch {
-    throw new Error('Logout failed');
-  }
+  return api
+    .post('/auth/logout')
+    .then(() => ({ status: 'ok', error: null, statusCode: 200 }))
+    .catch((error) => {
+      const statusCode = error?.response?.status || 500;
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Logout failed';
+      return { status: 'error', error: message, statusCode };
+    });
 }
 
 export async function logoutAll() {

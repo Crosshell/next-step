@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -25,24 +25,29 @@ export default function MainHeader() {
 
   const { isLogged, setIsLogged, setIsConfirmed } = useAuthStore();
 
+  const { mutate: logout } = useMutation({
+    mutationFn: logoutUser,
+    onSuccess: (data) => {
+      if (data.statusCode !== 200 && data.statusCode !== 401) {
+        console.error('Logout failed:', data.error);
+        return;
+      } else {
+        router.push('/sign-in');
+        Cookies.remove('role');
+        Cookies.remove('sid');
+        queryClient.clear();
+        setIsLogged(false);
+        setIsConfirmed(false);
+      }
+    },
+  });
+
   const role = Cookies.get('role');
 
   const handleLogout = async () => {
     const confirmLogout = window.confirm('Are you sure you want to log out?');
     if (!confirmLogout) return;
-
-    try {
-      await logoutUser();
-      setIsLogged(false);
-      setIsConfirmed(false);
-      Cookies.remove('role');
-      Cookies.remove('sid');
-      queryClient.clear();
-      router.push('/');
-    } catch (err) {
-      console.error('Logout error:', err);
-      alert('Something went wrong while logging out.');
-    }
+    logout();
   };
 
   return (
