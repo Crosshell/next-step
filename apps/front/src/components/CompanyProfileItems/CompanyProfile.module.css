@@ -35,7 +35,7 @@
 
 .main-info-data .edit-main-info-btn {
   position: absolute;
-  top: 0;
+  bottom: 20;
   right: 0;
   background-color: transparent;
   border: 0;
@@ -46,6 +46,22 @@
   border: 3px solid #37aa9c;
   font-size: 2rem;
   color: #37aa9c;
+}
+
+.main-info-data .my-vacancies-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border: 0;
+}
+
+.my-vacancies-btn div {
+  padding: 10px 15px;
+  border: 3px solid rgb(255, 255, 255);
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
 }
 
 .main-info-side .name-input {

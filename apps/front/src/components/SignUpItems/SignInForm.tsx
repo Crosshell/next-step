@@ -80,8 +80,6 @@ export default function SignInForm() {
         password: registrationData.password,
       });
     }
-
-    console.log(JSON.stringify(registrationData, null, 2));
   };
 
   const handleForgotPassword = () => {
