@@ -47,7 +47,7 @@ export class JobSeekerService {
     where: Prisma.JobSeekerWhereUniqueInput,
   ): Promise<void> {
     const jobSeeker = await this.repository.findOne(where);
-    if (jobSeeker) throw new BadRequestException('Job seeker already exists`');
+    if (jobSeeker) throw new BadRequestException('Job seeker already exists');
   }
 
   async search(dto: SearchJobSeekerDto): Promise<JobSeeker[]> {
