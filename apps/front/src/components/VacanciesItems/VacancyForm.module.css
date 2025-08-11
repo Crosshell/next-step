@@ -1,0 +1,88 @@
+.vacancy-form label {
+  display: block;
+  margin-bottom: 15px;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.vacancy-form > div {
+  padding-bottom: 50px;
+  margin-bottom: 40px;
+  border-bottom: 3px dashed #37aa9c;
+}
+
+.vacancy-form > div:first-of-type {
+  padding-bottom: 0;
+  margin-bottom: 40px;
+  border: 0;
+}
+
+.form-input {
+  padding: 15px 20px;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+.title input {
+  width: 100%;
+}
+
+.description textarea {
+  width: 100% !important;
+}
+
+.salary {
+  display: flex;
+  gap: 3%;
+}
+
+.salary span {
+  font-size: 3rem;
+  font-weight: 500;
+}
+
+.salary-item {
+  position: relative;
+}
+
+.salary-item > .dollar {
+  position: absolute;
+  top: 12;
+  right: 20;
+  font-size: 2rem;
+}
+
+.office-employment {
+  display: flex;
+  gap: 5%;
+}
+
+.office-employment input {
+  width: 20vw;
+}
+
+.employment input {
+  width: 35vw;
+}
+
+.office input {
+  width: 100%;
+}
+
+.experience-seniority {
+  display: flex;
+  gap: 5%;
+}
+
+.experience {
+  position: relative;
+}
+
+.experience .years {
+  position: absolute;
+  top: 70;
+  right: 20;
+  font-size: 1.5rem;
+}
