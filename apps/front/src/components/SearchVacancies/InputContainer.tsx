@@ -3,9 +3,13 @@ import AnimatedIcon from '../HoveredItem/HoveredItem';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import classes from './SearchVacancies.module.css';
 
-export default function InputContainer() {
+interface Props {
+  width: string;
+}
+
+export default function InputContainer({ width }: Props) {
   return (
-    <div className={classes['input-wrapper']}>
+    <div className={classes['input-wrapper']} style={{ width: width }}>
       <input
         className={classes['input-container']}
         name="name"

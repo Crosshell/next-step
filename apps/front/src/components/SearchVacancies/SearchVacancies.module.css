@@ -1,12 +1,36 @@
+/* SearchBar */
+
+.searchbar-container {
+  position: relative;
+  display: flex;
+  gap: 2%;
+  margin-bottom: 60px;
+}
+
+.searchbar-container button {
+  background: transparent;
+  border: 0;
+}
+
+.add-vacancy-btn div {
+  padding: 15px 25px;
+  background-color: #37aa9c;
+  border: 3px solid #37aa9c;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+/* SearchBar */
+
 /* InputContainer */
 .input-wrapper {
   position: relative;
-  width: 75%;
+  width: 60%;
 }
 
 .input-container {
   padding: 18px 20px;
-  margin-bottom: 50px;
   width: 100%;
 
   background-color: white;
@@ -41,7 +65,7 @@
   padding: 15px;
   width: 20%;
   background-color: #1f1f21;
-  border: 1px solid #37aa9c;
+  border: 3px solid #37aa9c;
   border-radius: 10px;
 }
 
@@ -69,7 +93,7 @@
   margin-bottom: 30px;
   width: 75%;
   background-color: #1f1f21;
-  border: 1px solid white;
+  border: 2px solid white;
   border-radius: 10px;
 }
 

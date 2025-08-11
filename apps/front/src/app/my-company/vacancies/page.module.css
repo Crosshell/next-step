@@ -1,0 +1,15 @@
+.page-header {
+  margin-bottom: 3rem;
+  font-size: 3rem;
+}
+
+.page-container button {
+  background: transparent;
+  border: 0;
+}
+
+.add-vacancy-btn div {
+  padding: 15px 20px;
+  background-color: #37aa9c;
+  font-weight: 500;
+}
