@@ -52,6 +52,10 @@ describe('UserService', () => {
     mockedArgon2.hash.mockClear();
   });
 
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
   describe('create', () => {
     const user: Prisma.UserCreateInput = {
       email: 'test@example.com',

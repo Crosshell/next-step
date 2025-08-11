@@ -94,6 +94,10 @@ describe('AuthService', () => {
     mockedArgon2.hash.mockClear();
   });
 
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
   describe('validateCredentials', () => {
     const dto: LoginDto = {
       email: 'test@example.com',

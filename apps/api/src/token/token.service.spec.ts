@@ -47,6 +47,10 @@ describe('TokenService', () => {
     jest.clearAllMocks();
   });
 
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
   describe('createToken', () => {
     const type: TokenType = TokenType.VERIFY;
     const email: string = 'test@gmail.com';

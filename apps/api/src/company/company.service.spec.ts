@@ -67,6 +67,10 @@ describe('CompanyService', () => {
     jest.clearAllMocks();
   });
 
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
   describe('create', () => {
     const userId: string = '123e4567-e89b-12d3-a456-426614174001';
     const dto: CreateCompanyDto = {
