@@ -39,6 +39,10 @@ describe('LanguageService', () => {
     jest.clearAllMocks();
   });
 
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
   describe('assertExists', () => {
     const languageIds: string[] = [
       '123e4567-e89b-12d3-a456-426614174000',

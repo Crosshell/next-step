@@ -95,6 +95,10 @@ describe('JobSeekerSearchService', () => {
     jest.clearAllMocks();
   });
 
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
   describe('search', () => {
     const mockPagination = { skip: 0, take: pageSize };
     const mockLanguageLevels: LanguageLevel[] = [
