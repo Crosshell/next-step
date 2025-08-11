@@ -90,6 +90,8 @@ describe('JobSeekerService', () => {
     skillService = module.get(SkillService);
     languageService = module.get(LanguageService);
     searchService = module.get(JobSeekerSearchService);
+
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
