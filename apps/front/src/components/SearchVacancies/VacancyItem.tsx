@@ -6,10 +6,10 @@ import { motion } from 'framer-motion';
 
 import classes from './SearchVacancies.module.css';
 
-import { Vacancy } from '@/types/vacancy';
+import { VacancyData } from '@/types/vacancies';
 
 interface Props {
-  data: Vacancy;
+  data: VacancyData;
 }
 
 export default function VacancyItem({ data }: Props) {
@@ -26,7 +26,7 @@ export default function VacancyItem({ data }: Props) {
           />
           <div className={classes['short-info']}>
             <h4>{data.title}</h4>
-            <h3>{data.company_name}</h3>
+            <h3>{data.company.name}</h3>
           </div>
         </div>
 

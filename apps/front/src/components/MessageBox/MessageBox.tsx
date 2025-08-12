@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode;
 }
 
-export default function MessageBox({ type, children }: Props) {
+export default function MessageBox({ type = 'info', children }: Props) {
   let color = '#f37199';
   if (type === 'info') color = '#ffffff';
 
