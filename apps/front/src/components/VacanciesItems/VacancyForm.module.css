@@ -17,6 +17,12 @@
   border: 0;
 }
 
+.vacancy-form > div:last-of-type {
+  padding-bottom: 0;
+  margin-bottom: 1px;
+  border: 0;
+}
+
 .form-input {
   padding: 15px 20px;
   background-color: transparent;
@@ -35,7 +41,11 @@
 
 .salary {
   display: flex;
-  gap: 3%;
+  gap: 1.9%;
+}
+
+.salary input {
+  width: 20vw;
 }
 
 .salary span {
@@ -45,6 +55,10 @@
 
 .salary-item {
   position: relative;
+}
+
+.salary-item input {
+  padding-right: 45px;
 }
 
 .salary-item > .dollar {
@@ -76,8 +90,16 @@
   gap: 5%;
 }
 
+.experience-seniority input {
+  width: 20vw;
+}
+
 .experience {
   position: relative;
+}
+
+.experience input {
+  padding-right: 90px;
 }
 
 .experience .years {
@@ -85,4 +107,17 @@
   top: 70;
   right: 20;
   font-size: 1.5rem;
+}
+
+.submit-btn {
+  background-color: transparent;
+  border: 0;
+}
+
+.submit-btn div {
+  padding: 10px 15px;
+  background-color: #37aa9c;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: 500;
 }
