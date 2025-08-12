@@ -2,6 +2,13 @@ import { Field, Form, Formik } from 'formik';
 
 import AnimatedIcon from '../HoveredItem/HoveredItem';
 import classes from './VacancyForm.module.css';
+import {
+  employmentTypeOptions,
+  seniorityOptions,
+  workFormatOptions,
+} from '@/lib/vacancy-data';
+import { capitalize } from '@/utils/convertData';
+import MultiSelect from '../MultiSelect/MultiSelect';
 
 const fallbackValues = {
   title: '',
@@ -10,9 +17,9 @@ const fallbackValues = {
   salaryMax: '',
   officeLocation: '',
   experienceRequired: '',
-  workFormat: ['OFFICE', 'REMOTE', 'HYBRID'],
-  employmentType: ['FULL_TIME', 'PART_TIME', 'INTERNSHIP', 'CONTRACT'],
-  seniorityLevel: 'MIDDLE',
+  workFormat: [],
+  employmentType: [],
+  seniorityLevel: '',
 };
 
 export default function VacancyForm() {
@@ -26,7 +33,7 @@ export default function VacancyForm() {
       >
         <Form className={classes['vacancy-form']}>
           <div className={classes.title}>
-            <label>Vacancy title</label>
+            <p>Vacancy title</p>
             <Field
               name="title"
               className={classes['form-input']}
@@ -34,7 +41,7 @@ export default function VacancyForm() {
             />
           </div>
           <div className={classes.description}>
-            <label>Job description</label>
+            <p>Job description</p>
             <Field
               name="description"
               className={classes['form-input']}
@@ -44,7 +51,7 @@ export default function VacancyForm() {
             />
           </div>
           <div>
-            <label>Salary</label>
+            <p>Salary</p>
             <div className={classes.salary}>
               <div className={classes['salary-item']}>
                 <Field
@@ -72,7 +79,7 @@ export default function VacancyForm() {
             </div>
           </div>
           <div className={classes.office}>
-            <label>Office Location</label>
+            <p>Office Location</p>
             <Field
               name="officeLocation"
               className={classes['form-input']}
@@ -81,17 +88,27 @@ export default function VacancyForm() {
           </div>
           <div className={classes['office-employment']}>
             <div>
-              <label>Work Format</label>
-              <Field name="workFormat" className={classes['form-input']} />
+              <p>Work Format</p>
+              <Field
+                name="workFormat"
+                component={MultiSelect}
+                options={workFormatOptions}
+                placeholder="Select work format"
+              />
             </div>
             <div className={classes.employment}>
-              <label>Employment Type</label>
-              <Field name="employmentType" className={classes['form-input']} />
+              <p>Employment Type</p>
+              <Field
+                name="employmentType"
+                component={MultiSelect}
+                options={employmentTypeOptions}
+                placeholder="Select employment type"
+              />
             </div>
           </div>
           <div className={classes['experience-seniority']}>
             <div className={classes.experience}>
-              <label>Experience</label>
+              <p>Experience</p>
               <Field
                 name="experienceRequired"
                 className={classes['form-input']}
@@ -101,8 +118,19 @@ export default function VacancyForm() {
               <span className={classes.years}>years</span>
             </div>
             <div>
-              <label>Seniority</label>
-              <Field name="seniorityLevel" className={classes['form-input']} />
+              <p>Seniority</p>
+              <Field
+                as="select"
+                name="seniorityLevel"
+                className={classes['form-input']}
+              >
+                <option value="">Select seniority</option>
+                {seniorityOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {capitalize(option)}
+                  </option>
+                ))}
+              </Field>
             </div>
           </div>
           <div className="row-end">

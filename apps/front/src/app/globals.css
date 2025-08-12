@@ -82,6 +82,13 @@ input[type='number'] {
   appearance: textfield;
 }
 
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+}
+
 .row-space-between {
   display: flex;
   justify-content: space-between;

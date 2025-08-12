@@ -1,4 +1,4 @@
-.vacancy-form label {
+.vacancy-form p {
   display: block;
   margin-bottom: 15px;
   font-size: 2rem;
@@ -25,7 +25,7 @@
 
 .form-input {
   padding: 15px 20px;
-  background-color: transparent;
+  background-color: #1f1f21;
   border: 2px solid white;
   border-radius: 10px;
   font-size: 1.5rem;
@@ -92,6 +92,11 @@
 
 .experience-seniority input {
   width: 20vw;
+}
+
+.experience-seniority select {
+  width: 20vw;
+  background-color: #1f1f21;
 }
 
 .experience {

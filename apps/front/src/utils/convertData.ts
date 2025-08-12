@@ -17,4 +17,18 @@ function toClientLangLevel(level: string): string {
   return clientLanguageLevels[landIndex];
 }
 
-export { isoToDate, isoToSimpleDate, toClientLangLevel };
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+function toKebabCase(value: string) {
+  return String(value).trim().replace(/\s+/g, '_').replace(/_/g, '-');
+}
+
+export {
+  isoToDate,
+  isoToSimpleDate,
+  toClientLangLevel,
+  capitalize,
+  toKebabCase,
+};
