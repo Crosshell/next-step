@@ -1,7 +1,7 @@
 'use client';
 import { Suspense } from 'react';
 
-import VacancyItem from '@/components/SearchVacancies/VacancyItem';
+import VacancyItem from '@/components/VacanciesItems/VacancyItem';
 import LoadingPage from '../loading-out';
 
 import classes from './page.module.css';

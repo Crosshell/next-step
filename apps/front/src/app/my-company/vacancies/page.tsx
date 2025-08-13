@@ -6,7 +6,7 @@ import SearchBar from '@/components/SearchVacancies/SearchBar';
 import { ApiError } from '@/types/authForm';
 import { getMyVacancies } from '@/services/vacanciesService';
 import { VacancyData } from '@/types/vacancies';
-import VacancyItem from '@/components/SearchVacancies/VacancyItem';
+import VacancyItem from '@/components/VacanciesItems/VacancyItem';
 import MessageBox from '@/components/MessageBox/MessageBox';
 
 export default function CompanyVacancies() {

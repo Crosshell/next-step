@@ -45,7 +45,7 @@
 }
 
 .salary input {
-  width: 20vw;
+  width: 18vw;
 }
 
 .salary span {
@@ -87,12 +87,12 @@
   gap: 5%;
 }
 
-.office-employment input {
+.office-employment div {
   width: 20vw;
 }
 
-.employment input {
-  width: 35vw;
+.employment div {
+  width: 30vw;
 }
 
 .office input {
@@ -104,8 +104,8 @@
   gap: 5%;
 }
 
-.experience-seniority input {
-  width: 20vw;
+.experience-item input {
+  width: 16vw;
 }
 
 .experience-seniority select {

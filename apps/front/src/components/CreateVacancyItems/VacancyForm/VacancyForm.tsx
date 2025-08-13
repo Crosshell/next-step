@@ -4,8 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 
-import AnimatedIcon from '../HoveredItem/HoveredItem';
-import MultiSelect from '../MultiSelect/MultiSelect';
+import AnimatedIcon from '../../HoveredItem/HoveredItem';
+import MultiSelect from '../../MultiSelect/MultiSelect';
 
 import classes from './VacancyForm.module.css';
 
@@ -18,7 +18,7 @@ import {
 import { capitalize } from '@/utils/convertData';
 import { validateVacancyForm } from '@/utils/vacancyValidation';
 import { createVacancy } from '@/services/vacanciesService';
-import MessageBox from '../MessageBox/MessageBox';
+import MessageBox from '../../MessageBox/MessageBox';
 
 export default function VacancyForm() {
   const [requestError, setRequestError] = useState<string | null>(null);

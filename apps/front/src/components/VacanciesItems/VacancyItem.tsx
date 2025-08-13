@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-import classes from './SearchVacancies.module.css';
+import classes from './VacanciesItems.module.css';
 
 import { VacancyData } from '@/types/vacancies';
 
