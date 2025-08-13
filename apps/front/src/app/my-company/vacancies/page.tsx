@@ -48,7 +48,16 @@ export default function CompanyVacancies() {
         <SearchBar addBtn={true} />
         {myVacancies && Array.isArray(myVacancies) ? (
           myVacancies.map((vacancyData) => (
-            <VacancyItem key={vacancyData.id} data={vacancyData} />
+            <VacancyItem
+              key={vacancyData.id}
+              data={{
+                id: vacancyData.id,
+                title: vacancyData.title,
+                companyName: vacancyData.company.name,
+                companyLogo: vacancyData.company.logoUrl,
+                createdAt: vacancyData.createdAt,
+              }}
+            />
           ))
         ) : (
           <p>No vacancies found.</p>

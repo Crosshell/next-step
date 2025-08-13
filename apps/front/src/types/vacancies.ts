@@ -37,4 +37,12 @@ type VacancyData = {
   updatedAt: string;
 };
 
-export { type VacancyData };
+type VacancyItemData = {
+  id: string;
+  title: string;
+  companyName: string;
+  companyLogo: string;
+  createdAt: string;
+};
+
+export type { VacancyData, VacancyItemData };

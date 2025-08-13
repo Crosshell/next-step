@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
-import HoveredItem from '@/components/HoveredItem/HoveredItem';
-import classes from './Profile.module.css';
-import { useModalStore } from '@/store/modalSlice';
 import { AnimatePresence } from 'framer-motion';
+
+import HoveredItem from '@/components/HoveredItem/HoveredItem';
 import AvatarModal from './AvatarModal';
+
+import classes from './Profile.module.css';
+
+import { useModalStore } from '@/store/modalSlice';
+import { validateImageUrl } from '@/utils/validation';
 
 interface Props {
   isEditable: boolean;
@@ -17,32 +21,31 @@ export default function Avatar({
   type = 'job-seeker',
 }: Props) {
   const openModal = useModalStore((state) => state.openModal);
-  const [avatarUrl, setAvatarUrl] = useState('/images/no-avatar.png');
+  const fallbackImage =
+    type === 'job-seeker'
+      ? '/images/no-avatar.png'
+      : '/images/company-no-logo.png';
+  const [avatarUrl, setAvatarUrl] = useState(fallbackImage);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (!data) {
-      setAvatarUrl(
-        type === 'job-seeker'
-          ? '/images/no-avatar.png'
-          : '/images/company-no-logo.png'
-      );
+      setAvatarUrl(fallbackImage);
       setIsLoaded(true);
       return;
     }
+
     setIsLoaded(false);
 
-    const img = new Image();
-    img.src = data;
-    img.onload = () => {
-      setAvatarUrl(data);
+    validateImageUrl(data).then((isValid) => {
+      if (isValid) {
+        setAvatarUrl(data);
+      } else {
+        setAvatarUrl(fallbackImage);
+      }
       setIsLoaded(true);
-    };
-    img.onerror = () => {
-      setAvatarUrl('/images/no-avatar.png');
-      setIsLoaded(true);
-    };
-  }, [data]);
+    });
+  }, [data, fallbackImage]);
 
   return (
     <button
