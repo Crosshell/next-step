@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import classes from './page.module.css';
 import SearchBar from '@/components/SearchVacancies/SearchBar';
 import { ApiError } from '@/types/authForm';
-import { getMyVacancies } from '@/services/companyVacancies';
+import { getMyVacancies } from '@/services/vacanciesService';
 import { VacancyData } from '@/types/vacancies';
 import VacancyItem from '@/components/SearchVacancies/VacancyItem';
 import MessageBox from '@/components/MessageBox/MessageBox';

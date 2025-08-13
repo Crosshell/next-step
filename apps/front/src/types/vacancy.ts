@@ -16,4 +16,16 @@ interface Vacancy {
   edited_at: Date;
 }
 
-export type { Vacancy };
+type VacancyFormValues = {
+  title: string;
+  description: string;
+  salaryMin: string;
+  salaryMax: string;
+  officeLocation: string;
+  experienceRequired: string;
+  workFormat: string[];
+  employmentType: string[];
+  seniorityLevel: string;
+};
+
+export type { Vacancy, VacancyFormValues };

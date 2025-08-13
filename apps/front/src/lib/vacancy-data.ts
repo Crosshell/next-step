@@ -1,12 +1,4 @@
-const seniorityOptions = [
-  'INTERN',
-  'JUNIOR',
-  'MID',
-  'SENIOR',
-  'LEAD',
-  'MANAGER',
-  'DIRECTOR',
-];
+const seniorityOptions = ['TRAINEE', 'JUNIOR', 'MIDDLE', 'SENIOR', 'LEAD'];
 const workFormatOptions = ['OFFICE', 'REMOTE', 'HYBRID'];
 const employmentTypeOptions = [
   'FULL_TIME',
@@ -15,4 +7,21 @@ const employmentTypeOptions = [
   'CONTRACT',
 ];
 
-export { seniorityOptions, workFormatOptions, employmentTypeOptions };
+const vacancyFallbackValues = {
+  title: '',
+  description: '',
+  salaryMin: '',
+  salaryMax: '',
+  officeLocation: '',
+  experienceRequired: '',
+  workFormat: [],
+  employmentType: [],
+  seniorityLevel: '',
+};
+
+export {
+  seniorityOptions,
+  workFormatOptions,
+  employmentTypeOptions,
+  vacancyFallbackValues,
+};

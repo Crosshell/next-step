@@ -1,145 +1,219 @@
-import { Field, Form, Formik } from 'formik';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 
 import AnimatedIcon from '../HoveredItem/HoveredItem';
+import MultiSelect from '../MultiSelect/MultiSelect';
+
 import classes from './VacancyForm.module.css';
+
 import {
   employmentTypeOptions,
   seniorityOptions,
+  vacancyFallbackValues,
   workFormatOptions,
 } from '@/lib/vacancy-data';
 import { capitalize } from '@/utils/convertData';
-import MultiSelect from '../MultiSelect/MultiSelect';
-
-const fallbackValues = {
-  title: '',
-  description: '',
-  salaryMin: '',
-  salaryMax: '',
-  officeLocation: '',
-  experienceRequired: '',
-  workFormat: [],
-  employmentType: [],
-  seniorityLevel: '',
-};
+import { validateVacancyForm } from '@/utils/vacancyValidation';
+import { createVacancy } from '@/services/vacanciesService';
+import MessageBox from '../MessageBox/MessageBox';
 
 export default function VacancyForm() {
+  const [requestError, setRequestError] = useState<string | null>(null);
+  const router = useRouter();
+
+  const { mutate: createProfile, isPending } = useMutation({
+    mutationFn: createVacancy,
+    onSuccess: async (result) => {
+      if (result.status === 'error') {
+        setRequestError(result.error);
+        return;
+      }
+
+      setRequestError(null);
+      router.push('/my-company/vacancies/');
+    },
+  });
+
   return (
-    <>
-      <Formik
-        initialValues={fallbackValues}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-      >
-        <Form className={classes['vacancy-form']}>
-          <div className={classes.title}>
-            <p>Vacancy title</p>
-            <Field
-              name="title"
-              className={classes['form-input']}
-              placeholder="Cool vacancy"
-            />
+    <Formik
+      initialValues={vacancyFallbackValues}
+      validate={validateVacancyForm}
+      onSubmit={(values) => {
+        console.log(values);
+        createProfile(values);
+      }}
+    >
+      <Form className={classes['vacancy-form']}>
+        <div className={classes.title}>
+          <p>Vacancy title</p>
+          <Field
+            name="title"
+            className={classes['form-input']}
+            placeholder="Cool vacancy"
+          />
+          <ErrorMessage
+            name="title"
+            component="div"
+            className={classes['error-msg']}
+          />
+        </div>
+
+        <div className={classes.description}>
+          <p>Job description</p>
+          <Field
+            name="description"
+            className={classes['form-input']}
+            as="textarea"
+            rows={10}
+            placeholder="Some info..."
+          />
+          <ErrorMessage
+            name="description"
+            component="div"
+            className={classes['error-msg']}
+          />
+        </div>
+
+        <div>
+          <p>Salary</p>
+          <div className={classes.salary}>
+            <div>
+              <div className={classes['salary-item']}>
+                <Field name="salaryMin" type="number" placeholder="0" />
+                <div className="align-center">
+                  <span className={classes.dollar}>$</span>
+                </div>
+              </div>
+              <ErrorMessage
+                name="salaryMin"
+                component="div"
+                className={classes['error-msg']}
+              />
+            </div>
+            <div>
+              <span>-</span>
+            </div>
+            <div>
+              <div className={classes['salary-item']}>
+                <Field name="salaryMax" type="number" placeholder="999" />
+                <div className="align-center">
+                  <span className={classes.dollar}>$</span>
+                </div>
+              </div>
+              <ErrorMessage
+                name="salaryMax"
+                component="div"
+                className={classes['error-msg']}
+              />
+            </div>
           </div>
-          <div className={classes.description}>
-            <p>Job description</p>
-            <Field
-              name="description"
-              className={classes['form-input']}
-              as="textarea"
-              rows={10}
-              placeholder="Some info..."
-            />
-          </div>
+        </div>
+
+        <div className={classes.office}>
+          <p>Office Location</p>
+          <Field
+            name="officeLocation"
+            className={classes['form-input']}
+            placeholder="Hostel number 8"
+          />
+          <ErrorMessage
+            name="officeLocation"
+            component="div"
+            className={classes['error-msg']}
+          />
+        </div>
+
+        <div className={classes['office-employment']}>
           <div>
-            <p>Salary</p>
-            <div className={classes.salary}>
-              <div className={classes['salary-item']}>
-                <Field
-                  name="salaryMin"
-                  className={classes['form-input']}
-                  type="number"
-                  placeholder="0"
-                />
-                <span className={classes.dollar}>$</span>
-              </div>
-
-              <div className="align-center">
-                <span>-</span>
-              </div>
-
-              <div className={classes['salary-item']}>
-                <Field
-                  name="salaryMax"
-                  className={classes['form-input']}
-                  type="number"
-                  placeholder="999"
-                />
-                <span className={classes.dollar}>$</span>
-              </div>
-            </div>
-          </div>
-          <div className={classes.office}>
-            <p>Office Location</p>
+            <p>Work Format</p>
             <Field
-              name="officeLocation"
-              className={classes['form-input']}
-              placeholder="Hostel number 8"
+              name="workFormat"
+              component={MultiSelect}
+              options={workFormatOptions}
+              placeholder="Select work format"
+            />
+            <ErrorMessage
+              name="workFormat"
+              component="div"
+              className={classes['error-msg']}
             />
           </div>
-          <div className={classes['office-employment']}>
-            <div>
-              <p>Work Format</p>
-              <Field
-                name="workFormat"
-                component={MultiSelect}
-                options={workFormatOptions}
-                placeholder="Select work format"
-              />
-            </div>
-            <div className={classes.employment}>
-              <p>Employment Type</p>
-              <Field
-                name="employmentType"
-                component={MultiSelect}
-                options={employmentTypeOptions}
-                placeholder="Select employment type"
-              />
-            </div>
+
+          <div className={classes.employment}>
+            <p>Employment Type</p>
+            <Field
+              name="employmentType"
+              component={MultiSelect}
+              options={employmentTypeOptions}
+              placeholder="Select employment type"
+            />
+            <ErrorMessage
+              name="employmentType"
+              component="div"
+              className={classes['error-msg']}
+            />
           </div>
-          <div className={classes['experience-seniority']}>
-            <div className={classes.experience}>
-              <p>Experience</p>
-              <Field
-                name="experienceRequired"
-                className={classes['form-input']}
-                type="number"
-                placeholder="0"
-              />
-              <span className={classes.years}>years</span>
+        </div>
+
+        <div className={classes['experience-seniority']}>
+          <div className={classes.experience}>
+            <p>Experience</p>
+            <div className={classes['experience-item']}>
+              <Field name="experienceRequired" type="number" placeholder="0" />
+              <div className="align-center">
+                <span className={classes.years}>years</span>
+              </div>
             </div>
-            <div>
-              <p>Seniority</p>
-              <Field
-                as="select"
-                name="seniorityLevel"
-                className={classes['form-input']}
-              >
-                <option value="">Select seniority</option>
-                {seniorityOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {capitalize(option)}
-                  </option>
-                ))}
-              </Field>
-            </div>
+            <ErrorMessage
+              name="experienceRequired"
+              component="div"
+              className={classes['error-msg']}
+            />
           </div>
-          <div className="row-end">
-            <button type="submit" className={classes['submit-btn']}>
-              <AnimatedIcon>Create Vacancy</AnimatedIcon>
-            </button>
+
+          <div>
+            <p>Seniority</p>
+            <Field
+              as="select"
+              name="seniorityLevel"
+              className={classes['form-input']}
+            >
+              <option value="">Select seniority</option>
+              {seniorityOptions.map((option) => (
+                <option key={option} value={option}>
+                  {capitalize(option)}
+                </option>
+              ))}
+            </Field>
+            <ErrorMessage
+              name="seniorityLevel"
+              component="div"
+              className={classes['error-msg']}
+            />
           </div>
-        </Form>
-      </Formik>
-    </>
+        </div>
+
+        {requestError && (
+          <div className={classes['error-container']}>
+            <MessageBox>{requestError}</MessageBox>;
+          </div>
+        )}
+
+        {isPending && (
+          <div className={classes['error-container']}>
+            <MessageBox>Wait while we adding your vacancy...</MessageBox>;
+          </div>
+        )}
+
+        <div className="row-end">
+          <button type="submit" className={classes['submit-btn']}>
+            <AnimatedIcon>Create Vacancy</AnimatedIcon>
+          </button>
+        </div>
+      </Form>
+    </Formik>
   );
 }

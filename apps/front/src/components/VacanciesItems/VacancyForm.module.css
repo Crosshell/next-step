@@ -53,18 +53,32 @@
   font-weight: 500;
 }
 
-.salary-item {
-  position: relative;
+.salary-item,
+.experience-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
 }
 
-.salary-item input {
-  padding-right: 45px;
+.salary-item input,
+.experience-item input {
+  padding: 15px 20px;
+  background-color: transparent;
+  border: 0;
+  font-size: 1.5rem;
 }
 
-.salary-item > .dollar {
-  position: absolute;
-  top: 12;
-  right: 20;
+.salary-item input:focus,
+.experience-item input:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.salary-item .dollar {
+  padding-right: 20px;
   font-size: 2rem;
 }
 
@@ -99,18 +113,8 @@
   background-color: #1f1f21;
 }
 
-.experience {
-  position: relative;
-}
-
-.experience input {
-  padding-right: 90px;
-}
-
-.experience .years {
-  position: absolute;
-  top: 70;
-  right: 20;
+.experience-item .years {
+  padding-right: 20px;
   font-size: 1.5rem;
 }
 
@@ -125,4 +129,10 @@
   border-radius: 10px;
   font-size: 1.5rem;
   font-weight: 500;
+}
+
+.error-msg {
+  display: block;
+  padding-top: 10px;
+  font-size: 1.25rem;
 }
