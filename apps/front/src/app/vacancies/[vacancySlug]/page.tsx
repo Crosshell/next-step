@@ -1,59 +1,83 @@
-import React, { Suspense } from 'react';
+'use client';
+
+import { useParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 import SideBox from '@/components/Vacancy/SideBox';
 import SideBoxButton from '@/components/Vacancy/SideBoxButton';
-import LoadingPage from '@/app/loading-out';
+import MessageBox from '@/components/MessageBox/MessageBox';
 
 import classes from './page.module.css';
 
-import { Vacancy } from '@/types/vacancy';
-import { vacanciesData } from '@/lib/test-data';
+import { VacancyData } from '@/types/vacancies';
+import { ApiError } from '@/types/authForm';
+import { getVacancyById } from '@/services/vacanciesService';
 
-interface Props {
-  params: Promise<{ vacancySlug: string }>;
-}
+export default function VacancyPage() {
+  const params = useParams();
+  const vacancyId = params.vacancySlug as string;
 
-const getVacancyById = (id: string): Vacancy | undefined => {
-  return vacanciesData.find((vacancy) => vacancy.id === id);
-};
+  const { data, isPending, error, isError } = useQuery<
+    VacancyData | null,
+    ApiError
+  >({
+    queryKey: ['vacancy', vacancyId],
+    queryFn: () => getVacancyById(vacancyId),
+    staleTime: 0,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
+  });
 
-export default function VacancyPage({ params }: Props) {
-  const { vacancySlug } = React.use(params);
-
-  const data = getVacancyById(vacancySlug);
   const date = new Date();
   const dateString = date.toLocaleDateString('en-GB');
+
+  if (isPending)
+    return (
+      <MessageBox>
+        <p>Wait while we are loading this vacancy...</p>
+      </MessageBox>
+    );
+
+  if (isError)
+    return (
+      <MessageBox type="error">
+        <p>Error loading profile: {error?.message || 'Unexpected error'}</p>
+      </MessageBox>
+    );
 
   return (
     <div className="container">
       <div className={classes['vacancy-container']}>
         <div className={classes['main-info']}>
           <h2>Job Details</h2>
-          <Suspense fallback={<LoadingPage />}>
-            <>
-              <h1>{data?.title}</h1>
-              <p className={classes['details']}>{data?.description}</p>
-              <section>
-                <h3>Experience</h3>
-                <p>{data?.experience_required} years</p>
-              </section>
-              <section>
-                <h3>Seniority</h3>
-                <p>{data?.seniority_level}</p>{' '}
-              </section>
-              <div className={classes['date-views-row']}>
-                <h4>
-                  Posted: <span>{dateString}</span>
-                </h4>
-                <h4>
-                  Views: <span>{data?.views}</span>
-                </h4>
-              </div>
-              <SideBoxButton />
-            </>
-          </Suspense>
+
+          <h1>{data?.title}</h1>
+          <p className={classes['details']}>{data?.description}</p>
+          <section>
+            <h3>Experience</h3>
+            <p>{data?.experienceRequired} years</p>
+          </section>
+          <section>
+            <h3>Seniority</h3>
+            <p>{data?.seniorityLevel}</p>{' '}
+          </section>
+          <div className={classes['date-views-row']}>
+            <h4>
+              Posted: <span>{dateString}</span>
+            </h4>
+          </div>
+          <SideBoxButton />
         </div>
-        <SideBox data={data} />
+        <SideBox
+          data={{
+            companyName: data?.company.name ?? '',
+            companyLogo: data?.company.logoUrl ?? '',
+            companyUrl: data?.company.url ?? '',
+            employmentType: data?.employmentType ?? [],
+            workFormat: data?.workFormat ?? [],
+            officeLocation: data?.officeLocation ?? '',
+          }}
+        />
       </div>
     </div>
   );

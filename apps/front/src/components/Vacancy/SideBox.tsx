@@ -8,10 +8,10 @@ import SideBoxButton from './SideBoxButton';
 
 import classes from './SideBox.module.css';
 
-import { Vacancy } from '@/types/vacancy';
+import { VacancySideBoxData } from '@/types/vacancy';
 
 interface Props {
-  data: Vacancy | undefined;
+  data: VacancySideBoxData;
 }
 
 export default function SideBox({ data }: Props) {
@@ -29,23 +29,23 @@ export default function SideBox({ data }: Props) {
         height={100}
         priority
       />
-      <h3>{data?.company_name}</h3>
+      <h3>{data?.companyName}</h3>
       <h4 className={classes['site-link']}>
         <motion.div whileHover={{ scale: 1.1 }}>
-          <Link href={data?.company_site || '/'}>Visit Website</Link>
+          <Link href={data?.companyUrl || '/'}>Visit Website</Link>
         </motion.div>
       </h4>
       <section>
         <h4>Employment Type:</h4>
-        <p>{data?.employment_type}</p>
+        <p>{data?.employmentType}</p>
       </section>
       <section>
         <h4>Work Format:</h4>
-        <p>{data?.work_format}</p>
+        <p>{data?.workFormat}</p>
       </section>
       <section>
         <h4>Office Location:</h4>
-        <p>{data?.office_location}</p>
+        <p>{data?.officeLocation}</p>
       </section>
       <SideBoxButton />
     </motion.div>

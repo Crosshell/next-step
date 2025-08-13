@@ -27,3 +27,17 @@ export async function createVacancy(data: VacancyFormValues) {
       return { status: 'error', error: message };
     });
 }
+
+export async function getVacancyById(id: string) {
+  return api
+    .get(`/vacancies/${id}`)
+    .then((res) => res.data)
+    .catch((error) => {
+      const message =
+        error?.response?.data?.message || 'Failed to fetch profile';
+      throw {
+        status: error?.response?.status || 500,
+        message,
+      };
+    });
+}

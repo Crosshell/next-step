@@ -28,4 +28,13 @@ type VacancyFormValues = {
   seniorityLevel: string;
 };
 
-export type { Vacancy, VacancyFormValues };
+type VacancySideBoxData = {
+  companyName: string;
+  companyLogo: string | null;
+  companyUrl: string | null;
+  employmentType: string[];
+  workFormat: string[];
+  officeLocation: string;
+};
+
+export type { Vacancy, VacancyFormValues, VacancySideBoxData };
