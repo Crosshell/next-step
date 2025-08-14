@@ -20,7 +20,7 @@ import { validateVacancyForm } from '@/utils/vacancyValidation';
 import { createVacancy } from '@/services/vacanciesService';
 import MessageBox from '../../MessageBox/MessageBox';
 
-export default function VacancyForm() {
+export default function MainInfoForm() {
   const [requestError, setRequestError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -36,7 +36,6 @@ export default function VacancyForm() {
       router.push('/my-company/vacancies/');
     },
   });
-
   return (
     <Formik
       initialValues={vacancyFallbackValues}

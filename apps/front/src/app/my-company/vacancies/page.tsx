@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import classes from './page.module.css';
-import SearchBar from '@/components/SearchVacancies/SearchBar';
+import SearchBar from '@/components/SearchItems/SearchBar';
 import { ApiError } from '@/types/authForm';
 import { getMyVacancies } from '@/services/vacanciesService';
 import { VacancyData } from '@/types/vacancies';

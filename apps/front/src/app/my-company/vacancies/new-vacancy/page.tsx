@@ -1,6 +1,6 @@
 'use client';
 
-import VacancyForm from '@/components/CreateVacancyItems/VacancyForm/VacancyForm';
+import VacancyForm from '@/components/VacanciesItems/VacancyForm/VacancyForm';
 import classes from './page.module.css';
 
 export default function NewVacancyPage() {

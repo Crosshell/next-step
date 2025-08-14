@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
-import SideBox from '@/components/Vacancy/SideBox';
+import SideBox from '@/components/VacanciesItems/VacancyPage/SideBox';
 import MessageBox from '@/components/MessageBox/MessageBox';
 
 import classes from './page.module.css';

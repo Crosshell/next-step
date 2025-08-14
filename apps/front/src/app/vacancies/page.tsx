@@ -7,7 +7,7 @@ import LoadingPage from '../loading-out';
 import classes from './page.module.css';
 
 import { vacanciesData } from '@/lib/test-data';
-import SearchBar from '@/components/SearchVacancies/SearchBar';
+import SearchBar from '@/components/SearchItems/SearchBar';
 
 export default function VacanciesPage() {
   return (

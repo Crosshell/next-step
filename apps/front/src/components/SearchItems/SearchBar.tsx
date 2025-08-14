@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import InputContainer from './InputContainer';
-import VacanciesTagBox from './VacanciesTagBox';
+import VacanciesTagBox from './SearchTagBox';
 import AnimatedIcon from '../HoveredItem/HoveredItem';
 
 import classes from './SearchVacancies.module.css';

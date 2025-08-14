@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
-import HoveredItem from '../HoveredItem/HoveredItem';
+import HoveredItem from '../../HoveredItem/HoveredItem';
 
 import classes from './SideBox.module.css';
 
