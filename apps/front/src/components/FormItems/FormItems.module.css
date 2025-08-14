@@ -1,0 +1,60 @@
+.form-input {
+  padding: 10px 15px;
+  width: 15%;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}
+
+.form-del-btn div {
+  padding: 8px 10px;
+  background-color: #f37199;
+  border: 2px solid #f37199;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.add-save-btn-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.add-save-btn-container button div {
+  padding: 8px 12px;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.save-btns-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.info-form-btn div {
+  background-color: white;
+  border: 2px solid white;
+  color: #1f1f21;
+}
+
+/* LanguagesForm */
+
+.language-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.language-row select:first-of-type {
+  width: 20%;
+}
+
+.language-row select:last-of-type {
+  width: 25%;
+}
+
+/* LanguagesForm */

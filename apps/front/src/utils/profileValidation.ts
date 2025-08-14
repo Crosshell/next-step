@@ -157,33 +157,29 @@ export function handleCertificatesSubmit(
   onSuccess(values.certs);
 }
 
-export function handleLanguagesSubmit(
-  values: { languages: UserLanguageData[] },
-  helpers: FormikHelpers<{ languages: UserLanguageData[] }>,
-  onSuccess: (updatedLanguages: UserLanguageData[]) => void
-) {
+export function validateLanguages(values: { languages: UserLanguageData[] }) {
   const seen = new Set();
   const duplicates = values.languages.some((lang) => {
-    if (seen.has(lang.language)) return true;
-    seen.add(lang.language);
+    const langId = lang.language?.id?.trim();
+    if (!langId) return false; // skip empty until empty-field check
+    if (seen.has(langId)) return true;
+    seen.add(langId);
     return false;
   });
 
   const hasEmptyFields = values.languages.some(
-    (lang) => !lang.language || !lang.level
+    (lang) => !lang.language?.id?.trim() || !lang.level?.trim()
   );
 
   if (duplicates) {
-    helpers.setErrors({ languages: 'Languages must be unique' });
-    return;
+    return { languages: 'Languages must be unique' };
   }
 
   if (hasEmptyFields) {
-    helpers.setErrors({ languages: 'All language fields must be filled' });
-    return;
+    return { languages: 'All language fields must be filled' };
   }
 
-  onSuccess(values.languages);
+  return {};
 }
 
 export function handleExperienceSubmit(
