@@ -3,14 +3,14 @@
   border: 0;
 }
 
-/* Main Info Form */
-
-.main-info-form p {
+.vacancy-form p {
   display: block;
   margin-bottom: 15px;
   font-size: 2rem;
   font-weight: 500;
 }
+
+/* Main Info Form */
 
 .main-info-form > div {
   padding-bottom: 50px;
@@ -21,12 +21,6 @@
 .main-info-form > div:first-of-type {
   padding-bottom: 0;
   margin-bottom: 40px;
-  border: 0;
-}
-
-.main-info-form > div:last-of-type {
-  padding-bottom: 0;
-  margin-bottom: 1px;
   border: 0;
 }
 
@@ -145,3 +139,11 @@
 }
 
 /* Main Info Form */
+
+/* Language Form */
+.lang-form {
+  padding-bottom: 50px;
+  margin-bottom: 40px;
+  border-bottom: 3px dashed #37aa9c;
+}
+/* Language Form */

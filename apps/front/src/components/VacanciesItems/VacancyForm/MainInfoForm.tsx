@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-
-import AnimatedIcon from '../../HoveredItem/HoveredItem';
-import MultiSelect from '../../MultiSelect/MultiSelect';
-
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import classes from './VacancyForm.module.css';
 
 import {
@@ -17,35 +12,49 @@ import {
 } from '@/lib/vacancy-data';
 import { capitalize } from '@/utils/convertData';
 import { validateVacancyForm } from '@/utils/vacancyValidation';
-import { createVacancy } from '@/services/vacanciesService';
+import {
+  createVacancy,
+  updateVacancyLanguages,
+} from '@/services/vacanciesService';
 import MessageBox from '../../MessageBox/MessageBox';
+import MultiSelect from '../../MultiSelect/MultiSelect';
+import { useVacancyStore } from '@/store/useVacancyStore';
 
 export default function MainInfoForm() {
   const [requestError, setRequestError] = useState<string | null>(null);
   const router = useRouter();
+  const { languages } = useVacancyStore();
 
-  const { mutate: createProfile } = useMutation({
+  const { mutate: createVacancyMutate } = useMutation({
     mutationFn: createVacancy,
     onSuccess: async (result) => {
       if (result.status === 'error') {
         setRequestError(result.error);
         return;
       }
+      console.log(languages);
+
+      try {
+        await updateVacancyLanguages({
+          id: result.data.id,
+          data: languages,
+        });
+      } catch (err) {
+        console.error('Failed to update languages:', err);
+      }
 
       setRequestError(null);
       router.push('/my-company/vacancies/');
     },
   });
+
   return (
     <Formik
       initialValues={vacancyFallbackValues}
       validate={validateVacancyForm}
-      onSubmit={(values) => {
-        console.log(values);
-        createProfile(values);
-      }}
+      onSubmit={(values) => createVacancyMutate(values)}
     >
-      <Form className={classes['main-info-form']}>
+      <Form id="vacancy-main-info-form" className={classes['main-info-form']}>
         <div className={classes.title}>
           <p>Vacancy title</p>
           <Field
@@ -197,15 +206,9 @@ export default function MainInfoForm() {
 
         {requestError && (
           <div className={classes['error-container']}>
-            <MessageBox>{requestError}</MessageBox>;
+            <MessageBox>{requestError}</MessageBox>
           </div>
         )}
-
-        <div className="row-end">
-          <button type="submit" className={classes['submit-btn']}>
-            <AnimatedIcon>Create Vacancy</AnimatedIcon>
-          </button>
-        </div>
       </Form>
     </Formik>
   );

@@ -19,13 +19,20 @@ export async function getMyVacancies() {
 export async function createVacancy(data: VacancyFormValues) {
   return api
     .post('/vacancies', data)
-    .then(() => ({ status: 'ok', error: null }))
+    .then((response) => {
+      console.log(response.data.id);
+      return {
+        status: 'ok',
+        error: null,
+        data: response.data,
+      };
+    })
     .catch((error) => {
       const message =
         error?.response?.data?.errors?.[0] ||
         error?.response?.data?.message ||
-        'Creating profile failed';
-      return { status: 'error', error: message };
+        'Creating vacancy failed';
+      return { status: 'error', error: message, data: null };
     });
 }
 
@@ -64,7 +71,7 @@ export async function updateVacancyLanguages({
   data: UpdatedUserLanguages[];
 }) {
   return api
-    .put(`/vacancies/${id}/languages`, { languages: data })
+    .put(`/vacancies/${id}/languages`, { requiredLanguages: data })
     .then(() => ({ status: 'ok', error: null }))
     .catch((error) => {
       const message =
