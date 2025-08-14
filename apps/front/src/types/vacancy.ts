@@ -29,6 +29,8 @@ type VacancyFormValues = {
 };
 
 type VacancySideBoxData = {
+  id: string;
+  companyId: string;
   companyName: string;
   companyLogo: string | null;
   companyUrl: string | null;

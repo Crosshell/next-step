@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
-import SideBoxButton from './SideBoxButton';
 import HoveredItem from '../HoveredItem/HoveredItem';
 
 import classes from './SideBox.module.css';
@@ -11,6 +10,7 @@ import classes from './SideBox.module.css';
 import { VacancySideBoxData } from '@/types/vacancy';
 import { capitalize, toKebabCase } from '@/utils/convertData';
 import { validateImageUrl } from '@/utils/validation';
+import Cookies from 'js-cookie';
 
 interface Props {
   data: VacancySideBoxData;
@@ -19,6 +19,7 @@ interface Props {
 export default function SideBox({ data }: Props) {
   const [logoUrl, setLogoUrl] = useState('/images/suitcase.png');
   const [isLoaded, setIsLoaded] = useState(false);
+  const companyId = Cookies.get('company-id');
 
   useEffect(() => {
     const companyLogo = data.companyLogo ?? '';
@@ -79,7 +80,19 @@ export default function SideBox({ data }: Props) {
           {data?.salaryMin} - {data.salaryMax} $
         </p>
       </section>
-      <SideBoxButton />
+      {!companyId && (
+        <button className={classes['apply-btn']}>
+          <HoveredItem> Apply for a job</HoveredItem>
+        </button>
+      )}
+      {companyId === data?.companyId && (
+        <Link
+          href={`/my-company/vacancies/edit-vacancy/${data.id}`}
+          className={classes['edit-link']}
+        >
+          <HoveredItem>Edit vacancy</HoveredItem>
+        </Link>
+      )}
     </motion.div>
   );
 }

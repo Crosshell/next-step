@@ -40,6 +40,7 @@ export default function CompanyProfilePage() {
     }
     if (companyData) {
       Cookies.set('role', 'COMPANY');
+      Cookies.set('company-id', companyData.id);
       closeModal();
     }
   }, [isError, error, companyData, openModal, closeModal, router]);

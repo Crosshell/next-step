@@ -34,6 +34,7 @@ export default function MainHeader() {
       } else {
         router.push('/sign-in');
         Cookies.remove('sid');
+        Cookies.remove('company-id');
         queryClient.clear();
         setIsLogged(false);
       }

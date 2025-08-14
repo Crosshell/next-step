@@ -51,7 +51,8 @@
   font-weight: 400;
 }
 
-.apply-btn {
+.apply-btn,
+.edit-link div {
   padding: 10px 20px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -60,4 +61,17 @@
   border-radius: 30px;
   color: #1f1f21;
   font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.edit-link {
+  display: block;
+  margin-top: 50px;
+}
+
+.edit-link div {
+  display: inline;
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: 500;
 }
