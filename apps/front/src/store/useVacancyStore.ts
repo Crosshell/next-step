@@ -1,4 +1,3 @@
-// store/useVacancyStore.ts
 import { UpdatedUserLanguages } from '@/types/profile';
 import { create } from 'zustand';
 

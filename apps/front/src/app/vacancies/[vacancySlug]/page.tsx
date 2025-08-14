@@ -13,7 +13,7 @@ import classes from './page.module.css';
 
 import { VacancyData } from '@/types/vacancies';
 import { ApiError } from '@/types/authForm';
-import { capitalize } from '@/utils/convertData';
+import { capitalize, toKebabCase } from '@/utils/convertData';
 import {
   deleteVacancy as deleteVacancyFn,
   getVacancyById,
@@ -75,22 +75,36 @@ export default function VacancyPage() {
           <h1>{data?.title}</h1>
           <p className={classes['details']}>{data?.description}</p>
           <section>
-            <h3>Experience</h3>
+            <h3>Required Experience</h3>
             <p>{data?.experienceRequired} years</p>
           </section>
           <section>
             <h3>Seniority</h3>
             {data?.seniorityLevel && <p>{capitalize(data.seniorityLevel)}</p>}
           </section>
-          <div className={classes['date-views-row']}>
-            <h4>
-              Posted: <span>{data?.createdAt}</span>
-            </h4>
-          </div>
+          {data?.requiredLanguages && data?.requiredLanguages.length > 0 && (
+            <section>
+              <h3>Required Languages</h3>
+              {data?.requiredLanguages.length > 0 &&
+                data?.requiredLanguages.map((lang) => (
+                  <p key={lang.language.id}>
+                    {lang.language.name} - {capitalize(toKebabCase(lang.level))}
+                  </p>
+                ))}
+            </section>
+          )}
+
+          <section>
+            <div className={classes['date-views-row']}>
+              <h4>
+                Posted: <span>{data?.createdAt}</span>
+              </h4>
+            </div>
+          </section>
 
           {!companyId && (
             <button className={classes['apply-btn']}>
-              {/* <HoveredItem>Apply for a job</HoveredItem> */}
+              <AnimatedIcon>Apply for a job</AnimatedIcon>
             </button>
           )}
 
