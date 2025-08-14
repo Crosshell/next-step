@@ -12,6 +12,7 @@ import classes from './page.module.css';
 import { VacancyData } from '@/types/vacancies';
 import { ApiError } from '@/types/authForm';
 import { getVacancyById } from '@/services/vacanciesService';
+import { capitalize } from '@/utils/convertData';
 
 export default function VacancyPage() {
   const params = useParams();
@@ -45,6 +46,8 @@ export default function VacancyPage() {
       </MessageBox>
     );
 
+  console.log(data);
+
   return (
     <div className="container">
       <div className={classes['vacancy-container']}>
@@ -59,7 +62,7 @@ export default function VacancyPage() {
           </section>
           <section>
             <h3>Seniority</h3>
-            <p>{data?.seniorityLevel}</p>{' '}
+            {data?.seniorityLevel && <p>{capitalize(data.seniorityLevel)}</p>}
           </section>
           <div className={classes['date-views-row']}>
             <h4>
@@ -76,6 +79,8 @@ export default function VacancyPage() {
             employmentType: data?.employmentType ?? [],
             workFormat: data?.workFormat ?? [],
             officeLocation: data?.officeLocation ?? '',
+            salaryMin: data?.salaryMin ?? 0,
+            salaryMax: data?.salaryMax ?? 0,
           }}
         />
       </div>

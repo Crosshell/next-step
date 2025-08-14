@@ -35,6 +35,8 @@ type VacancySideBoxData = {
   employmentType: string[];
   workFormat: string[];
   officeLocation: string;
+  salaryMin: number;
+  salaryMax: number;
 };
 
 export type { Vacancy, VacancyFormValues, VacancySideBoxData };

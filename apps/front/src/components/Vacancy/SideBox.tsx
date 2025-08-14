@@ -73,6 +73,12 @@ export default function SideBox({ data }: Props) {
         <h4>Office Location:</h4>
         <p>{data?.officeLocation}</p>
       </section>
+      <section>
+        <h4>Salary:</h4>
+        <p>
+          {data?.salaryMin} - {data.salaryMax} $
+        </p>
+      </section>
       <SideBoxButton />
     </motion.div>
   );
