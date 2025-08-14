@@ -1,23 +1,30 @@
-.vacancy-form p {
+.vacancy-form button {
+  background-color: transparent;
+  border: 0;
+}
+
+/* Main Info Form */
+
+.main-info-form p {
   display: block;
   margin-bottom: 15px;
   font-size: 2rem;
   font-weight: 500;
 }
 
-.vacancy-form > div {
+.main-info-form > div {
   padding-bottom: 50px;
   margin-bottom: 40px;
   border-bottom: 3px dashed #37aa9c;
 }
 
-.vacancy-form > div:first-of-type {
+.main-info-form > div:first-of-type {
   padding-bottom: 0;
   margin-bottom: 40px;
   border: 0;
 }
 
-.vacancy-form > div:last-of-type {
+.main-info-form > div:last-of-type {
   padding-bottom: 0;
   margin-bottom: 1px;
   border: 0;
@@ -136,3 +143,5 @@
   padding-top: 10px;
   font-size: 1.25rem;
 }
+
+/* Main Info Form */

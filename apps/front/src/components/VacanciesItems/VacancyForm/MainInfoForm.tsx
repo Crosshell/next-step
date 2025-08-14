@@ -45,7 +45,7 @@ export default function MainInfoForm() {
         createProfile(values);
       }}
     >
-      <Form className={classes['vacancy-form']}>
+      <Form className={classes['main-info-form']}>
         <div className={classes.title}>
           <p>Vacancy title</p>
           <Field

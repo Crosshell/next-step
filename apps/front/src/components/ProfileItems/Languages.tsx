@@ -53,7 +53,7 @@ export default function Languages({ isEditable, data }: Props) {
       ) : (
         <LanguagesForm
           data={data}
-          updateLanguages={updateLanguages}
+          updateLanguages={(data) => updateLanguages(data)}
           isPending={isPending}
           goBack={toggleEdit}
         />

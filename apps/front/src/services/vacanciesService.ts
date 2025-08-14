@@ -1,5 +1,6 @@
 import { VacancyFormValues } from '@/types/vacancy';
 import api from './axios';
+import { UpdatedUserLanguages } from '@/types/profile';
 
 export async function getMyVacancies() {
   return api
@@ -51,6 +52,25 @@ export async function deleteVacancy(id: string | undefined) {
         error?.response?.data?.errors?.[0] ||
         error?.response?.data?.message ||
         'Creating profile failed';
+      return { status: 'error', error: message };
+    });
+}
+
+export async function updateVacancyLanguages({
+  id,
+  data,
+}: {
+  id: string;
+  data: UpdatedUserLanguages[];
+}) {
+  return api
+    .put(`/vacancies/${id}/languages`, { languages: data })
+    .then(() => ({ status: 'ok', error: null }))
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Updating languages failed';
       return { status: 'error', error: message };
     });
 }

@@ -18,10 +18,10 @@ import { useQuery } from '@tanstack/react-query';
 import { getLanguages } from '@/services/jobseekerService';
 
 interface Props {
-  data: UserLanguageData[];
+  data?: UserLanguageData[];
   updateLanguages: (data: UpdatedUserLanguages[]) => void;
   isPending: boolean;
-  goBack: () => void;
+  goBack?: () => void;
 }
 
 export default function LanguagesForm({
@@ -42,7 +42,7 @@ export default function LanguagesForm({
 
   return (
     <Formik
-      initialValues={{ languages: data }}
+      initialValues={{ languages: data ? data : [] }}
       validate={validateLanguages}
       onSubmit={(values) =>
         updateLanguages(
@@ -116,13 +116,16 @@ export default function LanguagesForm({
                   </button>
 
                   <div className={classes['save-btns-container']}>
-                    <button
-                      className="underline-link"
-                      type="button"
-                      onClick={() => goBack()}
-                    >
-                      <AnimatedIcon>Go Back</AnimatedIcon>
-                    </button>
+                    {goBack && (
+                      <button
+                        className="underline-link"
+                        type="button"
+                        onClick={() => goBack()}
+                      >
+                        <AnimatedIcon>Go Back</AnimatedIcon>
+                      </button>
+                    )}
+
                     <button
                       className={classes['info-form-btn']}
                       type="submit"
