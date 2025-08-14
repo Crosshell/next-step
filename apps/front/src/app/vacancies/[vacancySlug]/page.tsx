@@ -1,10 +1,11 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import HoveredItem from '@/components/HoveredItem/HoveredItem';
+import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import SideBox from '@/components/Vacancy/SideBox';
 import MessageBox from '@/components/MessageBox/MessageBox';
 
@@ -12,12 +13,17 @@ import classes from './page.module.css';
 
 import { VacancyData } from '@/types/vacancies';
 import { ApiError } from '@/types/authForm';
-import { getVacancyById } from '@/services/vacanciesService';
 import { capitalize } from '@/utils/convertData';
+import {
+  deleteVacancy as deleteVacancyFn,
+  getVacancyById,
+} from '@/services/vacanciesService';
 import Cookies from 'js-cookie';
 
 export default function VacancyPage() {
   const params = useParams();
+  const [requestError, setRequestError] = useState<string | null>(null);
+  const router = useRouter();
   const vacancyId = params.vacancySlug as string;
   const companyId = Cookies.get('company-id');
 
@@ -30,6 +36,18 @@ export default function VacancyPage() {
     staleTime: 0,
     refetchOnMount: 'always',
     refetchOnWindowFocus: true,
+  });
+
+  const { mutate: deleteVacancy } = useMutation({
+    mutationFn: deleteVacancyFn,
+    onSuccess: async (result) => {
+      if (result.status === 'error') {
+        setRequestError(result.error);
+        return;
+      }
+      setRequestError(null);
+      router.push('/my-company/vacancies/');
+    },
   });
 
   if (isPending)
@@ -72,17 +90,31 @@ export default function VacancyPage() {
 
           {!companyId && (
             <button className={classes['apply-btn']}>
-              <HoveredItem>Apply for a job</HoveredItem>
+              {/* <HoveredItem>Apply for a job</HoveredItem> */}
             </button>
           )}
 
+          {requestError && (
+            <div className={classes['error-container']}>
+              <MessageBox>{requestError}</MessageBox>;
+            </div>
+          )}
+
           {companyId === data?.company.id && (
-            <Link
-              href={`/my-company/vacancies/edit-vacancy/${data?.id}`}
-              className={classes['edit-link']}
-            >
-              <HoveredItem>Edit vacancy</HoveredItem>
-            </Link>
+            <div className={classes['bottom-row']}>
+              <Link
+                href={`/my-company/vacancies/edit-vacancy/${data?.id}`}
+                className={classes['edit-link']}
+              >
+                <AnimatedIcon>Edit vacancy</AnimatedIcon>
+              </Link>
+              <button
+                className={classes['del-btn']}
+                onClick={() => deleteVacancy(data?.id)}
+              >
+                <AnimatedIcon>Delete vacancy</AnimatedIcon>
+              </button>
+            </div>
           )}
         </div>
         <SideBox

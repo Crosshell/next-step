@@ -51,8 +51,14 @@
   font-weight: 400;
 }
 
+.bottom-row {
+  display: flex;
+  gap: 2%;
+}
+
 .apply-btn,
-.edit-link div {
+.edit-link div,
+.del-btn div {
   padding: 10px 20px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -66,12 +72,25 @@
 
 .edit-link {
   display: block;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .edit-link div {
-  display: inline;
   cursor: pointer;
   font-size: 1.5rem;
   font-weight: 500;
+  border: 2px solid white;
+}
+
+.del-btn {
+  display: block;
+  margin-top: 30px;
+  background-color: transparent;
+  border: 0;
+}
+
+.del-btn div {
+  border: 2px solid #f37199;
+  background-color: transparent;
+  color: #f37199;
 }

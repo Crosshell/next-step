@@ -41,3 +41,16 @@ export async function getVacancyById(id: string) {
       };
     });
 }
+
+export async function deleteVacancy(id: string | undefined) {
+  return api
+    .delete(`/vacancies/${id}`)
+    .then(() => ({ status: 'ok', error: null }))
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Creating profile failed';
+      return { status: 'error', error: message };
+    });
+}

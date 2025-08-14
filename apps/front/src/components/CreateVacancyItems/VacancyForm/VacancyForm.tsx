@@ -24,7 +24,7 @@ export default function VacancyForm() {
   const [requestError, setRequestError] = useState<string | null>(null);
   const router = useRouter();
 
-  const { mutate: createProfile, isPending } = useMutation({
+  const { mutate: createProfile } = useMutation({
     mutationFn: createVacancy,
     onSuccess: async (result) => {
       if (result.status === 'error') {
@@ -199,12 +199,6 @@ export default function VacancyForm() {
         {requestError && (
           <div className={classes['error-container']}>
             <MessageBox>{requestError}</MessageBox>;
-          </div>
-        )}
-
-        {isPending && (
-          <div className={classes['error-container']}>
-            <MessageBox>Wait while we adding your vacancy...</MessageBox>;
           </div>
         )}
 
