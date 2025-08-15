@@ -1,4 +1,3 @@
-import LanguagesForm from '@/components/FormItems/LanguagesForm';
 import classes from './VacancyForm.module.css';
 import { useVacancyStore } from '@/store/useVacancyStore';
 
@@ -8,13 +7,6 @@ export default function Languages() {
   return (
     <div className={classes['lang-form']}>
       <p>Languages</p>
-      <LanguagesForm
-        updateLanguages={(data) => {
-          console.log('Languages', data);
-          setLanguages(data);
-        }}
-        isPending={false}
-      />
     </div>
   );
 }
