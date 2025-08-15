@@ -1,24 +1,20 @@
 import { useState } from 'react';
+import { FieldArray, Form, Formik } from 'formik';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 import InfoBox from './InfoBox';
-
-import { UserLanguageData, LanguageData } from '@/types/profile';
-import { updateUserLanguages } from '@/services/jobseekerService';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import LanguageRow from '../FormItems/LanguageRow';
 import RequestError from '../RequestErrors/RequestErrors';
-import { toClientLangLevel } from '@/utils/convertData';
-
-import { FieldArray, Form, Formik } from 'formik';
-
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 
 import classes from './Profile.module.css';
 
-import { validateLanguages } from '@/utils/profileValidation';
 import { ApiError } from '@/types/authForm';
-import { useQuery } from '@tanstack/react-query';
+import { UserLanguageData, LanguageData } from '@/types/profile';
+import { validateLanguages } from '@/utils/profileValidation';
+import { toClientLangLevel } from '@/utils/convertData';
+import { updateUserLanguages } from '@/services/jobseekerService';
 import { getLanguages } from '@/services/jobseekerService';
-import LanguageRow from '../FormItems/LanguageRow';
 
 interface Props {
   isEditable: boolean;
@@ -27,7 +23,6 @@ interface Props {
 
 export default function Languages({ isEditable, data }: Props) {
   const [editMode, setEditMode] = useState(false);
-  const queryClient = useQueryClient();
 
   const { data: languagesList = [], error: fetchLangError } = useQuery<
     LanguageData[] | null,
@@ -47,7 +42,6 @@ export default function Languages({ isEditable, data }: Props) {
     mutationFn: updateUserLanguages,
     onSuccess: async (result) => {
       if (result.status === 'error') return;
-      await queryClient.invalidateQueries({ queryKey: ['profile'] });
       setEditMode(false);
     },
   });

@@ -24,6 +24,11 @@
   border: 0;
 }
 
+.main-info-form > div:last-of-type {
+  padding-bottom: 0;
+  border: 0;
+}
+
 .form-input {
   padding: 15px 20px;
   background-color: #1f1f21;
