@@ -45,6 +45,12 @@
   font-weight: 500;
 }
 
+.office {
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
 .apply-btn,
 .edit-link div {
   padding: 10px 20px;
