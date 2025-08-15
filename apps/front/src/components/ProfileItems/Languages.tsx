@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FieldArray, Form, Formik } from 'formik';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import InfoBox from './InfoBox';
 import LanguageRow from '../FormItems/LanguageRow';
@@ -24,6 +24,8 @@ interface Props {
 export default function Languages({ isEditable, data }: Props) {
   const [editMode, setEditMode] = useState(false);
 
+  const queryClient = useQueryClient();
+
   const { data: languagesList = [], error: fetchLangError } = useQuery<
     LanguageData[] | null,
     ApiError
@@ -42,6 +44,7 @@ export default function Languages({ isEditable, data }: Props) {
     mutationFn: updateUserLanguages,
     onSuccess: async (result) => {
       if (result.status === 'error') return;
+      await queryClient.invalidateQueries({ queryKey: ['profile'] });
       setEditMode(false);
     },
   });

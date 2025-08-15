@@ -38,12 +38,13 @@ export default function VacancyForm() {
       }
 
       const vacancyId = result.data.id;
-      console.log(vacancyId, variables.languages);
 
-      updateLanguages({
-        id: vacancyId,
-        data: variables.languages,
-      });
+      if (variables.languages.length > 0) {
+        updateLanguages({
+          id: vacancyId,
+          data: variables.languages,
+        });
+      }
 
       setRequestError(null);
       router.push('/my-company/vacancies/');

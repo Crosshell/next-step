@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import LanguageRow from '@/components/FormItems/LanguageRow';
 import classes from './VacancyForm.module.css';
-import { LanguageData } from '@/types/profile';
+import { LanguageData, UpdatedUserLanguages } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
 import { getLanguages } from '@/services/jobseekerService';
 
@@ -25,14 +25,16 @@ export default function LanguagesFields() {
       <FieldArray name="languages">
         {({ push, remove, form }) => (
           <>
-            {form.values.languages.map((lang: any, index: number) => (
-              <LanguageRow
-                key={index}
-                index={index}
-                languagesList={languagesList || []}
-                onRemove={() => remove(index)}
-              />
-            ))}
+            {form.values.languages.map(
+              (lang: UpdatedUserLanguages, index: number) => (
+                <LanguageRow
+                  key={index}
+                  index={index}
+                  languagesList={languagesList || []}
+                  onRemove={() => remove(index)}
+                />
+              )
+            )}
 
             <ErrorMessage
               name="languages"
@@ -49,7 +51,7 @@ export default function LanguagesFields() {
             <button
               type="button"
               className={classes['info-form-btn']}
-              onClick={() => push({ languageId: '', level: '' })}
+              onClick={() => push({ language: { id: '' }, level: '' })}
             >
               <AnimatedIcon>Add +</AnimatedIcon>
             </button>
