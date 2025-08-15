@@ -9,29 +9,41 @@ import { validateVacancyForm } from '@/utils/vacancyValidation';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { createVacancy } from '@/services/vacanciesService';
+import {
+  createVacancy,
+  updateVacancyLanguages,
+} from '@/services/vacanciesService';
 
 export default function VacancyForm() {
   const [requestError, setRequestError] = useState<string | null>(null);
   const router = useRouter();
 
-  const { mutate: createVacancyMutate } = useMutation({
-    mutationFn: createVacancy,
+  const { mutate: updateLanguages } = useMutation({
+    mutationFn: updateVacancyLanguages,
     onSuccess: async (result) => {
       if (result.status === 'error') {
         setRequestError(result.error);
         return;
       }
-      // console.log(languages);
+      setRequestError(null);
+    },
+  });
 
-      // try {
-      //   await updateVacancyLanguages({
-      //     id: result.data.id,
-      //     data: languages,
-      //   });
-      // } catch (err) {
-      //   console.error('Failed to update languages:', err);
-      // }
+  const { mutate: createVacancyMutate } = useMutation({
+    mutationFn: createVacancy,
+    onSuccess: async (result, variables) => {
+      if (result.status === 'error') {
+        setRequestError(result.error);
+        return;
+      }
+
+      const vacancyId = result.data.id;
+      console.log(vacancyId, variables.languages);
+
+      updateLanguages({
+        id: vacancyId,
+        data: variables.languages,
+      });
 
       setRequestError(null);
       router.push('/my-company/vacancies/');
@@ -44,8 +56,14 @@ export default function VacancyForm() {
         initialValues={vacancyFallbackValues}
         validate={validateVacancyForm}
         onSubmit={(values) => {
-          console.log(values);
-          createVacancyMutate(values);
+          const cleaned = {
+            ...values,
+            languages: values.languages.map((l) => ({
+              languageId: l.language?.id ?? l.languageId,
+              level: l.level,
+            })),
+          };
+          createVacancyMutate(cleaned);
         }}
       >
         <Form id="vacancy-form" className={classes['main-info-form']}>

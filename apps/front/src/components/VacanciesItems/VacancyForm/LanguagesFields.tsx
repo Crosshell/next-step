@@ -1,12 +1,13 @@
+import { FieldArray, ErrorMessage } from 'formik';
 import { useQuery } from '@tanstack/react-query';
+import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
+import LanguageRow from '@/components/FormItems/LanguageRow';
 import classes from './VacancyForm.module.css';
-import { useVacancyStore } from '@/store/useVacancyStore';
 import { LanguageData } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
 import { getLanguages } from '@/services/jobseekerService';
-import LanguageRow from '@/components/FormItems/LanguageRow';
 
-export default function Languages() {
+export default function LanguagesFields() {
   const { data: languagesList = [], error: fetchLangError } = useQuery<
     LanguageData[] | null,
     ApiError
@@ -20,7 +21,41 @@ export default function Languages() {
   return (
     <div className={classes['lang-form']}>
       <p>Languages</p>
-      {/* <LanguageRow /> */}
+
+      <FieldArray name="languages">
+        {({ push, remove, form }) => (
+          <>
+            {form.values.languages.map((lang: any, index: number) => (
+              <LanguageRow
+                key={index}
+                index={index}
+                languagesList={languagesList || []}
+                onRemove={() => remove(index)}
+              />
+            ))}
+
+            <ErrorMessage
+              name="languages"
+              component="div"
+              className={classes['error-msg']}
+            />
+
+            {fetchLangError && (
+              <div className={classes['error-msg']}>
+                {fetchLangError.message}
+              </div>
+            )}
+
+            <button
+              type="button"
+              className={classes['info-form-btn']}
+              onClick={() => push({ languageId: '', level: '' })}
+            >
+              <AnimatedIcon>Add +</AnimatedIcon>
+            </button>
+          </>
+        )}
+      </FieldArray>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { VacancyFormValues } from '@/types/vacancy';
+
 const seniorityOptions = ['TRAINEE', 'JUNIOR', 'MIDDLE', 'SENIOR', 'LEAD'];
 const workFormatOptions = ['OFFICE', 'REMOTE', 'HYBRID'];
 const employmentTypeOptions = [
@@ -7,7 +9,7 @@ const employmentTypeOptions = [
   'CONTRACT',
 ];
 
-const vacancyFallbackValues = {
+const vacancyFallbackValues: VacancyFormValues = {
   title: '',
   description: '',
   salaryMin: '',
@@ -17,6 +19,7 @@ const vacancyFallbackValues = {
   workFormat: [],
   employmentType: [],
   seniorityLevel: '',
+  languages: [{ languageId: '', level: '' }],
 };
 
 export {

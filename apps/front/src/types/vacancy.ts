@@ -16,6 +16,12 @@ interface Vacancy {
   edited_at: Date;
 }
 
+type FormLanguage = {
+  languageId: string;
+  level: string;
+  language?: { id: string; name: string };
+};
+
 type VacancyFormValues = {
   title: string;
   description: string;
@@ -26,6 +32,7 @@ type VacancyFormValues = {
   workFormat: string[];
   employmentType: string[];
   seniorityLevel: string;
+  languages: FormLanguage[];
 };
 
 type VacancySideBoxData = {
@@ -41,4 +48,4 @@ type VacancySideBoxData = {
   salaryMax: number;
 };
 
-export type { Vacancy, VacancyFormValues, VacancySideBoxData };
+export type { Vacancy, VacancyFormValues, VacancySideBoxData, FormLanguage };
