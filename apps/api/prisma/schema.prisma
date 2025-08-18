@@ -7,6 +7,12 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+enum ApplicationStatus {
+  SUBMITTED
+  REJECTED
+  ACCEPTED
+}
+
 enum UserType {
   JOB_SEEKER
   COMPANY
@@ -217,12 +223,13 @@ model VacancySkill {
 }
 
 model Application {
-  id          String   @id @default(uuid())
-  jobSeekerId String   @map("job_seeker_id")
-  vacancyId   String   @map("vacancy_id")
-  coverLetter String?  @map("cover_letter")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  id          String            @id @default(uuid())
+  jobSeekerId String            @map("job_seeker_id")
+  vacancyId   String            @map("vacancy_id")
+  status      ApplicationStatus @default(SUBMITTED)
+  coverLetter String?           @map("cover_letter")
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
 
   jobSeeker JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   vacancy   Vacancy   @relation(fields: [vacancyId], references: [id], onDelete: Cascade, onUpdate: Cascade)

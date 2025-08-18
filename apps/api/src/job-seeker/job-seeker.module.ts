@@ -27,5 +27,6 @@ import { JobSeekerSearchService } from './job-seeker-search.service';
     JobSeekerRepository,
     JobSeekerSearchService,
   ],
+  exports: [JobSeekerService, JobSeekerGuard],
 })
 export class JobSeekerModule {}

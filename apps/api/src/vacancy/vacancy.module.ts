@@ -19,5 +19,6 @@ import { VacancySearchService } from './vacancy-search.service';
   ],
   controllers: [VacancyController],
   providers: [VacancyService, VacancyRepository, VacancySearchService],
+  exports: [VacancyService],
 })
 export class VacancyModule {}
