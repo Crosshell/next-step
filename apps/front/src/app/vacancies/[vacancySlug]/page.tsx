@@ -82,15 +82,20 @@ export default function VacancyPage() {
             <h3>Seniority</h3>
             {data?.seniorityLevel && <p>{capitalize(data.seniorityLevel)}</p>}
           </section>
+          {data?.requiredSkills && data?.requiredSkills.length > 0 && (
+            <section>
+              <h3>Required Skills</h3>
+              <p> {data.requiredSkills.map((s) => s.skill.name).join(', ')}</p>
+            </section>
+          )}
           {data?.requiredLanguages && data?.requiredLanguages.length > 0 && (
             <section>
               <h3>Required Languages</h3>
-              {data?.requiredLanguages.length > 0 &&
-                data?.requiredLanguages.map((lang) => (
-                  <p key={lang.language.id}>
-                    {lang.language.name} - {capitalize(toKebabCase(lang.level))}
-                  </p>
-                ))}
+              {data?.requiredLanguages.map((lang) => (
+                <p key={lang.language.id}>
+                  {lang.language.name} - {capitalize(toKebabCase(lang.level))}
+                </p>
+              ))}
             </section>
           )}
 
