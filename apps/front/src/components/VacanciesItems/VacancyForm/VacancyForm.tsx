@@ -12,7 +12,9 @@ import { useMutation } from '@tanstack/react-query';
 import {
   createVacancy,
   updateVacancyLanguages,
+  updateVacancySkills,
 } from '@/services/vacanciesService';
+import SkillsFields from './SkillsFields';
 
 export default function VacancyForm() {
   const [requestError, setRequestError] = useState<string | null>(null);
@@ -20,6 +22,17 @@ export default function VacancyForm() {
 
   const { mutate: updateLanguages } = useMutation({
     mutationFn: updateVacancyLanguages,
+    onSuccess: async (result) => {
+      if (result.status === 'error') {
+        setRequestError(result.error);
+        return;
+      }
+      setRequestError(null);
+    },
+  });
+
+  const { mutate: updateSkills } = useMutation({
+    mutationFn: updateVacancySkills,
     onSuccess: async (result) => {
       if (result.status === 'error') {
         setRequestError(result.error);
@@ -46,6 +59,11 @@ export default function VacancyForm() {
         });
       }
 
+      if (variables.skills.length > 0) {
+        const skillIds = variables.skills.map((s) => s.skill.id);
+        updateSkills({ id: vacancyId, data: skillIds });
+      }
+
       setRequestError(null);
       router.push('/my-company/vacancies/');
     },
@@ -69,6 +87,9 @@ export default function VacancyForm() {
       >
         <Form id="vacancy-form" className={classes['main-info-form']}>
           <MainInfoFields />
+
+          <SkillsFields />
+
           <LanguagesFields />
           {requestError && (
             <div className={classes['error-container']}>

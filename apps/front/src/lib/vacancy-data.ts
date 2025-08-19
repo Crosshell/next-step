@@ -20,6 +20,8 @@ const vacancyFallbackValues: VacancyFormValues = {
   employmentType: [],
   seniorityLevel: '',
   languages: [],
+  skills: [],
+  newSkill: '',
 };
 
 export {

@@ -23,8 +23,6 @@ export default function CompanyVacancies() {
     refetchOnWindowFocus: true,
   });
 
-  console.log(myVacancies);
-
   if (isError)
     return (
       <MessageBox type="error">

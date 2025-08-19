@@ -87,10 +87,10 @@ export async function updateVacancySkills({
   data,
 }: {
   id: string;
-  data: UpdatedUserLanguages[];
+  data: string[];
 }) {
   return api
-    .put(`/vacancies/${id}/languages`, { requiredSkills: data })
+    .put(`/vacancies/${id}/skills`, { requiredSkillIds: data })
     .then(() => ({ status: 'ok', error: null }))
     .catch((error) => {
       const message =

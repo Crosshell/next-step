@@ -74,7 +74,7 @@ export default function SkillsRow({
                 type="text"
                 name="newSkill"
                 className={classes['form-input']}
-                placeholder="Search skill"
+                placeholder="Add new skill"
                 value={values.newSkill}
                 onChange={handleChange}
                 autoComplete="off"

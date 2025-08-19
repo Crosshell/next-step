@@ -1,3 +1,5 @@
+import { SkillData } from './profile';
+
 interface Vacancy {
   id: string;
   title: string;
@@ -33,6 +35,8 @@ type VacancyFormValues = {
   employmentType: string[];
   seniorityLevel: string;
   languages: FormLanguage[];
+  skills: SkillData[];
+  newSkill: string;
 };
 
 type VacancySideBoxData = {
