@@ -1,14 +1,5 @@
-interface VacancyFormValues {
-  title: string;
-  description: string;
-  salaryMin: string;
-  salaryMax: string;
-  officeLocation: string;
-  experienceRequired: string;
-  workFormat: string[];
-  employmentType: string[];
-  seniorityLevel: string;
-}
+import { VacancyData } from '@/types/vacancies';
+import { VacancyFormValues } from '@/types/vacancy';
 
 export function validateVacancyForm(values: VacancyFormValues) {
   const errors: Partial<Record<keyof VacancyFormValues, string>> = {};
@@ -65,4 +56,31 @@ export function validateVacancyForm(values: VacancyFormValues) {
   }
 
   return errors;
+}
+
+export function mapVacancyToFormValues(data: VacancyData): VacancyFormValues {
+  return {
+    id: data.id,
+    title: data.title,
+    description: data.description,
+    salaryMin: data.salaryMin.toString(),
+    salaryMax: data.salaryMax.toString(),
+    officeLocation: data.officeLocation,
+    experienceRequired: data.experienceRequired.toString(),
+    workFormat: data.workFormat,
+    employmentType: data.employmentType,
+    seniorityLevel: data.seniorityLevel,
+    languages: data.requiredLanguages.map((l) => ({
+      languageId: l.language.id,
+      level: l.level,
+      language: { id: l.language.id, name: l.language.name },
+    })),
+    skills: data.requiredSkills.map((s) => ({
+      skill: {
+        id: s.skill.id,
+        name: s.skill.name,
+      },
+    })),
+    newSkill: '',
+  };
 }

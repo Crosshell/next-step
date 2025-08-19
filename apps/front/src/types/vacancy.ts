@@ -25,6 +25,7 @@ type FormLanguage = {
 };
 
 type VacancyFormValues = {
+  id?: string;
   title: string;
   description: string;
   salaryMin: string;

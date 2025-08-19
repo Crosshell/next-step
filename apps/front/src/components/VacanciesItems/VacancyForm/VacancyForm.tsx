@@ -1,27 +1,37 @@
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Form, Formik } from 'formik';
+import { useMutation } from '@tanstack/react-query';
+
 import AnimatedIcon from '../../HoveredItem/HoveredItem';
 import LanguagesFields from './LanguagesFields';
 import MainInfoFields from './MainInfoFields';
-import classes from './VacancyForm.module.css';
+import SkillsFields from './SkillsFields';
 import MessageBox from '@/components/MessageBox/MessageBox';
+
+import classes from './VacancyForm.module.css';
+
 import { vacancyFallbackValues } from '@/lib/vacancy-data';
+import { addMissingSkills } from '@/utils/skillsConvertData';
 import { validateVacancyForm } from '@/utils/vacancyValidation';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import {
   createVacancy,
+  editVacancy,
   updateVacancyLanguages,
   updateVacancySkills,
 } from '@/services/vacanciesService';
-import SkillsFields from './SkillsFields';
 import {
   createNewSkill as createNewSkillFn,
   getSkills,
 } from '@/services/jobseekerService';
-import { addMissingSkills } from '@/utils/skillsConvertData';
+import { VacancyFormValues } from '@/types/vacancy';
 
-export default function VacancyForm() {
+interface Props {
+  data: VacancyFormValues | null;
+  type?: 'CREATE' | 'EDIT';
+}
+
+export default function VacancyForm({ data, type = 'CREATE' }: Props) {
   const [requestError, setRequestError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -74,6 +84,33 @@ export default function VacancyForm() {
     },
   });
 
+  const { mutate: editVacancyMutate } = useMutation({
+    mutationFn: editVacancy,
+    onSuccess: async (result, variables) => {
+      if (result.status === 'error') {
+        setRequestError(result.error);
+        return;
+      }
+
+      const vacancyId = result.data.id;
+
+      if (variables.data.languages.length > 0) {
+        updateLanguages({
+          id: vacancyId,
+          data: variables.data.languages,
+        });
+      }
+
+      if (variables.data.skills.length > 0) {
+        const skillIds = variables.data.skills.map((s) => s.skill.id);
+        updateSkills({ id: vacancyId, data: skillIds });
+      }
+
+      setRequestError(null);
+      router.push('/my-company/vacancies/');
+    },
+  });
+
   const { mutateAsync: createNewSkill } = useMutation({
     mutationFn: createNewSkillFn,
     onSuccess: async (result) => {
@@ -85,10 +122,12 @@ export default function VacancyForm() {
     },
   });
 
+  console.log(data ? data : '');
+
   return (
     <div className={classes['vacancy-form']}>
       <Formik
-        initialValues={vacancyFallbackValues}
+        initialValues={data ? data : vacancyFallbackValues}
         validate={validateVacancyForm}
         onSubmit={async (values) => {
           const skillsList = await getSkills();
@@ -109,7 +148,8 @@ export default function VacancyForm() {
             })),
           };
 
-          createVacancyMutate(cleaned);
+          if (type === 'CREATE') createVacancyMutate(cleaned);
+          else editVacancyMutate({ id: data?.id ?? '', data: cleaned });
         }}
       >
         <Form id="vacancy-form" className={classes['main-info-form']}>

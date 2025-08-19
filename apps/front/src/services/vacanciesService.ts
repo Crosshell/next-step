@@ -100,3 +100,29 @@ export async function updateVacancySkills({
       return { status: 'error', error: message };
     });
 }
+
+export async function editVacancy({
+  id,
+  data,
+}: {
+  id: string;
+  data: VacancyFormValues;
+}) {
+  return api
+    .patch(`/vacancies/${id}`, data)
+    .then((response) => {
+      console.log(response.data.id);
+      return {
+        status: 'ok',
+        error: null,
+        data: response.data,
+      };
+    })
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Creating vacancy failed';
+      return { status: 'error', error: message, data: null };
+    });
+}

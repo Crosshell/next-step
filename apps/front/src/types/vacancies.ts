@@ -17,7 +17,7 @@ type VacancyData = {
     };
   }[];
   requiredLanguages: {
-    level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'NATIVE' | string; // adjust if you have a fixed enum
+    level: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'NATIVE' | string;
     language: {
       id: string;
       name: string;
