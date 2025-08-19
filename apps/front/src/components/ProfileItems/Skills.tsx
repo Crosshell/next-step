@@ -16,6 +16,7 @@ import {
 } from '@/services/jobseekerService';
 import SkillsRow from '../FormItems/SkillRow';
 import { ApiError } from '@/types/authForm';
+import { addMissingSkills } from '@/utils/skillsConvertData';
 
 interface Props {
   isEditable: boolean;
@@ -91,30 +92,12 @@ export default function Skills({ isEditable, skills }: Props) {
           enableReinitialize
           initialValues={{ skills: skills, newSkill: '' }}
           onSubmit={async (values) => {
-            const notExistingSkills =
-              skillsList &&
-              values.skills.filter(
-                (formSkill) =>
-                  !skillsList.some(
-                    (available) => formSkill.skill.name === available.name
-                  )
-              );
-
-            if (notExistingSkills?.length) {
-              for (const item of notExistingSkills) {
-                const result = await addNewSkill({ name: item.skill.name });
-
-                if (result.status === 'ok') {
-                  values.skills = values.skills.map((s) =>
-                    s.skill.name === item.skill.name
-                      ? { skill: result.data }
-                      : s
-                  );
-                } else {
-                  setRequestError(result.error);
-                }
-              }
-            }
+            await addMissingSkills(
+              values,
+              skillsList,
+              addNewSkill,
+              setRequestError
+            );
 
             updateUserSkills({
               skillIds: values.skills.map((s) => s.skill.id),
