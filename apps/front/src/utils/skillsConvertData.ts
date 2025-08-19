@@ -16,14 +16,17 @@ export async function addMissingSkills(
   if (notExistingSkills?.length) {
     for (const item of notExistingSkills) {
       const result = await addNewSkill({ name: item.skill.name });
-
       if (result.status === 'ok') {
-        values.skills = values.skills.map((s) =>
+        const updatedSkills: SkillData[] = values.skills.map((s) =>
           s.skill.name === item.skill.name ? { skill: result.data } : s
         );
+        values.skills = updatedSkills;
+        return updatedSkills;
       } else {
         setRequestError(result.error);
       }
     }
+  } else {
+    return values.skills;
   }
 }

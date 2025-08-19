@@ -12,7 +12,6 @@ export default function SkillsFields() {
   const { data: skillsList = [], error: fetchSkillsError } = useQuery({
     queryKey: ['skills'],
     queryFn: getSkills,
-    staleTime: 1000 * 60 * 5,
     retry: false,
   });
 

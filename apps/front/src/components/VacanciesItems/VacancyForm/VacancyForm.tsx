@@ -15,6 +15,11 @@ import {
   updateVacancySkills,
 } from '@/services/vacanciesService';
 import SkillsFields from './SkillsFields';
+import {
+  createNewSkill as createNewSkillFn,
+  getSkills,
+} from '@/services/jobseekerService';
+import { addMissingSkills } from '@/utils/skillsConvertData';
 
 export default function VacancyForm() {
   const [requestError, setRequestError] = useState<string | null>(null);
@@ -69,19 +74,41 @@ export default function VacancyForm() {
     },
   });
 
+  const { mutateAsync: createNewSkill } = useMutation({
+    mutationFn: createNewSkillFn,
+    onSuccess: async (result) => {
+      if (result.status === 'error') {
+        setRequestError(result.error);
+        return;
+      }
+      return result.data;
+    },
+  });
+
   return (
     <div className={classes['vacancy-form']}>
       <Formik
         initialValues={vacancyFallbackValues}
         validate={validateVacancyForm}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
+          const skillsList = await getSkills();
+
+          const updatedSkills = await addMissingSkills(
+            { skills: values.skills, newSkill: values.newSkill },
+            skillsList,
+            createNewSkill,
+            setRequestError
+          );
+
           const cleaned = {
             ...values,
+            skills: updatedSkills ?? [],
             languages: values.languages.map((l) => ({
               languageId: l.language?.id ?? l.languageId,
               level: l.level,
             })),
           };
+
           createVacancyMutate(cleaned);
         }}
       >
