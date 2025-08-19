@@ -17,6 +17,7 @@ import classes from './MainHeader.module.css';
 import { useAuthStore } from '@/store/authSlice';
 import { logoutUser } from '@/services/userService';
 import Cookies from 'js-cookie';
+import HoveredItem from '../HoveredItem/HoveredItem';
 
 export default function MainHeader() {
   const pathname = usePathname();
@@ -117,6 +118,18 @@ export default function MainHeader() {
             >
               Log Out
             </motion.button>
+            {role === 'COMPANY' && (
+              <motion.div
+                className={classes['no-border-btn']}
+                whileHover={{
+                  scale: 1.1,
+                  borderColor: 'white',
+                }}
+              >
+                <Link href="/my-company/vacancies">My vacancies</Link>
+              </motion.div>
+            )}
+
             <motion.div
               className={`${classes['border-btn']} ${pathname === '/my-profile' ? classes['active-link'] : ''} `}
               whileHover={

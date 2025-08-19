@@ -107,7 +107,7 @@ export default function VacancyForm({ data, type = 'CREATE' }: Props) {
       }
 
       setRequestError(null);
-      router.push('/my-company/vacancies/');
+      router.push(`/vacancies/${data?.id}`);
     },
   });
 
@@ -165,7 +165,9 @@ export default function VacancyForm({ data, type = 'CREATE' }: Props) {
           )}
           <div className="row-end">
             <button type="submit" className={classes['submit-btn']}>
-              <AnimatedIcon>Create Vacancy</AnimatedIcon>
+              <AnimatedIcon>
+                {type === 'CREATE' ? 'Create' : 'Save'} Vacancy
+              </AnimatedIcon>
             </button>
           </div>
         </Form>
