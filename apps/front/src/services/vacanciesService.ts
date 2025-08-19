@@ -81,3 +81,22 @@ export async function updateVacancyLanguages({
       return { status: 'error', error: message };
     });
 }
+
+export async function updateVacancySkills({
+  id,
+  data,
+}: {
+  id: string;
+  data: UpdatedUserLanguages[];
+}) {
+  return api
+    .put(`/vacancies/${id}/languages`, { requiredSkills: data })
+    .then(() => ({ status: 'ok', error: null }))
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Updating languages failed';
+      return { status: 'error', error: message };
+    });
+}

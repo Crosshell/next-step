@@ -244,27 +244,6 @@
   width: 100%;
 }
 
-.skills .autocomplete-wrapper {
-  position: relative;
-}
-
-.skills .autocomplete-list {
-  position: absolute;
-  z-index: 10;
-  margin-top: 10px;
-  width: 100%;
-  background-color: #1f1f21;
-  border: 2px solid white;
-  border-radius: 10px;
-}
-
-.skills .autocomplete-item {
-  padding: 7px 10px;
-  width: 100%;
-  border-bottom: 1px solid white;
-  font-size: 1.25rem;
-}
-
 .skills span {
   display: block;
   padding: 10px 30px;
@@ -294,10 +273,6 @@
   font-size: 1.5rem;
 }
 
-.edit-skills-btn div {
-  color: white;
-}
-
 .skills-check-btn div,
 .skills-cross-btn div {
   background-color: white;
@@ -308,23 +283,9 @@
   padding: 5px 9.5px !important;
 }
 
-.del-btn-box {
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-}
-
-.del-skill-btn div {
-  position: absolute;
-  top: -10;
-  right: -10;
-  padding: 3px 5px;
-  background-color: #f37199;
-  border: 2px solid #f37199;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #1f1f21;
+.skills-form {
+  display: flex;
+  gap: 2%;
 }
 
 /* Skills */

@@ -1,16 +1,11 @@
 import { useState } from 'react';
-import { Formik, Form, FieldArray } from 'formik';
+import { Formik, Form } from 'formik';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import RequestErrors from '../RequestErrors/RequestErrors';
 
-import {
-  faPlus,
-  faCheck,
-  faXmark,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import classes from './Profile.module.css';
 
 import { SkillData, SkillItem } from '@/types/profile';
@@ -19,6 +14,7 @@ import {
   getSkills,
   updateSkills,
 } from '@/services/jobseekerService';
+import SkillsRow from '../FormItems/SkillRow';
 import { ApiError } from '@/types/authForm';
 
 interface Props {
@@ -42,7 +38,7 @@ export default function Skills({ isEditable, skills }: Props) {
     retry: false,
   });
 
-  const { mutateAsync: addNewSkill, isPending: addSkillPending } = useMutation({
+  const { mutateAsync: addNewSkill } = useMutation({
     mutationFn: createNewSkill,
     onSuccess: async (result) => {
       if (result.status === 'error') {
@@ -58,7 +54,7 @@ export default function Skills({ isEditable, skills }: Props) {
     },
   });
 
-  const { mutate: updateUserSkills, isPending } = useMutation({
+  const { mutate: updateUserSkills } = useMutation({
     mutationFn: updateSkills,
     onSuccess: async (result) => {
       if (result.status === 'error') {
@@ -126,126 +122,27 @@ export default function Skills({ isEditable, skills }: Props) {
           }}
         >
           {({ values, handleChange, setFieldValue }) => (
-            <FieldArray name="skills">
-              {({ remove, push }) => {
-                const tryAddSkill = () => {
-                  const trimmed = values.newSkill.trim();
-                  if (!trimmed) return;
-
-                  const existsInForm = values.skills.some(
-                    (s) => s.skill.name.toLowerCase() === trimmed.toLowerCase()
-                  );
-                  if (existsInForm) return;
-
-                  const existingSkill = skillsList?.find(
-                    (item) => item.name.toLowerCase() === trimmed.toLowerCase()
-                  );
-
-                  if (existingSkill) {
-                    push({ skill: existingSkill });
-                  } else {
-                    push({
-                      skill: {
-                        id: crypto.randomUUID(),
-                        name: trimmed,
-                      },
-                    });
-                  }
-
-                  setFieldValue('newSkill', '');
-                };
-
-                return (
-                  <Form className={classes.skills}>
-                    {values.skills.map((s, index) => (
-                      <div key={s.skill.id} className={classes['del-btn-box']}>
-                        <span>{s.skill.name}</span>
-                        <button
-                          type="button"
-                          className={classes['del-skill-btn']}
-                          onClick={() => remove(index)}
-                        >
-                          <AnimatedIcon iconType={faTrash} />
-                        </button>
-                      </div>
-                    ))}
-
-                    <div className={classes['autocomplete-wrapper']}>
-                      <input
-                        type="text"
-                        name="newSkill"
-                        className={classes['form-input']}
-                        placeholder="Search skill"
-                        value={values.newSkill}
-                        onChange={handleChange}
-                        autoComplete="off"
-                      />
-                      {values.newSkill.trim() && (
-                        <ul className={classes['autocomplete-list']}>
-                          {fetchSkillsError?.message && (
-                            <RequestErrors error={fetchSkillsError.message} />
-                          )}
-                          {skillsList &&
-                            skillsList
-                              .filter(
-                                (item) =>
-                                  item.name
-                                    .toLowerCase()
-                                    .includes(
-                                      values.newSkill.trim().toLowerCase()
-                                    ) &&
-                                  !values.skills.some(
-                                    (s) => s.skill.id === item.id
-                                  )
-                              )
-                              .slice(0, 5)
-                              .map((item) => {
-                                return (
-                                  <li
-                                    key={item.id}
-                                    className={classes['autocomplete-item']}
-                                    onClick={() => {
-                                      push({ skill: item });
-                                      setFieldValue('newSkill', '');
-                                    }}
-                                  >
-                                    {item.name}
-                                  </li>
-                                );
-                              })}
-                        </ul>
-                      )}
-                    </div>
-
-                    <div className={classes['btn-container']}>
-                      <button
-                        type="button"
-                        className={classes['edit-skills-btn']}
-                        onClick={tryAddSkill}
-                        disabled={addSkillPending}
-                      >
-                        <AnimatedIcon iconType={faPlus} />
-                      </button>
-                      <button
-                        type="button"
-                        className={classes['skills-cross-btn']}
-                        onClick={() => setEditMode(false)}
-                        disabled={isPending}
-                      >
-                        <AnimatedIcon iconType={faXmark} />
-                      </button>
-                      <button
-                        type="submit"
-                        className={classes['skills-check-btn']}
-                        disabled={isPending}
-                      >
-                        <AnimatedIcon iconType={faCheck} />
-                      </button>
-                    </div>
-                  </Form>
-                );
-              }}
-            </FieldArray>
+            <Form className={classes['skills-form']}>
+              <SkillsRow
+                values={values}
+                handleChange={handleChange}
+                setFieldValue={setFieldValue}
+                skillsList={skillsList}
+                fetchSkillsError={fetchSkillsError}
+              />
+              <div className={classes['btn-container']}>
+                <button
+                  type="button"
+                  className={classes['skills-cross-btn']}
+                  onClick={() => setEditMode(false)}
+                >
+                  <AnimatedIcon iconType={faXmark} />
+                </button>
+                <button type="submit" className={classes['skills-check-btn']}>
+                  <AnimatedIcon iconType={faCheck} />
+                </button>
+              </div>
+            </Form>
           )}
         </Formik>
       )}
