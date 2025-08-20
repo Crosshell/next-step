@@ -17,7 +17,6 @@ import classes from './MainHeader.module.css';
 import { useAuthStore } from '@/store/authSlice';
 import { logoutUser } from '@/services/userService';
 import Cookies from 'js-cookie';
-import HoveredItem from '../HoveredItem/HoveredItem';
 
 export default function MainHeader() {
   const pathname = usePathname();
@@ -126,7 +125,7 @@ export default function MainHeader() {
                   borderColor: 'white',
                 }}
               >
-                <Link href="/my-company/vacancies">My vacancies</Link>
+                <Link href="/my-company/vacancies">My Vacancies</Link>
               </motion.div>
             )}
 
