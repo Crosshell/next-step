@@ -35,4 +35,10 @@ export class ApplicationRepository {
   ): Promise<Application | null> {
     return this.prisma.application.findUnique({ where });
   }
+
+  async findMany(
+    params: Prisma.ApplicationFindManyArgs,
+  ): Promise<Application[]> {
+    return this.prisma.application.findMany(params);
+  }
 }

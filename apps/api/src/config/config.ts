@@ -69,5 +69,10 @@ export default () => ({
         process.env.SEARCH_VACANCY_PAGE_SIZE &&
         parseInt(process.env.SEARCH_VACANCY_PAGE_SIZE, 10),
     },
+    application: {
+      pageSize:
+        process.env.SEARCH_APPLICATION_PAGE_SIZE &&
+        parseInt(process.env.SEARCH_APPLICATION_PAGE_SIZE, 10),
+    },
   },
 });

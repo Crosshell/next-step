@@ -6,9 +6,16 @@ import { AuthModule } from '../auth/auth.module';
 import { JobSeekerModule } from '../job-seeker/job-seeker.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { VacancyModule } from '../vacancy/vacancy.module';
+import { CompanyModule } from '../company/company.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, JobSeekerModule, VacancyModule],
+  imports: [
+    AuthModule,
+    PrismaModule,
+    JobSeekerModule,
+    VacancyModule,
+    CompanyModule,
+  ],
   controllers: [ApplicationController],
   providers: [ApplicationService, ApplicationRepository],
 })
