@@ -11,6 +11,8 @@ enum ApplicationStatus {
   SUBMITTED
   REJECTED
   ACCEPTED
+
+  @@map("application_status")
 }
 
 enum UserType {

@@ -41,4 +41,11 @@ export class ApplicationRepository {
   ): Promise<Application[]> {
     return this.prisma.application.findMany(params);
   }
+
+  async update(
+    where: Prisma.ApplicationWhereUniqueInput,
+    data: Prisma.ApplicationUpdateInput,
+  ): Promise<Application> {
+    return this.prisma.application.update({ where, data });
+  }
 }

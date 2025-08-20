@@ -5,17 +5,21 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApplicationService } from './application.service';
-import { Application, JobSeeker } from '@prisma/client';
+import { Application, Company, JobSeeker } from '@prisma/client';
 import { CurrentJobSeeker } from '../job-seeker/decorators/current-job-seeker.decorator';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
 import { JobSeekerGuard } from '../job-seeker/guards/job-seeker.guard';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { SearchApplicationDto } from './dto/search-application';
+import { SetStatusDto } from './dto/set-status.dto';
+import { VacancyOwnerGuard } from '../vacancy/guards/vacancy-owner.guard';
+import { CurrentCompany } from '../company/decorators/current-company.decorator';
 
 @Controller('applications')
 export class ApplicationController {
@@ -30,11 +34,11 @@ export class ApplicationController {
     return this.service.create(dto, jobSeeker.id);
   }
 
-  @Get('vacancies/:vacancyId')
-  @UseGuards(SessionAuthGuard, CompanyGuard)
+  @Get('vacancies/:id')
+  @UseGuards(SessionAuthGuard, CompanyGuard, VacancyOwnerGuard)
   async searchByVacancy(
     @Query() dto: SearchApplicationDto,
-    @Param('vacancyId', ParseUUIDPipe) vacancyId: string,
+    @Param('id', ParseUUIDPipe) vacancyId: string,
   ): Promise<Application[]> {
     return this.service.searchByVacancyId(vacancyId, dto);
   }
@@ -46,5 +50,15 @@ export class ApplicationController {
     @CurrentJobSeeker() jobSeeker: JobSeeker,
   ): Promise<Application[]> {
     return this.service.searchByJobSeekerId(jobSeeker.id, dto);
+  }
+
+  @Put(':id/status')
+  @UseGuards(SessionAuthGuard, CompanyGuard)
+  async setStatus(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: SetStatusDto,
+    @CurrentCompany() company: Company,
+  ): Promise<Application> {
+    return this.service.setStatus(id, company.id, dto);
   }
 }

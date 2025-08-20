@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { ApplicationRepository } from './application.repository';
 import { Application, Prisma } from '@prisma/client';
 import { CreateApplicationDto } from './dto/create-application.dto';
@@ -7,6 +11,7 @@ import { getPaginationByPage } from '@common/utils';
 import { ConfigService } from '@nestjs/config';
 import { SearchApplicationDto } from './dto/search-application';
 import { JobSeekerService } from '../job-seeker/job-seeker.service';
+import { SetStatusDto } from './dto/set-status.dto';
 
 @Injectable()
 export class ApplicationService {
@@ -42,6 +47,14 @@ export class ApplicationService {
       throw new BadRequestException('Application already exists');
   }
 
+  async findOneOrThrow(
+    where: Prisma.ApplicationWhereUniqueInput,
+  ): Promise<Application> {
+    const application = await this.repository.findOne(where);
+    if (!application) throw new BadRequestException('Application not found');
+    return application;
+  }
+
   async searchByVacancyId(
     vacancyId: string,
     dto: SearchApplicationDto,
@@ -72,5 +85,25 @@ export class ApplicationService {
     }
 
     return this.repository.findMany({ where, ...pagination, orderBy });
+  }
+
+  async setStatus(
+    id: string,
+    companyId: string,
+    dto: SetStatusDto,
+  ): Promise<Application> {
+    const application = await this.findOneOrThrow({ id });
+
+    const vacancy = await this.vacancyService.findOneOrThrow({
+      id: application.vacancyId,
+    });
+
+    if (vacancy.companyId !== companyId) {
+      throw new ForbiddenException(
+        'You are not allowed to change the status of this application',
+      );
+    }
+
+    return this.repository.update({ id }, dto);
   }
 }
