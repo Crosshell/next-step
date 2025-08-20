@@ -73,6 +73,7 @@ export default function VacancyPage() {
           <h2>Job Details</h2>
 
           <h1>{data?.title}</h1>
+
           <p className={classes['details']}>{data?.description}</p>
           <section>
             <h3>Required Experience</h3>
@@ -139,6 +140,7 @@ export default function VacancyPage() {
         <SideBox
           data={{
             id: data?.id ?? '',
+            isActive: data?.isActive ?? false,
             companyId: data?.company.id ?? '',
             companyName: data?.company.name ?? '',
             companyLogo: data?.company.logoUrl ?? '',

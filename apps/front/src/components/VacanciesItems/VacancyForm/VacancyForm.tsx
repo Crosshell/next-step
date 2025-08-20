@@ -122,8 +122,6 @@ export default function VacancyForm({ data, type = 'CREATE' }: Props) {
     },
   });
 
-  console.log(data ? data : '');
-
   return (
     <div className={classes['vacancy-form']}>
       <Formik

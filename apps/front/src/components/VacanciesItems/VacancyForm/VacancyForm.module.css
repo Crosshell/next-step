@@ -37,8 +37,39 @@
   font-size: 1.5rem;
 }
 
+.title-is-active {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.title {
+  width: 85%;
+}
+
 .title input {
   width: 100%;
+}
+
+.is-active-btn {
+  width: 10%;
+}
+
+.is-active-btn div,
+.is-not-active-btn div {
+  padding: 15px 20px;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+.is-active-btn div {
+  border: 2px solid #37aa9c;
+  background-color: #37aa9c;
+  color: white;
+}
+
+.is-not-active-btn {
 }
 
 .description textarea {

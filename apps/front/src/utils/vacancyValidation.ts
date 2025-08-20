@@ -61,6 +61,7 @@ export function validateVacancyForm(values: VacancyFormValues) {
 export function mapVacancyToFormValues(data: VacancyData): VacancyFormValues {
   return {
     id: data.id,
+    isActive: data.isActive,
     title: data.title,
     description: data.description,
     salaryMin: data.salaryMin.toString(),

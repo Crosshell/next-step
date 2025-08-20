@@ -26,6 +26,7 @@ type FormLanguage = {
 
 type VacancyFormValues = {
   id?: string;
+  isActive: boolean;
   title: string;
   description: string;
   salaryMin: string;
@@ -42,6 +43,7 @@ type VacancyFormValues = {
 
 type VacancySideBoxData = {
   id: string;
+  isActive: boolean;
   companyId: string;
   companyName: string;
   companyLogo: string | null;

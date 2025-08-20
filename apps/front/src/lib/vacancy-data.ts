@@ -12,6 +12,7 @@ const employmentTypeOptions = [
 
 const vacancyFallbackValues: VacancyFormValues = {
   title: '',
+  isActive: true,
   description: '',
   salaryMin: '',
   salaryMax: '',

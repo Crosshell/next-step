@@ -1,4 +1,4 @@
-import { Field, ErrorMessage } from 'formik';
+import { Field, ErrorMessage, useFormikContext } from 'formik';
 import classes from './VacancyForm.module.css';
 
 import {
@@ -9,17 +9,44 @@ import {
 import { capitalize } from '@/utils/convertData';
 
 import MultiSelect from '../../MultiSelect/MultiSelect';
+import HoveredItem from '@/components/HoveredItem/HoveredItem';
+import { VacancyFormValues } from '@/types/vacancy';
 
 export default function MainInfoForm() {
+  const { values, setFieldValue } = useFormikContext<VacancyFormValues>();
+
+  const toggleActive = () => {
+    setFieldValue('isActive', !values.isActive);
+  };
+
+  console.log(values);
+
   return (
     <>
-      <div className={classes.title}>
+      <div>
         <p>Vacancy title</p>
-        <Field
-          name="title"
-          className={classes['form-input']}
-          placeholder="Cool vacancy"
-        />
+        <div className={classes['title-is-active']}>
+          <div className={classes.title}>
+            <Field
+              name="title"
+              className={classes['form-input']}
+              placeholder="Cool vacancy"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={toggleActive}
+            className={
+              values.isActive
+                ? classes['is-active-btn']
+                : classes['is-not-active-btn']
+            }
+          >
+            <HoveredItem>
+              {values.isActive ? 'Is Active ' : 'Not Active '}
+            </HoveredItem>
+          </button>
+        </div>
         <ErrorMessage
           name="title"
           component="div"

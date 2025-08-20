@@ -86,12 +86,18 @@ export default function SideBox({ data }: Props) {
         </button>
       )}
       {companyId === data?.companyId && (
-        <Link
-          href={`/my-company/vacancies/edit-vacancy/${data.id}`}
-          className={classes['edit-link']}
-        >
-          <HoveredItem>Edit vacancy</HoveredItem>
-        </Link>
+        <>
+          <h3 className="underline-link">
+            {data?.isActive ? 'Is Active' : 'Not Active'}
+          </h3>
+
+          <Link
+            href={`/my-company/vacancies/edit-vacancy/${data.id}`}
+            className={classes['edit-link']}
+          >
+            <HoveredItem>Edit vacancy</HoveredItem>
+          </Link>
+        </>
       )}
     </motion.div>
   );
