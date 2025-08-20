@@ -32,7 +32,7 @@ export default function SearchBar({ addBtn = false }: Props) {
                 <AnimatedIcon>Add Vacancy +</AnimatedIcon>
               </Link>
             )}
-            <InputContainer width={!addBtn ? '100%' : '80%'} />
+            <InputContainer width={!addBtn ? '100%' : '85%'} />
           </div>
           <VacanciesTagBox />
         </Form>

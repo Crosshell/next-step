@@ -53,16 +53,28 @@ type OrderBy = {
 
 type RequiredLanguage = {
   languageId: string;
-  level: 'NATIVE' | 'FLUENT' | 'INTERMEDIATE' | 'BASIC';
+  level:
+    | 'ELEMENTARY'
+    | 'PRE_INTERMEDIATE'
+    | 'INTERMEDIATE'
+    | 'UPPER_INTERMEDIATE'
+    | 'ADVANCED'
+    | 'NATIVE';
 };
 
 type VacancySearchForm = {
   title: string;
-  salaryMin: number | null;
-  experienceRequired: number | null;
+  salaryMin: number | undefined;
+  experienceRequired: number | undefined;
   workFormats: ('OFFICE' | 'REMOTE' | 'HYBRID')[];
   employmentTypes: ('FULL_TIME' | 'PART_TIME' | 'INTERNSHIP' | 'CONTRACT')[];
-  seniorityLevel: 'JUNIOR' | 'MIDDLE' | 'SENIOR' | 'LEAD' | null;
+  seniorityLevel:
+    | 'TRAINEE'
+    | 'JUNIOR'
+    | 'MIDDLE'
+    | 'SENIOR'
+    | 'LEAD'
+    | undefined;
   requiredLanguages: RequiredLanguage[];
   requiredSkillIds: string[];
   orderBy: OrderBy;

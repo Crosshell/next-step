@@ -28,11 +28,11 @@ const vacancyFallbackValues: VacancyFormValues = {
 
 const vacancySearchDefaults: VacancySearchForm = {
   title: '',
-  salaryMin: null,
-  experienceRequired: null,
+  salaryMin: 0,
+  experienceRequired: 0,
   workFormats: [],
   employmentTypes: [],
-  seniorityLevel: null,
+  seniorityLevel: undefined,
   requiredLanguages: [],
   requiredSkillIds: [],
   orderBy: {},

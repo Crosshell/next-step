@@ -89,6 +89,10 @@ select {
   background-image: none;
 }
 
+input[type='range'] {
+  accent-color: #37aa9c;
+}
+
 .row-space-between {
   display: flex;
   justify-content: space-between;
