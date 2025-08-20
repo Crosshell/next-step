@@ -1,3 +1,4 @@
+import { VacancySearchForm } from '@/types/vacancies';
 import { VacancyFormValues } from '@/types/vacancy';
 
 const seniorityOptions = ['TRAINEE', 'JUNIOR', 'MIDDLE', 'SENIOR', 'LEAD'];
@@ -24,9 +25,23 @@ const vacancyFallbackValues: VacancyFormValues = {
   newSkill: '',
 };
 
+const vacancySearchDefaults: VacancySearchForm = {
+  title: '',
+  salaryMin: null,
+  experienceRequired: null,
+  workFormats: [],
+  employmentTypes: [],
+  seniorityLevel: null,
+  requiredLanguages: [],
+  requiredSkillIds: [],
+  orderBy: {},
+  page: 1,
+};
+
 export {
   seniorityOptions,
   workFormatOptions,
   employmentTypeOptions,
   vacancyFallbackValues,
+  vacancySearchDefaults,
 };

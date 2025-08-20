@@ -45,4 +45,28 @@ type VacancyItemData = {
   createdAt: string;
 };
 
-export type { VacancyData, VacancyItemData };
+type OrderBy = {
+  salaryMin?: 'asc' | 'desc';
+  salaryMax?: 'asc' | 'desc';
+  experienceRequired?: 'asc' | 'desc';
+};
+
+type RequiredLanguage = {
+  languageId: string;
+  level: 'NATIVE' | 'FLUENT' | 'INTERMEDIATE' | 'BASIC';
+};
+
+type VacancySearchForm = {
+  title: string;
+  salaryMin: number | null;
+  experienceRequired: number | null;
+  workFormats: ('OFFICE' | 'REMOTE' | 'HYBRID')[];
+  employmentTypes: ('FULL_TIME' | 'PART_TIME' | 'INTERNSHIP' | 'CONTRACT')[];
+  seniorityLevel: 'JUNIOR' | 'MIDDLE' | 'SENIOR' | 'LEAD' | null;
+  requiredLanguages: RequiredLanguage[];
+  requiredSkillIds: string[];
+  orderBy: OrderBy;
+  page: number;
+};
+
+export type { VacancyData, VacancyItemData, VacancySearchForm };

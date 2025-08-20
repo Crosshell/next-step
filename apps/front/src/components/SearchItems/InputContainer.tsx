@@ -2,6 +2,7 @@ import AnimatedIcon from '../HoveredItem/HoveredItem';
 
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import classes from './SearchVacancies.module.css';
+import { Field } from 'formik';
 
 interface Props {
   width: string;
@@ -10,10 +11,9 @@ interface Props {
 export default function InputContainer({ width }: Props) {
   return (
     <div className={classes['input-wrapper']} style={{ width: width }}>
-      <input
+      <Field
         className={classes['input-container']}
-        name="name"
-        type="text"
+        name="title"
         placeholder="Search for jobs..."
       />
       <button className={classes['search-btn']} type="submit">

@@ -33,7 +33,10 @@ export default function VacancyItem({ data }: Props) {
   }, [data.companyLogo]);
 
   return (
-    <motion.div whileHover={{ scale: 1.02 }}>
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      className={classes['vacancy-item-container']}
+    >
       <Link href={`/vacancies/${data.id}`} className={classes['vacancy-item']}>
         <div>
           <img

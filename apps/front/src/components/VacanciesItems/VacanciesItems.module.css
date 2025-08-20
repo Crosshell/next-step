@@ -1,10 +1,14 @@
 /* VacancyItem */
+.vacancy-item-container {
+  width: 75%;
+}
+
 .vacancy-item {
   display: flex;
   justify-content: space-between;
   padding: 15px 20px;
   margin-bottom: 30px;
-  width: 75%;
+  width: 100%;
   background-color: #1f1f21;
   border: 2px solid white;
   border-radius: 10px;
