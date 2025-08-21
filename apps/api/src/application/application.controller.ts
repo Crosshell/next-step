@@ -20,6 +20,7 @@ import { SearchApplicationDto } from './dto/search-application';
 import { SetStatusDto } from './dto/set-status.dto';
 import { VacancyOwnerGuard } from '../vacancy/guards/vacancy-owner.guard';
 import { CurrentCompany } from '../company/decorators/current-company.decorator';
+import { PagedDataResponse } from '@common/responses';
 
 @Controller('applications')
 export class ApplicationController {
@@ -39,7 +40,7 @@ export class ApplicationController {
   async searchByVacancy(
     @Query() dto: SearchApplicationDto,
     @Param('id', ParseUUIDPipe) vacancyId: string,
-  ): Promise<Application[]> {
+  ): Promise<PagedDataResponse<Application[]>> {
     return this.service.searchByVacancyId(vacancyId, dto);
   }
 
@@ -48,7 +49,7 @@ export class ApplicationController {
   async searchMyApplications(
     @Query() dto: SearchApplicationDto,
     @CurrentJobSeeker() jobSeeker: JobSeeker,
-  ): Promise<Application[]> {
+  ): Promise<PagedDataResponse<Application[]>> {
     return this.service.searchByJobSeekerId(jobSeeker.id, dto);
   }
 

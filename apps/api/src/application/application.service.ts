@@ -7,11 +7,12 @@ import { ApplicationRepository } from './application.repository';
 import { Application, Prisma } from '@prisma/client';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { VacancyService } from '../vacancy/vacancy.service';
-import { getPaginationByPage } from '@common/utils';
+import { getPaginationByPage, createPaginationMeta } from '@common/utils';
 import { ConfigService } from '@nestjs/config';
 import { SearchApplicationDto } from './dto/search-application';
 import { JobSeekerService } from '../job-seeker/job-seeker.service';
 import { SetStatusDto } from './dto/set-status.dto';
+import { PagedDataResponse } from '@common/responses';
 
 @Injectable()
 export class ApplicationService {
@@ -58,7 +59,7 @@ export class ApplicationService {
   async searchByVacancyId(
     vacancyId: string,
     dto: SearchApplicationDto,
-  ): Promise<Application[]> {
+  ): Promise<PagedDataResponse<Application[]>> {
     await this.vacancyService.findOneOrThrow({ id: vacancyId });
     return this.search(dto, { vacancyId });
   }
@@ -66,7 +67,7 @@ export class ApplicationService {
   async searchByJobSeekerId(
     jobSeekerId: string,
     dto: SearchApplicationDto,
-  ): Promise<Application[]> {
+  ): Promise<PagedDataResponse<Application[]>> {
     await this.jobSeekerService.findOneOrThrow({ id: jobSeekerId });
     return this.search(dto, { jobSeekerId });
   }
@@ -74,7 +75,7 @@ export class ApplicationService {
   async search(
     dto: SearchApplicationDto,
     additionalFilters: Prisma.ApplicationWhereInput = {},
-  ): Promise<Application[]> {
+  ): Promise<PagedDataResponse<Application[]>> {
     const where: Prisma.ApplicationWhereInput = { ...additionalFilters };
     const orderBy = dto.orderBy ?? { createdAt: 'desc' };
 
@@ -84,7 +85,17 @@ export class ApplicationService {
       where.status = dto.status;
     }
 
-    return this.repository.findMany({ where, ...pagination, orderBy });
+    const data = await this.repository.findMany({
+      where,
+      ...pagination,
+      orderBy,
+    });
+
+    const total = await this.repository.count(where);
+
+    const meta = createPaginationMeta(total, dto.page, this.pageSize);
+
+    return { data, meta };
   }
 
   async setStatus(

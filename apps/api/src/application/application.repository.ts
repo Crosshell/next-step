@@ -48,4 +48,8 @@ export class ApplicationRepository {
   ): Promise<Application> {
     return this.prisma.application.update({ where, data });
   }
+
+  async count(where: Prisma.ApplicationWhereInput): Promise<number> {
+    return this.prisma.application.count({ where });
+  }
 }
