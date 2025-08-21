@@ -1,6 +1,8 @@
 /* VacancyItem */
 .vacancy-item-container {
-  width: 80%;
+  position: relative;
+  z-index: 100;
+  width: 100%;
 }
 
 .vacancy-item {

@@ -44,22 +44,24 @@ export default function CompanyVacancies() {
           Your Company&apos;s Vacancies
         </h1>
         <SearchBar addBtn={true} />
-        {myVacancies && Array.isArray(myVacancies) ? (
-          myVacancies.map((vacancyData) => (
-            <VacancyItem
-              key={vacancyData.id}
-              data={{
-                id: vacancyData.id,
-                title: vacancyData.title,
-                companyName: vacancyData.company.name,
-                companyLogo: vacancyData.company.logoUrl,
-                createdAt: vacancyData.createdAt,
-              }}
-            />
-          ))
-        ) : (
-          <p>No vacancies found.</p>
-        )}
+        <div className={classes['vacancies-container']}>
+          {myVacancies && Array.isArray(myVacancies) ? (
+            myVacancies.map((vacancyData) => (
+              <VacancyItem
+                key={vacancyData.id}
+                data={{
+                  id: vacancyData.id,
+                  title: vacancyData.title,
+                  companyName: vacancyData.company.name,
+                  companyLogo: vacancyData.company.logoUrl,
+                  createdAt: vacancyData.createdAt,
+                }}
+              />
+            ))
+          ) : (
+            <p>No vacancies found.</p>
+          )}
+        </div>
       </div>
     </div>
   );

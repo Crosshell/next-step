@@ -25,14 +25,16 @@ export default function SearchBar({ addBtn = false }: Props) {
         <Form className={classes['searchbar-container']}>
           <div className={classes['btn-search-container']}>
             {addBtn && (
-              <Link
-                href="/my-company/vacancies/new-vacancy"
-                className={classes['add-vacancy-btn']}
-              >
-                <AnimatedIcon>Add Vacancy +</AnimatedIcon>
-              </Link>
+              <div>
+                <Link
+                  href="/my-company/vacancies/new-vacancy"
+                  className={classes['add-vacancy-btn']}
+                >
+                  <AnimatedIcon>Add Vacancy +</AnimatedIcon>
+                </Link>
+              </div>
             )}
-            <InputContainer width={!addBtn ? '100%' : '85%'} />
+            <InputContainer width={!addBtn ? '100%' : '80%'} />
           </div>
           <VacanciesTagBox />
         </Form>
