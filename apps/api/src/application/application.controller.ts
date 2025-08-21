@@ -35,6 +35,12 @@ export class ApplicationController {
     return this.service.create(dto, jobSeeker.id);
   }
 
+  @Get(':id')
+  @UseGuards(SessionAuthGuard)
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Application> {
+    return this.service.findOneOrThrow({ id });
+  }
+
   @Get('vacancies/:id')
   @UseGuards(SessionAuthGuard, CompanyGuard, VacancyOwnerGuard)
   async searchByVacancy(
