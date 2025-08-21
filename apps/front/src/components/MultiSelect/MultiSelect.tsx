@@ -8,6 +8,7 @@ interface Props {
   form: FormikProps<any>;
   options: string[];
   placeholder?: string;
+  type?: string;
 }
 
 export default function MultiSelect({
@@ -15,6 +16,7 @@ export default function MultiSelect({
   form,
   options,
   placeholder,
+  type,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -29,9 +31,12 @@ export default function MultiSelect({
   };
 
   return (
-    <div className={classes['multi-select-wrapper']}>
+    <div
+      className={classes['multi-select-wrapper']}
+      style={{ width: type ? '100%' : '30vw' }}
+    >
       <div
-        className={`${classes['form-input']} ${classes['multi-select-display']}`}
+        className={`${type === 'search' ? classes['form-input-search'] : classes['form-input']} ${classes['multi-select-display']}`}
         onClick={() => setOpen((prev) => !prev)}
       >
         {field.value.length > 0
@@ -45,7 +50,7 @@ export default function MultiSelect({
         <div className={classes['multi-select-options']}>
           {options.map((option: string) => (
             <label key={option} className={classes['multi-select-option']}>
-              {capitalize(toKebabCase(option))}
+              <span>{capitalize(toKebabCase(option))}</span>
               <input
                 type="checkbox"
                 checked={field.value.includes(option)}
