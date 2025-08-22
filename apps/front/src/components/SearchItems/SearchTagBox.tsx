@@ -1,5 +1,6 @@
 import EmploymentTypesInput from './Fields/EmploymentTypes';
 import ExperienceInput from './Fields/Experience';
+import LanguagesInput from './Fields/Languages';
 import SalarySlider from './Fields/SalarySlider';
 import SeniorityInput from './Fields/Seniority';
 import WorkFormatsInput from './Fields/WorkFormats';
@@ -15,6 +16,7 @@ export default function VacanciesTagBox() {
       <SeniorityInput />
       <WorkFormatsInput />
       <EmploymentTypesInput />
+      <LanguagesInput />
     </div>
   );
 }

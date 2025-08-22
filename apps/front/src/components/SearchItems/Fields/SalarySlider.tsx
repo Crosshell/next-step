@@ -1,7 +1,7 @@
 import { VacancySearchForm } from '@/types/vacancies';
 import { Field, FieldProps } from 'formik';
 
-import classes from '../SearchVacancies.module.css';
+import classes from './Fields.module.css';
 
 export default function SalarySlider() {
   return (

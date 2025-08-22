@@ -11,14 +11,30 @@ interface Props {
   index: number;
   languagesList: LanguageData[];
   onRemove: () => void;
+  type?: 'tagBox';
 }
 
-export default function LanguageRow({ index, languagesList, onRemove }: Props) {
+export default function LanguageRow({
+  index,
+  languagesList,
+  onRemove,
+  type,
+}: Props) {
   return (
-    <div className={classes['language-row']}>
+    <div
+      className={
+        type !== 'tagBox'
+          ? classes['language-row']
+          : classes['language-row-tag-box']
+      }
+    >
       <Field
         as="select"
-        name={`languages[${index}].language.id`}
+        name={
+          type !== 'tagBox'
+            ? `languages[${index}].language.id`
+            : `requiredLanguages[${index}].language.id`
+        }
         className={classes['form-input']}
       >
         <option value="" disabled>
@@ -33,7 +49,11 @@ export default function LanguageRow({ index, languagesList, onRemove }: Props) {
 
       <Field
         as="select"
-        name={`languages[${index}].level`}
+        name={
+          type !== 'tagBox'
+            ? `languages[${index}].level`
+            : `requiredLanguages[${index}].level`
+        }
         className={classes['form-input']}
       >
         <option value="" disabled>

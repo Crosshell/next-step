@@ -81,4 +81,9 @@ type VacancySearchForm = {
   page: number;
 };
 
-export type { VacancyData, VacancyItemData, VacancySearchForm };
+export type {
+  VacancyData,
+  VacancyItemData,
+  RequiredLanguage,
+  VacancySearchForm,
+};

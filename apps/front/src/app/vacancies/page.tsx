@@ -35,14 +35,21 @@ export default function VacanciesPage() {
     Object.entries(values).forEach(([key, value]) => {
       if (isEmptyValue(value)) return;
 
-      if (typeof value === 'object' && !Array.isArray(value)) {
+      if (Array.isArray(value)) {
+        if (
+          value.every((v) => typeof v === 'string' || typeof v === 'number')
+        ) {
+          params.set(key, value.join(','));
+        } else {
+          params.set(key, JSON.stringify(value));
+        }
+      } else if (typeof value === 'object') {
         params.set(key, JSON.stringify(value));
       } else {
         params.set(key, String(value));
       }
     });
 
-    console.log(params);
     router.push(`?${params.toString()}`);
   };
 

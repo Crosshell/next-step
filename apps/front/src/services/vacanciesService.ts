@@ -131,6 +131,7 @@ export async function searchVacancies(data: VacancySearchForm) {
   return api
     .post('/vacancies/search', data)
     .then((response) => {
+      console.log(data);
       return {
         status: 'ok',
         error: null,

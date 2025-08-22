@@ -1,6 +1,7 @@
 import { Field } from 'formik';
 
-import classes from '../SearchVacancies.module.css';
+import classes from './Fields.module.css';
+
 import { seniorityOptions } from '@/lib/vacancy-data';
 import { capitalize } from '@/utils/convertData';
 

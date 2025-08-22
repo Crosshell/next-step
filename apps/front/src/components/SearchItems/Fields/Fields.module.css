@@ -1,0 +1,51 @@
+.form-input {
+  padding: 7px 10px;
+  margin-bottom: 15px;
+  background-color: #1f1f21;
+  border: 1px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+}
+
+.salary {
+  margin-bottom: 10px;
+}
+
+.salary input {
+  width: 65%;
+}
+
+.experience {
+  display: flex;
+  gap: 5%;
+  margin-bottom: 15px;
+}
+
+.experience input {
+  width: 70%;
+  margin-bottom: 0;
+}
+
+.experience-container label {
+  display: block;
+  padding-bottom: 10px;
+}
+
+.seniority select {
+  width: 100%;
+}
+
+.languages label {
+  display: block;
+}
+
+.info-form-btn div {
+  padding: 7px 10px;
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 10px;
+
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}

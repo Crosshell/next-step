@@ -1,6 +1,6 @@
 import { Field } from 'formik';
 
-import classes from '../SearchVacancies.module.css';
+import classes from './Fields.module.css';
 
 export default function ExperienceInput() {
   return (

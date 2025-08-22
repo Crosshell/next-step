@@ -120,12 +120,30 @@
   margin-bottom: 20px;
 }
 
+.language-row-tag-box {
+  display: grid;
+  row-gap: 0.5rem;
+  margin-bottom: 15px;
+}
+
 .language-row select:first-of-type {
   width: 20%;
 }
 
 .language-row select:last-of-type {
   width: 25%;
+}
+
+.language-row-tag-box select {
+  width: 100%;
+}
+
+.language-row-tag-box .form-del-btn {
+  display: flex;
+}
+
+.language-row-tag-box .form-input {
+  border: 1px solid white;
 }
 
 /* LanguagesForm */

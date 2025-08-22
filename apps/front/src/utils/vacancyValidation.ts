@@ -1,4 +1,8 @@
-import { VacancyData, VacancySearchForm } from '@/types/vacancies';
+import {
+  RequiredLanguage,
+  VacancyData,
+  VacancySearchForm,
+} from '@/types/vacancies';
 import { VacancyFormValues } from '@/types/vacancy';
 
 export function validateVacancyForm(values: VacancyFormValues) {
@@ -132,4 +136,38 @@ export function isEmptyValue(value: unknown): boolean {
     value === '' ||
     (Array.isArray(value) && value.length === 0)
   );
+}
+
+export function searchFormValidate(values: VacancySearchForm) {
+  const errors: Record<string, string> = {};
+  if (values.title && values.title.length < 10) {
+    errors.title = 'Title must be at least 10 characters';
+  }
+  return errors;
+}
+
+export function submitSearchForm(
+  values: VacancySearchForm,
+  onSubmit: (values: any) => void
+) {
+  console.log('before cleaning', values);
+
+  const cleaned = Object.fromEntries(
+    Object.entries(values).filter(([_, value]) => {
+      if (Array.isArray(value)) return value.length > 0;
+      if (typeof value === 'string') return value.trim() !== '';
+      if (typeof value === 'number') return value !== 0;
+      return value !== undefined && value !== null;
+    })
+  );
+
+  if (Array.isArray(cleaned.requiredLanguages)) {
+    cleaned.requiredLanguages = cleaned.requiredLanguages.map((lang) => ({
+      languageId: (lang as any).language?.id ?? (lang as any).languageId,
+      level: (lang as any).level,
+    }));
+  }
+
+  console.log('after cleaning', cleaned);
+  onSubmit(cleaned);
 }

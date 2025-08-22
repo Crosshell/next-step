@@ -8,6 +8,10 @@ import AnimatedIcon from '../HoveredItem/HoveredItem';
 import classes from './SearchVacancies.module.css';
 
 import { vacancySearchDefaults } from '@/lib/vacancy-data';
+import {
+  searchFormValidate,
+  submitSearchForm,
+} from '@/utils/vacancyValidation';
 
 interface Props {
   addBtn?: boolean;
@@ -24,26 +28,8 @@ export default function SearchBar({
     <div className={classes['searchbar-wrapper']}>
       <Formik
         initialValues={vacancySearchDefaults}
-        validate={(values) => {
-          const errors: Record<string, string> = {};
-          if (values.title && values.title.length < 10) {
-            errors.title = 'Title must be at least 10 characters';
-          }
-          return errors;
-        }}
-        onSubmit={(values) => {
-          const cleaned = Object.fromEntries(
-            Object.entries(values).filter(([_, v]) => {
-              if (Array.isArray(v)) return v.length > 0;
-              if (typeof v === 'string') return v.trim() !== '';
-              if (typeof v === 'number') return v !== 0;
-              return v !== undefined && v !== null;
-            })
-          );
-
-          console.log('cleaned values', cleaned);
-          onSubmit(cleaned);
-        }}
+        validate={searchFormValidate}
+        onSubmit={(values) => submitSearchForm(values, onSubmit)}
       >
         <Form className={classes['searchbar-container']}>
           <div className={classes['btn-search-container']}>

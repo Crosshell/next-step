@@ -1,7 +1,6 @@
 import { ErrorMessage, Field } from 'formik';
 import MultiSelect from '@/components/MultiSelect/MultiSelect';
 
-import classes from '../SearchVacancies.module.css';
 import { employmentTypeOptions } from '@/lib/vacancy-data';
 
 export default function EmploymentTypesInput() {
@@ -15,11 +14,7 @@ export default function EmploymentTypesInput() {
         placeholder="Select employment"
         type="search"
       />
-      <ErrorMessage
-        name="workFormat"
-        component="div"
-        className={classes['error-msg']}
-      />
+      <ErrorMessage name="workFormat" component="div" />
     </div>
   );
 }

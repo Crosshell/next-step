@@ -99,56 +99,12 @@
   border-bottom: 1px solid white;
 }
 
-.radio {
-  font-size: 1.25rem;
-}
-
-.radio label {
-  margin: 10px;
+.more-btn {
+  margin-top: 10px;
+  text-decoration: underline;
 }
 
 /* TagBox */
-
-/* Fields */
-
-.form-input {
-  padding: 7px 10px;
-  margin-bottom: 15px;
-  background-color: #1f1f21;
-  border: 1px solid white;
-  border-radius: 10px;
-  font-size: 1.25rem;
-}
-
-.salary {
-  margin-bottom: 10px;
-}
-
-.salary input {
-  width: 65%;
-}
-
-.experience {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
-.experience input {
-  width: 70%;
-  margin-bottom: 0;
-}
-
-.experience-container label {
-  display: block;
-  padding-bottom: 10px;
-}
-
-.seniority select {
-  width: 100%;
-}
-
-/* Fields */
 
 /* Responsiveness */
 
