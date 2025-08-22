@@ -147,6 +147,13 @@
   margin-bottom: 15px;
 }
 
+.sorting-fields .field {
+  width: 47%;
+}
+.sorting-fields .field select {
+  width: 100%;
+}
+
 .sorting-fields .field select {
   padding: 10px 15px;
   border: 1px solid white;

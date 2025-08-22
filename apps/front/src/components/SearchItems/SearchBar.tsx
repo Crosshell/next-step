@@ -12,10 +12,12 @@ import {
   searchFormValidate,
   submitSearchForm,
 } from '@/utils/vacancyValidation';
+import { VacancySearchForm } from '@/types/vacancies';
 
 interface Props {
   addBtn?: boolean;
   onSubmit?: (values: any) => void;
+  fieldsValues: VacancySearchForm;
 }
 
 export default function SearchBar({
@@ -23,11 +25,12 @@ export default function SearchBar({
   onSubmit = () => {
     console.log('submitted');
   },
+  fieldsValues,
 }: Props) {
   return (
     <div className={classes['searchbar-wrapper']}>
       <Formik
-        initialValues={vacancySearchDefaults}
+        initialValues={{ ...vacancySearchDefaults, ...fieldsValues }}
         validate={searchFormValidate}
         onSubmit={(values) => submitSearchForm(values, onSubmit)}
       >

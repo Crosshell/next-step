@@ -67,7 +67,7 @@ export default function VacanciesPage() {
   return (
     <div className="container">
       <h1 className={classes['page-header']}>Search for top-tear jobs </h1>
-      <SearchBar onSubmit={updateUrl} />
+      <SearchBar onSubmit={updateUrl} fieldsValues={vacancyForm} />
       <div className={classes['vacancies-container']}>
         {vacanciesData &&
           vacanciesData.data.map((vacancyData: VacancyData) => {

@@ -32,6 +32,7 @@ export default function VacanciesTagBox() {
 
       <button
         className={classes['more-btn']}
+        type="button"
         onClick={() => setMoreFilters((prev) => !prev)}
       >
         {moreFilters ? 'Less filters' : 'More filters...'}
