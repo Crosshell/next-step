@@ -55,6 +55,10 @@
 
 /* Skills */
 
+.skills-field {
+  margin-bottom: 20px;
+}
+
 .skills {
   display: grid;
   gap: 1rem;
@@ -134,3 +138,21 @@
 }
 
 /* Skills */
+
+/* Sorting Fields */
+
+.sorting-fields {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.sorting-fields .field select {
+  padding: 10px 15px;
+  border: 1px solid white;
+  border-radius: 10px;
+  background-color: #1f1f21;
+  font-size: 1.1rem;
+}
+
+/* Sorting Fields */

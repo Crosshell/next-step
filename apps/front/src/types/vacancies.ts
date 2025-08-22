@@ -47,9 +47,10 @@ type VacancyItemData = {
 
 type OrderBy = {
   salaryMin?: 'asc' | 'desc';
-  salaryMax?: 'asc' | 'desc';
-  experienceRequired?: 'asc' | 'desc';
+  createdAt?: 'asc' | 'desc';
 };
+
+type OrderField = 'salaryMin' | 'createdAt';
 
 type RequiredLanguage = {
   languageId: string;
@@ -87,4 +88,5 @@ export type {
   VacancyItemData,
   RequiredLanguage,
   VacancySearchForm,
+  OrderField,
 };
