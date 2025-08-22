@@ -34,6 +34,7 @@ const vacancySearchDefaults: VacancySearchForm = {
   employmentTypes: [],
   seniorityLevel: undefined,
   requiredLanguages: [],
+  newSkill: '',
   requiredSkillIds: [],
   orderBy: {},
   page: 1,

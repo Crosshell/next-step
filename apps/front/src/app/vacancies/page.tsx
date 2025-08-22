@@ -20,6 +20,8 @@ export default function VacanciesPage() {
   const queryData = Object.fromEntries(searchParams.entries());
   const vacancyForm = mapQueryToVacancyForm(queryData);
 
+  console.log(vacancyForm);
+
   const {
     data: vacanciesData,
     isError,
@@ -35,7 +37,9 @@ export default function VacanciesPage() {
     Object.entries(values).forEach(([key, value]) => {
       if (isEmptyValue(value)) return;
 
-      if (Array.isArray(value)) {
+      if (key === 'requiredSkillIds' && Array.isArray(value)) {
+        if (value.length) params.set(key, value.join(','));
+      } else if (Array.isArray(value)) {
         if (
           value.every((v) => typeof v === 'string' || typeof v === 'number')
         ) {

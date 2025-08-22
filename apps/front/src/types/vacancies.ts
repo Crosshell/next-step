@@ -76,7 +76,8 @@ type VacancySearchForm = {
     | 'LEAD'
     | undefined;
   requiredLanguages: RequiredLanguage[];
-  requiredSkillIds: string[];
+  requiredSkillIds: { skill: { id: string; name?: string } }[] | string[];
+  newSkill: string;
   orderBy: OrderBy;
   page: number;
 };

@@ -118,13 +118,14 @@ export function mapQueryToVacancyForm(query: {
       query.requiredLanguages
     ) as VacancySearchForm['requiredLanguages'];
   }
-  if (query.requiredSkillIds) {
-    result.requiredSkillIds = query.requiredSkillIds.split(',');
-  }
   if (query.orderBy) {
     result.orderBy = JSON.parse(query.orderBy) as VacancySearchForm['orderBy'];
   }
   if (query.page) result.page = Number(query.page);
+
+  if (query.requiredSkillIds) {
+    result.requiredSkillIds = query.requiredSkillIds.split(',');
+  }
 
   return result as VacancySearchForm;
 }
@@ -150,10 +151,9 @@ export function submitSearchForm(
   values: VacancySearchForm,
   onSubmit: (values: any) => void
 ) {
-  console.log('before cleaning', values);
-
   const cleaned = Object.fromEntries(
-    Object.entries(values).filter(([_, value]) => {
+    Object.entries(values).filter(([key, value]) => {
+      if (key === 'newSkill') return false; // не відправляємо newSkill
       if (Array.isArray(value)) return value.length > 0;
       if (typeof value === 'string') return value.trim() !== '';
       if (typeof value === 'number') return value !== 0;
@@ -168,6 +168,11 @@ export function submitSearchForm(
     }));
   }
 
-  console.log('after cleaning', cleaned);
+  if (Array.isArray(cleaned.requiredSkillIds)) {
+    cleaned.requiredSkillIds = cleaned.requiredSkillIds.map((s: any) =>
+      String(s.skill.id)
+    );
+  }
+
   onSubmit(cleaned);
 }
