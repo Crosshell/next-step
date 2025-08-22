@@ -1,4 +1,4 @@
-import { VacancyData } from '@/types/vacancies';
+import { VacancyData, VacancySearchForm } from '@/types/vacancies';
 import { VacancyFormValues } from '@/types/vacancy';
 
 export function validateVacancyForm(values: VacancyFormValues) {
@@ -84,4 +84,52 @@ export function mapVacancyToFormValues(data: VacancyData): VacancyFormValues {
     })),
     newSkill: '',
   };
+}
+
+export function mapQueryToVacancyForm(query: {
+  [k: string]: string;
+}): VacancySearchForm {
+  const result: Partial<VacancySearchForm> = {};
+
+  if (query.title) result.title = query.title;
+  if (query.salaryMin) result.salaryMin = Number(query.salaryMin);
+  if (query.experienceRequired)
+    result.experienceRequired = Number(query.experienceRequired);
+  if (query.workFormats) {
+    result.workFormats = query.workFormats.split(
+      ','
+    ) as VacancySearchForm['workFormats'];
+  }
+  if (query.employmentTypes) {
+    result.employmentTypes = query.employmentTypes.split(
+      ','
+    ) as VacancySearchForm['employmentTypes'];
+  }
+  if (query.seniorityLevel) {
+    result.seniorityLevel =
+      query.seniorityLevel as VacancySearchForm['seniorityLevel'];
+  }
+  if (query.requiredLanguages) {
+    result.requiredLanguages = JSON.parse(
+      query.requiredLanguages
+    ) as VacancySearchForm['requiredLanguages'];
+  }
+  if (query.requiredSkillIds) {
+    result.requiredSkillIds = query.requiredSkillIds.split(',');
+  }
+  if (query.orderBy) {
+    result.orderBy = JSON.parse(query.orderBy) as VacancySearchForm['orderBy'];
+  }
+  if (query.page) result.page = Number(query.page);
+
+  return result as VacancySearchForm;
+}
+
+export function isEmptyValue(value: unknown): boolean {
+  return (
+    value === undefined ||
+    value === null ||
+    value === '' ||
+    (Array.isArray(value) && value.length === 0)
+  );
 }

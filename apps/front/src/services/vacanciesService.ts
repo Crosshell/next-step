@@ -1,6 +1,7 @@
 import { VacancyFormValues } from '@/types/vacancy';
 import api from './axios';
 import { UpdatedUserLanguages } from '@/types/profile';
+import { VacancySearchForm } from '@/types/vacancies';
 
 export async function getMyVacancies() {
   return api
@@ -20,7 +21,6 @@ export async function createVacancy(data: VacancyFormValues) {
   return api
     .post('/vacancies', data)
     .then((response) => {
-      console.log(response.data.id);
       return {
         status: 'ok',
         error: null,
@@ -112,6 +112,25 @@ export async function editVacancy({
     .patch(`/vacancies/${id}`, data)
     .then((response) => {
       console.log(response.data.id);
+      return {
+        status: 'ok',
+        error: null,
+        data: response.data,
+      };
+    })
+    .catch((error) => {
+      const message =
+        error?.response?.data?.errors?.[0] ||
+        error?.response?.data?.message ||
+        'Creating vacancy failed';
+      return { status: 'error', error: message, data: null };
+    });
+}
+
+export async function searchVacancies(data: VacancySearchForm) {
+  return api
+    .post('/vacancies/search', data)
+    .then((response) => {
       return {
         status: 'ok',
         error: null,
