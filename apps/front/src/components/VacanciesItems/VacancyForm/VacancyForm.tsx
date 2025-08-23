@@ -27,7 +27,7 @@ import {
 import { VacancyFormValues } from '@/types/vacancy';
 
 interface Props {
-  data: VacancyFormValues | null;
+  data?: VacancyFormValues | null;
   type?: 'CREATE' | 'EDIT';
 }
 

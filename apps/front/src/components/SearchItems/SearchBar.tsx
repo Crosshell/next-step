@@ -1,9 +1,7 @@
-import Link from 'next/link';
 import { Form, Formik } from 'formik';
 
 import InputContainer from './InputContainer';
 import VacanciesTagBox from './SearchTagBox';
-import AnimatedIcon from '../HoveredItem/HoveredItem';
 
 import classes from './SearchVacancies.module.css';
 
@@ -15,13 +13,11 @@ import {
 import { VacancySearchForm } from '@/types/vacancies';
 
 interface Props {
-  addBtn?: boolean;
   onSubmit?: (values: any) => void;
   fieldsValues: VacancySearchForm;
 }
 
 export default function SearchBar({
-  addBtn = false,
   onSubmit = () => {
     console.log('submitted');
   },
@@ -36,17 +32,7 @@ export default function SearchBar({
       >
         <Form className={classes['searchbar-container']}>
           <div className={classes['btn-search-container']}>
-            {addBtn && (
-              <div>
-                <Link
-                  href="/my-company/vacancies/new-vacancy"
-                  className={classes['add-vacancy-btn']}
-                >
-                  <AnimatedIcon>Add Vacancy +</AnimatedIcon>
-                </Link>
-              </div>
-            )}
-            <InputContainer width={!addBtn ? '100%' : '80%'} />
+            <InputContainer />
           </div>
           <VacanciesTagBox />
         </Form>

@@ -51,8 +51,9 @@
   width: 100%;
 }
 
-.is-active-btn {
-  width: 10%;
+.is-active-btn,
+.is-not-active-btn {
+  width: 12%;
 }
 
 .is-active-btn div,

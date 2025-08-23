@@ -4,13 +4,9 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import classes from './SearchVacancies.module.css';
 import { ErrorMessage, Field } from 'formik';
 
-interface Props {
-  width: string;
-}
-
-export default function InputContainer({ width }: Props) {
+export default function InputContainer() {
   return (
-    <div className={classes['input-wrapper']} style={{ width: width }}>
+    <div className={classes['input-wrapper']}>
       <Field
         className={classes['input-container']}
         name="title"
