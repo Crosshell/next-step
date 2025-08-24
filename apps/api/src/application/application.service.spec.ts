@@ -5,6 +5,7 @@ import {
   Application,
   ApplicationStatus,
   EmploymentType,
+  Prisma,
   SeniorityLevel,
   Vacancy,
   WorkFormat,
@@ -138,6 +139,31 @@ describe('ApplicationService', () => {
       expect(repository.findOne).toHaveBeenCalledWith(where);
       expect(vacancyService.findOneOrThrow).not.toHaveBeenCalled();
       expect(repository.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('assertNotExists', () => {
+    const where: Prisma.ApplicationWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174001',
+    };
+
+    it('should not throw if application does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      const result = await service.assertNotExists(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw BadRequestException if application exists', async () => {
+      repository.findOne.mockResolvedValue(mockedApplication);
+
+      await expect(service.assertNotExists(where)).rejects.toThrow(
+        new BadRequestException('Application already exists'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where);
     });
   });
 });
