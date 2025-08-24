@@ -18,12 +18,15 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 
 import Cookies from 'js-cookie';
+import { searchCompanies } from '@/services/companiesSearchService';
 
-export default function VacanciesPage() {
+export default function CompaniesPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const queryData = Object.fromEntries(searchParams.entries());
+  console.log('queryData', queryData);
+
   const vacancyForm = mapQueryToVacancyForm(queryData);
 
   const [role, setRole] = useState<string | undefined>();
@@ -38,7 +41,7 @@ export default function VacanciesPage() {
     error,
   } = useQuery({
     queryKey: ['vacancies', queryData],
-    queryFn: () => searchVacancies(vacancyForm),
+    queryFn: () => searchCompanies(vacancyForm),
   });
 
   const updateUrl = (values: VacancyFormValues) => {
@@ -70,7 +73,7 @@ export default function VacanciesPage() {
   if (isError)
     return (
       <MessageBox type="error">
-        <p>Error loading profile: {error?.message || 'Unexpected error'}</p>
+        <p>Error loading companies: {error?.message || 'Unexpected error'}</p>
       </MessageBox>
     );
 
@@ -83,7 +86,7 @@ export default function VacanciesPage() {
       {role && (
         <Link href="/companies">
           <div className={classes['link-to-companies']}>
-            {role === 'JOB_SEEKER' && <span>Search for companies</span>}
+            {role === 'JOB_SEEKER' && <span>Search for vacancies</span>}
             {role === 'COMPANY' && <span>Search for job-seekers</span>}
             <div className="align-center">
               <FontAwesomeIcon icon={faArrowRight} />
