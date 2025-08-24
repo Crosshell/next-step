@@ -19,3 +19,17 @@ export async function searchCompanies(data: CompaniesSearchForm) {
       return { status: 'error', error: message, data: null };
     });
 }
+
+export async function getCompanyVacancies(companyId: string) {
+  return api
+    .get(`/vacancies/company/${companyId}`)
+    .then((res) => res.data)
+    .catch((error) => {
+      const message =
+        error?.response?.data?.message || 'Failed to fetch profile';
+      throw {
+        status: error?.response?.status || 500,
+        message,
+      };
+    });
+}
