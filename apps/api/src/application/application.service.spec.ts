@@ -166,4 +166,29 @@ describe('ApplicationService', () => {
       expect(repository.findOne).toHaveBeenCalledWith(where);
     });
   });
+
+  describe('findOneOrThrow', () => {
+    const where: Prisma.ApplicationWhereUniqueInput = {
+      id: '123e4567-e89b-12d3-a456-426614174001',
+    };
+
+    it('should return an application', async () => {
+      repository.findOne.mockResolvedValue(mockedApplication);
+
+      const result = await service.findOneOrThrow(where);
+
+      expect(repository.findOne).toHaveBeenCalledWith(where, true);
+      expect(result).toEqual(mockedApplication);
+    });
+
+    it('should throw BadRequestException if application does not exist', async () => {
+      repository.findOne.mockResolvedValue(null);
+
+      await expect(service.findOneOrThrow(where)).rejects.toThrow(
+        new BadRequestException('Application not found'),
+      );
+
+      expect(repository.findOne).toHaveBeenCalledWith(where, true);
+    });
+  });
 });
