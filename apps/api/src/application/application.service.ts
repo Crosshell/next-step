@@ -37,7 +37,7 @@ export class ApplicationService {
       jobSeekerId_vacancyId: { jobSeekerId, vacancyId: dto.vacancyId },
     });
     await this.vacancyService.findOneOrThrow({ id: dto.vacancyId });
-    return this.repository.create(dto, jobSeekerId);
+    return this.repository.create(dto, jobSeekerId, true);
   }
 
   async assertNotExists(
@@ -51,7 +51,7 @@ export class ApplicationService {
   async findOneOrThrow(
     where: Prisma.ApplicationWhereUniqueInput,
   ): Promise<Application> {
-    const application = await this.repository.findOne(where);
+    const application = await this.repository.findOne(where, true);
     if (!application) throw new BadRequestException('Application not found');
     return application;
   }
@@ -85,11 +85,14 @@ export class ApplicationService {
       where.status = dto.status;
     }
 
-    const data = await this.repository.findMany({
-      where,
-      ...pagination,
-      orderBy,
-    });
+    const data = await this.repository.findMany(
+      {
+        where,
+        ...pagination,
+        orderBy,
+      },
+      true,
+    );
 
     const total = await this.repository.count(where);
 
@@ -115,6 +118,6 @@ export class ApplicationService {
       );
     }
 
-    return this.repository.update({ id }, dto);
+    return this.repository.update({ id }, dto, true);
   }
 }
