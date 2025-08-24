@@ -10,6 +10,7 @@ type CompanyProfileData = {
 };
 
 type MainInfoData = {
+  id?: string;
   name: string | null;
   url: string | null;
 };

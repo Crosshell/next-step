@@ -59,21 +59,22 @@ export default function CompanyMainInfo({ isEditable, data }: Props) {
             </Link>
           </p>
 
+          <Link
+            className={classes['my-vacancies-btn']}
+            href={isEditable ? 'my-company/vacancies' : `${data.id}/vacancies`}
+          >
+            <AnimatedIcon>
+              {isEditable ? 'My Vacancies' : `Company Vacancies`}
+            </AnimatedIcon>
+          </Link>
+
           {isEditable && (
-            <>
-              <Link
-                className={classes['my-vacancies-btn']}
-                href={'my-company/vacancies'}
-              >
-                <AnimatedIcon>My Vacancies</AnimatedIcon>
-              </Link>
-              <button
-                className={classes['edit-main-info-btn']}
-                onClick={() => setIsChanging(true)}
-              >
-                <AnimatedIcon iconType={faPencil} />
-              </button>
-            </>
+            <button
+              className={classes['edit-main-info-btn']}
+              onClick={() => setIsChanging(true)}
+            >
+              <AnimatedIcon iconType={faPencil} />
+            </button>
           )}
         </div>
       ) : (

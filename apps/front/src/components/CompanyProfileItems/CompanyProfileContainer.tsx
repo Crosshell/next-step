@@ -21,6 +21,7 @@ export default function CompanyProfileContainer({
   console.log(companyData);
 
   const mainInfoData = {
+    id: companyData.id,
     name: companyData.name,
     url: companyData.url,
   };
