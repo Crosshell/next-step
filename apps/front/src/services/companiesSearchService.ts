@@ -3,7 +3,7 @@ import api from './axios';
 
 export async function searchCompanies(data: CompaniesSearchForm) {
   return api
-    .post('/vacancies/search', data)
+    .post('/companies/search', data)
     .then((response) => {
       return {
         status: 'ok',

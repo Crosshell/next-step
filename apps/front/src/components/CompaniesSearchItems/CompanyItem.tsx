@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-import classes from './CompaniesSearchItems.module.css';
+import classes from '../VacanciesItems/VacanciesItems.module.css';
 
 import { CompanyItemData } from '@/types/companiesSearch';
 import { isoToDate } from '@/utils/convertData';
@@ -26,18 +26,20 @@ export default function CompanyItem({ data }: Props) {
       if (isValid) {
         setLogoUrl(companyLogo);
       } else {
-        setLogoUrl('/images/suitcase.png');
+        setLogoUrl('/images/company-no-logo.png');
       }
       setIsLoaded(true);
     });
   }, [data.logoUrl]);
+
+  console.log(data.name.trim().length > 0 ? data.name : 'No url');
 
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
       className={classes['vacancy-item-container']}
     >
-      <Link href={`/vacancies/${data.id}`} className={classes['vacancy-item']}>
+      <Link href={`/company/${data.id}`} className={classes['vacancy-item']}>
         <div>
           <img
             src={logoUrl}
@@ -50,12 +52,12 @@ export default function CompanyItem({ data }: Props) {
             }}
           />
           <div className={classes['short-info']}>
-            <h4>{data.name}</h4>
-            <h3>{data.url}</h3>
+            <h3>{data.name}</h3>
+            <h4>{data.url.trim().length > 0 ? data.url : 'No url'}</h4>
           </div>
         </div>
 
-        <p>Posted: {isoToDate(data.createdAt)}</p>
+        <p>Joined: {isoToDate(data.createdAt)}</p>
       </Link>
     </motion.div>
   );
