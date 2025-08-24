@@ -42,6 +42,8 @@ export default function SignInForm() {
       setIsLogged(true);
       if (role) {
         router.push(role === 'JOB_SEEKER' ? '/my-profile' : '/my-company');
+      } else {
+        router.push('/my-profile');
       }
     },
   });
@@ -80,8 +82,6 @@ export default function SignInForm() {
         password: registrationData.password,
       });
     }
-
-    console.log(JSON.stringify(registrationData, null, 2));
   };
 
   const handleForgotPassword = () => {

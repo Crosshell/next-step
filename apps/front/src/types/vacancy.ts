@@ -1,3 +1,5 @@
+import { SkillData } from './profile';
+
 interface Vacancy {
   id: string;
   title: string;
@@ -16,4 +18,41 @@ interface Vacancy {
   edited_at: Date;
 }
 
-export type { Vacancy };
+type FormLanguage = {
+  languageId: string;
+  level: string;
+  language?: { id: string; name: string };
+};
+
+type VacancyFormValues = {
+  id?: string;
+  isActive: boolean;
+  title: string;
+  description: string;
+  salaryMin: string;
+  salaryMax: string;
+  officeLocation: string;
+  experienceRequired: string;
+  workFormat: string[];
+  employmentType: string[];
+  seniorityLevel: string;
+  languages: FormLanguage[];
+  skills: SkillData[];
+  newSkill: string;
+};
+
+type VacancySideBoxData = {
+  id: string;
+  isActive: boolean;
+  companyId: string;
+  companyName: string;
+  companyLogo: string | null;
+  companyUrl: string | null;
+  employmentType: string[];
+  workFormat: string[];
+  officeLocation: string;
+  salaryMin: number;
+  salaryMax: number;
+};
+
+export type { Vacancy, VacancyFormValues, VacancySideBoxData, FormLanguage };

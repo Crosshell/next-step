@@ -54,3 +54,18 @@ export const validateLogInForm = (data: LogInFormData): string[] => {
 
   return errors;
 };
+
+export function validateImageUrl(url: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (!url) {
+      resolve(false);
+      return;
+    }
+
+    const img = new Image();
+    img.src = url;
+
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+  });
+}

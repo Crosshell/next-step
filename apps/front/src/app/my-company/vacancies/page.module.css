@@ -1,0 +1,39 @@
+.page-header {
+  margin-bottom: 2rem;
+  font-size: 3rem;
+}
+
+.page-container button {
+  background: transparent;
+  border: 0;
+}
+
+.add-vacancy-btn div {
+  padding: 15px 20px;
+  background-color: #37aa9c;
+  font-weight: 500;
+}
+
+.vacancies-container {
+  position: relative;
+  width: 100%;
+  /* height: 62vh; */
+}
+
+.add-vacancy-btn-container {
+  width: 100%;
+}
+
+.add-vacancy-btn {
+  display: block;
+  margin-bottom: 30px;
+  width: 15%;
+  text-align: center;
+}
+
+/* .add-vacancy-btn {
+  position: fixed;
+  z-index: 200;
+  right: 3%;
+  bottom: 5%;
+} */

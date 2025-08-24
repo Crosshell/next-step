@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 import { Field, Form, Formik } from 'formik';
 
 import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
@@ -12,7 +13,6 @@ import { MainInfoData, UpdCompanyProfileData } from '@/types/companyProfile';
 import { validateCompanyInfoData } from '@/utils/companyProfileValidation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateCompanyProfile } from '@/services/companyProfileService';
-import Link from 'next/link';
 
 interface Props {
   isEditable?: boolean;
@@ -60,12 +60,20 @@ export default function CompanyMainInfo({ isEditable, data }: Props) {
           </p>
 
           {isEditable && (
-            <button
-              className={classes['edit-main-info-btn']}
-              onClick={() => setIsChanging(true)}
-            >
-              <AnimatedIcon iconType={faPencil} />
-            </button>
+            <>
+              <Link
+                className={classes['my-vacancies-btn']}
+                href={'my-company/vacancies'}
+              >
+                <AnimatedIcon>My Vacancies</AnimatedIcon>
+              </Link>
+              <button
+                className={classes['edit-main-info-btn']}
+                onClick={() => setIsChanging(true)}
+              >
+                <AnimatedIcon iconType={faPencil} />
+              </button>
+            </>
           )}
         </div>
       ) : (

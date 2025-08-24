@@ -1,0 +1,197 @@
+.vacancy-form button {
+  background-color: transparent;
+  border: 0;
+}
+
+.vacancy-form p {
+  display: block;
+  margin-bottom: 15px;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+/* Main Info Form */
+
+.main-info-form > div {
+  padding-bottom: 50px;
+  margin-bottom: 40px;
+  border-bottom: 3px dashed #37aa9c;
+}
+
+.main-info-form > div:first-of-type {
+  padding-bottom: 0;
+  margin-bottom: 40px;
+  border: 0;
+}
+
+.main-info-form > div:last-of-type {
+  padding-bottom: 0;
+  border: 0;
+}
+
+.form-input {
+  padding: 15px 20px;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+.title-is-active {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.title {
+  width: 85%;
+}
+
+.title input {
+  width: 100%;
+}
+
+.is-active-btn,
+.is-not-active-btn {
+  width: 12%;
+}
+
+.is-active-btn div,
+.is-not-active-btn div {
+  padding: 15px 20px;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+.is-active-btn div {
+  border: 2px solid #37aa9c;
+  background-color: #37aa9c;
+  color: white;
+}
+
+.description textarea {
+  width: 100% !important;
+}
+
+.salary {
+  display: flex;
+  gap: 1.9%;
+}
+
+.salary input {
+  width: 18vw;
+}
+
+.salary span {
+  font-size: 3rem;
+  font-weight: 500;
+}
+
+.salary-item,
+.experience-item {
+  display: flex;
+  justify-content: space-between;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
+}
+
+.salary-item input,
+.experience-item input {
+  padding: 15px 20px;
+  background-color: transparent;
+  border: 0;
+  font-size: 1.5rem;
+}
+
+.salary-item input:focus,
+.experience-item input:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.salary-item .dollar {
+  padding-right: 20px;
+  font-size: 2rem;
+}
+
+.office-employment {
+  display: flex;
+  gap: 5%;
+}
+
+.office-employment div {
+  width: 20vw;
+}
+
+.employment p {
+  width: 30vw;
+}
+
+.employment div {
+  width: 30vw;
+}
+
+.office input {
+  width: 100%;
+}
+
+.experience-seniority {
+  display: flex;
+  gap: 5%;
+}
+
+.experience-item input {
+  width: 16vw;
+}
+
+.experience-seniority select {
+  width: 20vw;
+  background-color: #1f1f21;
+}
+
+.experience-item .years {
+  padding-right: 20px;
+  font-size: 1.5rem;
+}
+
+.submit-btn {
+  background-color: transparent;
+  border: 0;
+}
+
+.submit-btn div {
+  padding: 10px 15px;
+  background-color: #37aa9c;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.error-msg {
+  display: block;
+  padding-top: 10px;
+  font-size: 1.25rem;
+}
+
+/* Main Info Form */
+
+/* Language Form */
+.lang-form {
+  padding-bottom: 50px;
+  margin-bottom: 40px;
+  border-bottom: 3px dashed #37aa9c;
+}
+
+.info-form-btn div {
+  padding: 8px 12px;
+  margin-top: 10px;
+  background-color: white;
+  border: 2px solid white;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #1f1f21;
+}
+/* Language Form */

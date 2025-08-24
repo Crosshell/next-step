@@ -59,8 +59,6 @@ export default function RegistrationForm() {
         type: registrationData.role,
       });
     }
-
-    console.log(JSON.stringify(registrationData, null, 2));
   };
 
   return (

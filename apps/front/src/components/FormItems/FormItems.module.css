@@ -1,0 +1,149 @@
+.form-input {
+  padding: 10px 15px;
+  width: 15%;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}
+
+.form-del-btn div {
+  padding: 8px 10px;
+  background-color: #f37199;
+  border: 2px solid #f37199;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.add-save-btn-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.add-save-btn-container button div {
+  padding: 8px 12px;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.save-btns-container {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.info-form-btn div {
+  background-color: white;
+  border: 2px solid white;
+  color: #1f1f21;
+}
+
+/* Skills */
+
+.skills {
+  display: flex;
+  gap: 30px;
+}
+
+.skills .form-input {
+  width: 100%;
+}
+
+.skills span {
+  display: block;
+  padding: 10px 30px;
+  background-color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #1f1f21;
+}
+
+.del-btn-box {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.del-skill-btn div {
+  position: absolute;
+  top: -10;
+  right: -10;
+  padding: 3px 5px;
+  background-color: #f37199;
+  border: 2px solid #f37199;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f1f21;
+}
+
+.skills .autocomplete-wrapper {
+  position: relative;
+}
+
+.skills .autocomplete-list {
+  position: absolute;
+  z-index: 10;
+  margin-top: 10px;
+  width: 100%;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
+}
+
+.skills .autocomplete-item {
+  padding: 7px 10px;
+  width: 100%;
+  border-bottom: 1px solid white;
+  font-size: 1.25rem;
+}
+
+.edit-skills-btn div {
+  padding: 5px 8px;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+/* Skills */
+
+/* LanguagesForm */
+
+.language-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.language-row-tag-box {
+  display: grid;
+  row-gap: 0.5rem;
+  margin-bottom: 15px;
+}
+
+.language-row select:first-of-type {
+  width: 20%;
+}
+
+.language-row select:last-of-type {
+  width: 25%;
+}
+
+.language-row-tag-box select {
+  width: 100%;
+}
+
+.language-row-tag-box .form-del-btn {
+  display: flex;
+}
+
+.language-row-tag-box .form-input {
+  border: 1px solid white;
+}
+
+/* LanguagesForm */

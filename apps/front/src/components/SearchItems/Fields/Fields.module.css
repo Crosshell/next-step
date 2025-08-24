@@ -1,0 +1,165 @@
+.form-input {
+  padding: 7px 10px;
+  margin-bottom: 15px;
+  background-color: #1f1f21;
+  border: 1px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+}
+
+.salary {
+  margin-bottom: 10px;
+}
+
+.salary input {
+  width: 65%;
+}
+
+.experience {
+  display: flex;
+  gap: 5%;
+  margin-bottom: 15px;
+}
+
+.experience input {
+  width: 70%;
+  margin-bottom: 0;
+}
+
+.experience-container label {
+  display: block;
+  padding-bottom: 10px;
+}
+
+.seniority select {
+  width: 100%;
+}
+
+.languages {
+  margin-bottom: 15px;
+}
+
+.languages label {
+  display: block;
+}
+
+.info-form-btn div {
+  padding: 7px 10px;
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: white;
+}
+
+/* Skills */
+
+.skills-field {
+  margin-bottom: 20px;
+}
+
+.skills {
+  display: grid;
+  gap: 1rem;
+}
+
+.skills .form-input {
+  width: 100%;
+}
+
+.skills span {
+  display: block;
+  padding: 10px 30px;
+  background-color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #1f1f21;
+}
+
+.del-btn-box {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.del-skill-btn div {
+  position: absolute;
+  top: -10;
+  right: -10;
+  padding: 3px 5px;
+  background-color: #f37199;
+  border: 2px solid #f37199;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f1f21;
+}
+
+.autocomplete-wrapper .form-input {
+  margin-bottom: 0;
+}
+
+.skills .autocomplete-wrapper {
+  display: flex;
+  gap: 5%;
+  position: relative;
+}
+
+.autocomplete-wrapper input {
+  width: 80%;
+}
+
+.skills .autocomplete-list {
+  position: absolute;
+  z-index: 10;
+  top: 40;
+  margin-top: 10px;
+  width: 80%;
+  background-color: #1f1f21;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+
+.skills .autocomplete-item {
+  padding: 7px 10px;
+  width: 100%;
+  border-bottom: 1px solid white;
+  font-size: 1.25rem;
+}
+
+.edit-skills-btn div {
+  padding: 5px 8px;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+/* Skills */
+
+/* Sorting Fields */
+
+.sorting-fields {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.sorting-fields .field {
+  width: 47%;
+}
+.sorting-fields .field select {
+  width: 100%;
+}
+
+.sorting-fields .field select {
+  padding: 10px 15px;
+  border: 1px solid white;
+  border-radius: 10px;
+  background-color: #1f1f21;
+  font-size: 1.1rem;
+}
+
+/* Sorting Fields */

@@ -1,4 +1,13 @@
+.page-header {
+  margin-bottom: 40px;
+  font-size: 3rem;
+}
+
 .search-form {
   margin-top: 50px;
   position: relative;
+}
+
+.vacancies-container {
+  width: 77.5%;
 }

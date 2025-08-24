@@ -1,0 +1,57 @@
+.form-input {
+  padding: 15px 20px;
+  background-color: #1f1f21;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+}
+
+.form-input-search {
+  padding: 7px 10px;
+  margin-bottom: 15px;
+  background-color: #1f1f21;
+  border: 1px solid white;
+  border-radius: 10px;
+  font-size: 1.25rem;
+}
+
+.multi-select-wrapper {
+  position: relative;
+  width: 30vw;
+}
+
+.multi-select-display {
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.multi-select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  background: #1f1f21;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.multi-select-option {
+  display: inline-flex !important;
+  justify-content: space-between;
+  padding: 10px;
+  width: 100%;
+  font-size: 1.25rem;
+}
+
+.multi-select-option span {
+  width: 50% !important;
+}
+
+.multi-select-option input {
+  display: block;
+  width: 10% !important;
+}
+
+.multi-select-option input[type='checkbox'] {
+  accent-color: #37aa9c;
+}

@@ -34,6 +34,7 @@ export default function MainHeader() {
       } else {
         router.push('/sign-in');
         Cookies.remove('sid');
+        Cookies.remove('company-id');
         queryClient.clear();
         setIsLogged(false);
       }
@@ -116,6 +117,18 @@ export default function MainHeader() {
             >
               Log Out
             </motion.button>
+            {role === 'COMPANY' && (
+              <motion.div
+                className={classes['no-border-btn']}
+                whileHover={{
+                  scale: 1.1,
+                  borderColor: 'white',
+                }}
+              >
+                <Link href="/my-company/vacancies">My Vacancies</Link>
+              </motion.div>
+            )}
+
             <motion.div
               className={`${classes['border-btn']} ${pathname === '/my-profile' ? classes['active-link'] : ''} `}
               whileHover={
