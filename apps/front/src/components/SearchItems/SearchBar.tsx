@@ -58,7 +58,7 @@ export default function SearchBar({
     >
       <Formik
         initialValues={{ ...defaultValues, ...fieldsValues }}
-        validate={validate}
+        validate={validate as any}
         onSubmit={(values) => submit(values, onSubmit)}
       >
         <Form className={classes['searchbar-container']}>

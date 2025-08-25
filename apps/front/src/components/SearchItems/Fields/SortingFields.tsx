@@ -6,7 +6,11 @@ import classes from './Fields.module.css';
 
 import { OrderField, VacancySearchForm } from '@/types/vacancies';
 
-export default function SortingFields() {
+interface Props {
+  type?: 'vacancies' | 'jobSeekers';
+}
+
+export default function SortingFields({ type = 'vacancies' }: Props) {
   const { values, setFieldValue } = useFormikContext<VacancySearchForm>();
 
   const currentField: OrderField | '' = values.orderBy
@@ -43,8 +47,14 @@ export default function SortingFields() {
           onChange={handleFieldChange}
         >
           <option value="">No sorting</option>
-          <option value="salaryMin">Salary</option>
-          <option value="createdAt">Created At</option>
+          {type === 'vacancies' ? (
+            <>
+              <option value="salaryMin">Salary</option>
+              <option value="createdAt">Created At</option>
+            </>
+          ) : (
+            <option value="updatedAt">Updated At</option>
+          )}
         </select>
       </div>
 

@@ -1,15 +1,18 @@
+'use client';
+
+import { useState } from 'react';
+
 import EmploymentTypesInput from './Fields/EmploymentTypes';
 import ExperienceInput from './Fields/Experience';
 import LanguagesInput from './Fields/Languages';
-import OrderFields from './Fields/SortingFields';
+import SortingFields from './Fields/SortingFields';
 import SalarySlider from './Fields/SalarySlider';
 import SeniorityInput from './Fields/Seniority';
 import SkillsInput from './Fields/Skills';
 import WorkFormatsInput from './Fields/WorkFormats';
+import HoveredItem from '../HoveredItem/HoveredItem';
 
 import classes from './SearchVacancies.module.css';
-import { useState } from 'react';
-import HoveredItem from '../HoveredItem/HoveredItem';
 
 interface Props {
   type?: 'vacancies' | 'jobSeekers';
@@ -37,7 +40,7 @@ export default function SearchTagBox({ type = 'vacancies' }: Props) {
           <LanguagesInput type={type} />
           <SkillsInput type={type} />
           <h3>Add sorting:</h3>
-          <OrderFields />
+          <SortingFields type={'jobSeekers'} />
         </>
       )}
 
