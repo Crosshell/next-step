@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
   providers: [
     {
       provide: 'RedisClient',
-      useFactory: async (configService: ConfigService) => {
+      useFactory: (configService: ConfigService) => {
         return new Redis({
           host: configService.getOrThrow('redis.host'),
           port: configService.getOrThrow('redis.port'),

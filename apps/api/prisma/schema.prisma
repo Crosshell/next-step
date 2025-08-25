@@ -7,6 +7,14 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+enum ApplicationStatus {
+  SUBMITTED
+  REJECTED
+  ACCEPTED
+
+  @@map("application_status")
+}
+
 enum UserType {
   JOB_SEEKER
   COMPANY
@@ -86,9 +94,10 @@ model JobSeeker {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  contacts  JobSeekerContacts?
-  languages JobSeekerLanguage[]
-  skills    JobSeekerSkill[]
+  contacts    JobSeekerContacts?
+  languages   JobSeekerLanguage[]
+  skills      JobSeekerSkill[]
+  Application Application[]
 
   @@index([isOpenToWork])
   @@map("job_seekers")
@@ -187,7 +196,8 @@ model Vacancy {
 
   seniorityLevel SeniorityLevel @map("seniority_level")
 
-  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  company     Company       @relation(fields: [companyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Application Application[]
 
   @@map("vacancies")
 }
@@ -212,4 +222,20 @@ model VacancySkill {
 
   @@id([vacancyId, skillId])
   @@map("vacancies_skills")
+}
+
+model Application {
+  id          String            @id @default(uuid())
+  jobSeekerId String            @map("job_seeker_id")
+  vacancyId   String            @map("vacancy_id")
+  status      ApplicationStatus @default(SUBMITTED)
+  coverLetter String?           @map("cover_letter")
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  jobSeeker JobSeeker @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vacancy   Vacancy   @relation(fields: [vacancyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([jobSeekerId, vacancyId])
+  @@map("applications")
 }
