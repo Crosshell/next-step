@@ -1,36 +1,30 @@
 'use client';
 
-import VacancyItem from '@/components/VacanciesItems/VacancyItem';
-
-import classes from './page.module.css';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 
 import SearchBar from '@/components/SearchItems/SearchBar';
-import { searchVacancies } from '@/services/vacanciesService';
-import { useQuery } from '@tanstack/react-query';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { VacancyData } from '@/types/vacancies';
-import { isEmptyValue, mapQueryToVacancyForm } from '@/utils/vacancyValidation';
 import MessageBox from '@/components/MessageBox/MessageBox';
-import { VacancyFormValues } from '@/types/vacancy';
-import Link from 'next/link';
+import JobSeekerItem from '@/components/JobSeekersSearchItems/JobSeekerItem';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useState } from 'react';
+import classes from './page.module.css';
 
-import Cookies from 'js-cookie';
+import { JobSeekerItemData } from '@/types/jobSeekerSearch';
+import { VacancyFormValues } from '@/types/vacancy';
+import { mapQueryToJobSeekerForm } from '@/utils/jobSeekerSearchValidation';
+import { isEmptyValue } from '@/utils/vacancyValidation';
+import { searchJobSeekers } from '@/services/jobSeekerSearchService';
 
-export default function VacanciesPage() {
+export default function JobSeekersPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const queryData = Object.fromEntries(searchParams.entries());
-  const vacancyForm = mapQueryToVacancyForm(queryData);
 
-  const [role, setRole] = useState<string | undefined>();
-
-  useEffect(() => {
-    setRole(Cookies.get('role'));
-  }, []);
+  const vacancyForm = mapQueryToJobSeekerForm(queryData);
 
   const {
     data: vacanciesData,
@@ -38,7 +32,7 @@ export default function VacanciesPage() {
     error,
   } = useQuery({
     queryKey: ['vacancies', queryData],
-    queryFn: () => searchVacancies(vacancyForm),
+    queryFn: () => searchJobSeekers(vacancyForm),
   });
 
   const updateUrl = (values: VacancyFormValues) => {
@@ -79,35 +73,39 @@ export default function VacanciesPage() {
   return (
     <div className="container">
       <h1 className={classes['page-header']}>Search for top-tier jobs </h1>
-      <SearchBar onSubmit={updateUrl} fieldsValues={vacancyForm} />
-      {role && (
-        <Link href={role === 'JOB_SEEKER' ? '/companies' : '/job-seekers'}>
-          <div className={classes['link-to-companies']}>
-            {role === 'JOB_SEEKER' && <span>Search for companies</span>}
-            {role === 'COMPANY' && <span>Search for job-seekers</span>}
-            <div className="align-center">
-              <FontAwesomeIcon icon={faArrowRight} />
-            </div>
+      <SearchBar
+        type={'jobSeekers'}
+        onSubmit={updateUrl}
+        fieldsValues={vacancyForm}
+      />
+
+      <Link href="/vacancies">
+        <div className={classes['link-to-companies']}>
+          <span>Search for vacancies</span>
+          <div className="align-center">
+            <FontAwesomeIcon icon={faArrowRight} />
           </div>
-        </Link>
-      )}
+        </div>
+      </Link>
 
       <div className={classes['vacancies-container']}>
         {vacanciesData &&
-          vacanciesData.data
-            .filter((v: VacancyData) => v.company)
-            .map((vacancyData: VacancyData) => (
-              <VacancyItem
+          vacanciesData.data.map((vacancyData: JobSeekerItemData) => {
+            console.log(vacancyData);
+            return (
+              <JobSeekerItem
                 key={vacancyData.id}
                 data={{
                   id: vacancyData.id,
-                  title: vacancyData.title,
-                  companyName: vacancyData.company.name,
-                  companyLogo: vacancyData.company.logoUrl,
+                  firstName: vacancyData.firstName,
+                  lastName: vacancyData.lastName,
+                  avatarUrl: vacancyData.avatarUrl,
+                  dateOfBirth: vacancyData.dateOfBirth,
                   createdAt: vacancyData.createdAt,
                 }}
               />
-            ))}
+            );
+          })}
       </div>
     </div>
   );

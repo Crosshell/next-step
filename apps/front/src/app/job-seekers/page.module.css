@@ -1,0 +1,31 @@
+.page-header {
+  margin-bottom: 40px;
+  font-size: 3rem;
+}
+
+.search-form {
+  margin-bottom: 20px;
+}
+
+.vacancies-container {
+  width: 77.5%;
+}
+
+.link-to-companies {
+  position: relative;
+  z-index: 200;
+  display: flex;
+  gap: 5px;
+  margin-bottom: 30px;
+  width: fit-content;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.link-to-companies:hover {
+  text-decoration: underline;
+}
+
+.link-to-companies svg {
+  font-size: 1.25rem;
+}

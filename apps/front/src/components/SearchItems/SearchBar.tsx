@@ -14,6 +14,7 @@ import { VacancySearchForm } from '@/types/vacancies';
 import { companiesSearchDefaults } from '@/lib/companies-search-data';
 import { submitCompaniesSearchForm } from '@/utils/companiesSearchValidation';
 import { CompaniesSearchForm } from '@/types/companiesSearch';
+import { jobSeekerSearchDefaults } from '@/lib/jobseeker-search-data';
 
 interface Props {
   type?: 'vacancies' | 'companies' | 'jobSeekers';
@@ -40,9 +41,17 @@ export default function SearchBar({
     defaultValues = companiesSearchDefaults;
     submit = submitCompaniesSearchForm;
   }
+  if (type === 'jobSeekers') {
+    defaultValues = jobSeekerSearchDefaults;
+    validate = () => {};
+    submit = () => {};
+  }
 
   return (
-    <div className={classes['searchbar-wrapper']}>
+    <div
+      className={classes['searchbar-wrapper']}
+      style={{ marginBottom: type === 'jobSeekers' ? 0 : '' }}
+    >
       <Formik
         initialValues={{ ...defaultValues, ...fieldsValues }}
         validate={validate}
@@ -53,9 +62,9 @@ export default function SearchBar({
             className={classes['btn-search-container']}
             style={{ width: type === 'companies' ? '100%' : '' }}
           >
-            <InputContainer type={type} />
+            {type !== 'jobSeekers' && <InputContainer type={type} />}
           </div>
-          {type !== 'companies' && <VacanciesTagBox />}
+          {/* {type !== 'companies' && <VacanciesTagBox type={type} />} */}
         </Form>
       </Formik>
     </div>

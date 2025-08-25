@@ -10,17 +10,31 @@ import WorkFormatsInput from './Fields/WorkFormats';
 import classes from './SearchVacancies.module.css';
 import { useState } from 'react';
 
-export default function VacanciesTagBox() {
-  const [moreFilters, setMoreFilters] = useState<boolean>(false);
+interface Props {
+  type?: 'vacancies' | 'jobSeekers';
+}
+
+export default function VacanciesTagBox({ type = 'vacancies' }: Props) {
+  const [moreFilters, setMoreFilters] = useState<boolean>(
+    type === 'jobSeekers' ? true : false
+  );
 
   return (
     <div className={classes['tag-box']}>
       <h3>Add filters:</h3>
-      <SalarySlider />
-      <ExperienceInput />
+      {type === 'vacancies' && (
+        <>
+          <SalarySlider />
+          <ExperienceInput />
+        </>
+      )}
       <SeniorityInput />
-      <WorkFormatsInput />
-      <EmploymentTypesInput />
+      {type === 'vacancies' && (
+        <>
+          <WorkFormatsInput />
+          <EmploymentTypesInput />
+        </>
+      )}
       {moreFilters && (
         <>
           <LanguagesInput />
@@ -30,13 +44,15 @@ export default function VacanciesTagBox() {
         </>
       )}
 
-      <button
-        className={classes['more-btn']}
-        type="button"
-        onClick={() => setMoreFilters((prev) => !prev)}
-      >
-        {moreFilters ? 'Less filters' : 'More filters...'}
-      </button>
+      {type === 'vacancies' && (
+        <button
+          className={classes['more-btn']}
+          type="button"
+          onClick={() => setMoreFilters((prev) => !prev)}
+        >
+          {moreFilters ? 'Less filters' : 'More filters...'}
+        </button>
+      )}
     </div>
   );
 }
