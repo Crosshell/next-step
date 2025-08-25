@@ -16,7 +16,6 @@ import {
   JobSeekerItemData,
   JobSeekerSearchForm,
 } from '@/types/jobSeekerSearch';
-import { VacancyFormValues } from '@/types/vacancy';
 import { mapQueryToJobSeekerForm } from '@/utils/jobSeekerSearchValidation';
 import { isEmptyValue } from '@/utils/vacancyValidation';
 import { searchJobSeekers } from '@/services/jobSeekerSearchService';
@@ -72,8 +71,6 @@ export default function JobSeekersPage() {
       </MessageBox>
     );
 
-  console.log(jobSeekerForm);
-
   return (
     <div className="container">
       <h1 className={classes['page-header']}>Search for top-tier jobs </h1>
@@ -95,7 +92,6 @@ export default function JobSeekersPage() {
       <div className={classes['vacancies-container']}>
         {jobSeekersData &&
           jobSeekersData.data.map((vacancyData: JobSeekerItemData) => {
-            console.log(vacancyData);
             return (
               <JobSeekerItem
                 key={vacancyData.id}

@@ -35,7 +35,7 @@ export default function SearchTagBox({ type = 'vacancies' }: Props) {
       {moreFilters && (
         <>
           <LanguagesInput type={type} />
-          {/* <SkillsInput /> */}
+          <SkillsInput type={type} />
           <h3>Add sorting:</h3>
           <OrderFields />
         </>

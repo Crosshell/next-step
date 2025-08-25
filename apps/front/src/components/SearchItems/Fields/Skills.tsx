@@ -1,5 +1,4 @@
 import { FieldArray, useFormikContext } from 'formik';
-import { VacancySearchForm } from '@/types/vacancies';
 import { getSkills } from '@/services/jobseekerService';
 import { useQuery } from '@tanstack/react-query';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -7,11 +6,21 @@ import AnimatedIcon from '@/components/HoveredItem/HoveredItem';
 import RequestErrors from '@/components/RequestErrors/RequestErrors';
 
 import classes from './Fields.module.css';
-import { div } from 'framer-motion/client';
+import { JobSeekerSearchForm } from '@/types/jobSeekerSearch';
 
-export default function SkillsInput() {
+interface Props {
+  type?: 'vacancies' | 'jobSeekers';
+}
+
+type SkillsFormValues = {
+  skillIds?: { skill: { id: string; name?: string } }[];
+  requiredSkillIds?: { skill: { id: string; name?: string } }[];
+  newSkill: string;
+};
+
+export default function SkillsInput({ type = 'vacancies' }: Props) {
   const { values, handleChange, setFieldValue } =
-    useFormikContext<VacancySearchForm>();
+    useFormikContext<SkillsFormValues>();
 
   const { data: skillsList = [], error: fetchSkillsError } = useQuery({
     queryKey: ['skills'],
@@ -19,11 +28,13 @@ export default function SkillsInput() {
     retry: false,
   });
 
+  const name = type === 'vacancies' ? 'requiredSkillIds' : 'skillIds';
+
   return (
     <div className={classes['skills-field']}>
       <label>Skills</label>
 
-      <FieldArray name="requiredSkillIds">
+      <FieldArray name={name}>
         {({ remove, push }) => {
           const tryAddSkill = () => {
             const trimmed = values.newSkill.trim();
@@ -35,9 +46,7 @@ export default function SkillsInput() {
 
             if (
               existingSkill &&
-              !values.requiredSkillIds.some(
-                (s: any) => s.skill.id === existingSkill.id
-              )
+              !values[name]?.some((s: any) => s.skill.id === existingSkill.id)
             ) {
               push({ skill: existingSkill });
               setFieldValue('newSkill', '');
@@ -46,7 +55,7 @@ export default function SkillsInput() {
 
           return (
             <div className={classes['skills']}>
-              {values.requiredSkillIds.map((s: any, index: number) => (
+              {values[name]?.map((s: any, index: number) => (
                 <div key={s.skill.id}>
                   <div className={classes['del-btn-box']}>
                     <span>{s.skill.name}</span>
@@ -82,7 +91,7 @@ export default function SkillsInput() {
                           item.name
                             .toLowerCase()
                             .includes(values.newSkill.trim().toLowerCase()) &&
-                          !values.requiredSkillIds.some(
+                          !values[name]?.some(
                             (s: any) => s.skill.id === item.id
                           )
                       )
