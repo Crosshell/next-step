@@ -38,4 +38,8 @@ export class CompanyRepository {
   ): Promise<Company> {
     return this.prisma.company.update({ where, data });
   }
+
+  async count(where: Prisma.CompanyWhereInput) {
+    return this.prisma.company.count({ where });
+  }
 }

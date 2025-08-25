@@ -9,7 +9,8 @@ import { UpdateCompanyDto } from './dto/update-company.dto';
 import { SearchCompanyDto } from './dto/search-company.dto';
 import { CompanyRepository } from './company.repository';
 import { ConfigService } from '@nestjs/config';
-import { getPaginationByPage } from '@common/utils';
+import { createPaginationMeta, getPaginationByPage } from '@common/utils';
+import { PagedDataResponse } from '@common/responses';
 
 @Injectable()
 export class CompanyService {
@@ -48,7 +49,7 @@ export class CompanyService {
     if (company) throw new BadRequestException('Company already exists');
   }
 
-  async search(dto: SearchCompanyDto): Promise<Company[]> {
+  async search(dto: SearchCompanyDto): Promise<PagedDataResponse<Company[]>> {
     const where: Prisma.CompanyWhereInput = {};
     const pagination = getPaginationByPage(dto.page, this.searchPageSize);
 
@@ -59,7 +60,12 @@ export class CompanyService {
       };
     }
 
-    return this.repository.findMany({ where, ...pagination });
+    const data = await this.repository.findMany({ where, ...pagination });
+    const total = await this.repository.count(where);
+
+    const meta = createPaginationMeta(total, dto.page, this.searchPageSize);
+
+    return { data, meta };
   }
 
   async update(id: string, dto: UpdateCompanyDto): Promise<Company> {

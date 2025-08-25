@@ -8,6 +8,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
@@ -22,6 +23,7 @@ import { SearchCompanyDto } from './dto/search-company.dto';
 import { CreateCompanyGuard } from './guards/create-company.guard';
 import { CurrentCompany } from './decorators/current-company.decorator';
 import { CompanySwagger } from '../../docs/swagger/company.swagger';
+import { PagedDataResponse } from '@common/responses';
 
 @Controller('companies')
 export class CompanyController {
@@ -38,10 +40,12 @@ export class CompanyController {
     return this.service.create(user.id, dto);
   }
 
-  @Post('search')
+  @Get('search')
   @HttpCode(HttpStatus.OK)
   @CompanySwagger.search()
-  async search(@Body() dto: SearchCompanyDto): Promise<Company[]> {
+  async search(
+    @Query() dto: SearchCompanyDto,
+  ): Promise<PagedDataResponse<Company[]>> {
     return this.service.search(dto);
   }
 
