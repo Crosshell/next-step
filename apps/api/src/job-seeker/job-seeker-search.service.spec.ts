@@ -6,11 +6,16 @@ import { SkillService } from '../skill/skill.service';
 import { LanguageService } from '../language/language.service';
 import { SearchJobSeekerDto } from './dto/search-job-seeker.dto';
 import { JobSeeker, LanguageLevel, SeniorityLevel } from '@prisma/client';
-import { getPaginationByPage, getLanguageLevelsFromLevel } from '@common/utils';
+import {
+  getPaginationByPage,
+  getLanguageLevelsFromLevel,
+  createPaginationMeta,
+} from '@common/utils';
 
 jest.mock('@common/utils', () => ({
   getPaginationByPage: jest.fn(),
   getLanguageLevelsFromLevel: jest.fn(),
+  createPaginationMeta: jest.fn(),
 }));
 
 const mockedGetPaginationByPage = getPaginationByPage as jest.MockedFunction<
@@ -21,6 +26,10 @@ const mockedGetLanguageLevelsFromLevel =
   getLanguageLevelsFromLevel as jest.MockedFunction<
     typeof getLanguageLevelsFromLevel
   >;
+
+const mockedCreatePaginationMeta = createPaginationMeta as jest.MockedFunction<
+  typeof createPaginationMeta
+>;
 
 describe('JobSeekerSearchService', () => {
   let service: JobSeekerSearchService;
@@ -53,6 +62,7 @@ describe('JobSeekerSearchService', () => {
 
     const mockJobSeekerRepository = {
       findMany: jest.fn(),
+      count: jest.fn(),
     };
 
     const mockSkillService = {
@@ -111,9 +121,13 @@ describe('JobSeekerSearchService', () => {
       const dto: SearchJobSeekerDto = {
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
       mockedGetPaginationByPage.mockReturnValue(mockPagination);
       repository.findMany.mockResolvedValue([mockJobSeeker]);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       const result = await service.search(dto);
 
@@ -126,9 +140,14 @@ describe('JobSeekerSearchService', () => {
         ...mockPagination,
         orderBy: { updatedAt: 'desc' },
       });
+      expect(mockedCreatePaginationMeta).toHaveBeenCalledWith(
+        total,
+        dto.page,
+        pageSize,
+      );
       expect(skillService.assertExists).not.toHaveBeenCalled();
       expect(languageService.assertExists).not.toHaveBeenCalled();
-      expect(result).toEqual([mockJobSeeker]);
+      expect(result).toEqual({ data: [mockJobSeeker], meta });
     });
 
     it('should search job seekers with skill filters', async () => {
@@ -139,10 +158,14 @@ describe('JobSeekerSearchService', () => {
           '123e4567-e89b-12d3-a456-426614174002',
         ],
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
       mockedGetPaginationByPage.mockReturnValue(mockPagination);
       skillService.assertExists.mockResolvedValue(undefined);
       repository.findMany.mockResolvedValue([mockJobSeeker]);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       const result = await service.search(dto);
 
@@ -169,7 +192,12 @@ describe('JobSeekerSearchService', () => {
         ...mockPagination,
         orderBy: { updatedAt: 'desc' },
       });
-      expect(result).toEqual([mockJobSeeker]);
+      expect(mockedCreatePaginationMeta).toHaveBeenCalledWith(
+        total,
+        dto.page,
+        pageSize,
+      );
+      expect(result).toEqual({ data: [mockJobSeeker], meta });
     });
 
     it('should search job seekers with language filters', async () => {
@@ -186,11 +214,15 @@ describe('JobSeekerSearchService', () => {
           },
         ],
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
       mockedGetPaginationByPage.mockReturnValue(mockPagination);
       mockedGetLanguageLevelsFromLevel.mockReturnValue(mockLanguageLevels);
       languageService.assertExists.mockResolvedValue(undefined);
       repository.findMany.mockResolvedValue([mockJobSeeker]);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       const result = await service.search(dto);
 
@@ -229,7 +261,12 @@ describe('JobSeekerSearchService', () => {
         ...mockPagination,
         orderBy: { updatedAt: 'desc' },
       });
-      expect(result).toEqual([mockJobSeeker]);
+      expect(mockedCreatePaginationMeta).toHaveBeenCalledWith(
+        total,
+        dto.page,
+        pageSize,
+      );
+      expect(result).toEqual({ data: [mockJobSeeker], meta });
     });
 
     it('should search job seekers with seniority level filters', async () => {
@@ -237,9 +274,13 @@ describe('JobSeekerSearchService', () => {
         page: 1,
         seniorityLevels: [SeniorityLevel.JUNIOR, SeniorityLevel.MIDDLE],
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
       mockedGetPaginationByPage.mockReturnValue(mockPagination);
       repository.findMany.mockResolvedValue([mockJobSeeker]);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       const result = await service.search(dto);
 
@@ -253,7 +294,12 @@ describe('JobSeekerSearchService', () => {
         ...mockPagination,
         orderBy: { updatedAt: 'desc' },
       });
-      expect(result).toEqual([mockJobSeeker]);
+      expect(mockedCreatePaginationMeta).toHaveBeenCalledWith(
+        total,
+        dto.page,
+        pageSize,
+      );
+      expect(result).toEqual({ data: [mockJobSeeker], meta });
     });
 
     it('should search job seekers with custom order by', async () => {
@@ -261,9 +307,13 @@ describe('JobSeekerSearchService', () => {
         page: 1,
         orderBy: { updatedAt: 'asc' },
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
       mockedGetPaginationByPage.mockReturnValue(mockPagination);
       repository.findMany.mockResolvedValue([mockJobSeeker]);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       const result = await service.search(dto);
 
@@ -272,7 +322,12 @@ describe('JobSeekerSearchService', () => {
         ...mockPagination,
         orderBy: { updatedAt: 'asc' },
       });
-      expect(result).toEqual([mockJobSeeker]);
+      expect(mockedCreatePaginationMeta).toHaveBeenCalledWith(
+        total,
+        dto.page,
+        pageSize,
+      );
+      expect(result).toEqual({ data: [mockJobSeeker], meta });
     });
 
     it('should search job seekers with all filters combined', async () => {
@@ -288,6 +343,8 @@ describe('JobSeekerSearchService', () => {
         seniorityLevels: [SeniorityLevel.SENIOR],
         orderBy: { updatedAt: 'asc' },
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
       const mockPaginationPage = { skip: pageSize, take: pageSize };
       mockedGetPaginationByPage.mockReturnValue(mockPaginationPage);
@@ -295,6 +352,8 @@ describe('JobSeekerSearchService', () => {
       skillService.assertExists.mockResolvedValue(undefined);
       languageService.assertExists.mockResolvedValue(undefined);
       repository.findMany.mockResolvedValue([mockJobSeeker]);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       const result = await service.search(dto);
 
@@ -331,7 +390,12 @@ describe('JobSeekerSearchService', () => {
         ...mockPaginationPage,
         orderBy: { updatedAt: 'asc' },
       });
-      expect(result).toEqual([mockJobSeeker]);
+      expect(mockedCreatePaginationMeta).toHaveBeenCalledWith(
+        total,
+        dto.page,
+        pageSize,
+      );
+      expect(result).toEqual({ data: [mockJobSeeker], meta });
     });
   });
 });

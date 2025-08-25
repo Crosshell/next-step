@@ -27,6 +27,7 @@ import { CreateJobSeekerGuard } from './guards/create-job-seeker.guard';
 import { CurrentJobSeeker } from './decorators/current-job-seeker.decorator';
 import { JobSeekerSwagger } from '../../docs/swagger/job-seeker.swagger';
 import { SetContactsDto } from './dto/set-contacts.dto';
+import { PagedDataResponse } from '@common/responses';
 
 @Controller('job-seekers')
 export class JobSeekerController {
@@ -63,7 +64,9 @@ export class JobSeekerController {
   @UseGuards(SessionAuthGuard, CompanyGuard)
   @HttpCode(HttpStatus.OK)
   @JobSeekerSwagger.search()
-  async search(@Body() dto: SearchJobSeekerDto): Promise<JobSeeker[]> {
+  async search(
+    @Body() dto: SearchJobSeekerDto,
+  ): Promise<PagedDataResponse<JobSeeker[]>> {
     return this.service.search(dto);
   }
 

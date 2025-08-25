@@ -49,6 +49,7 @@ describe('JobSeekerService', () => {
       setSkills: jest.fn(),
       setLanguages: jest.fn(),
       setContacts: jest.fn(),
+      count: jest.fn(),
     };
 
     const mockSkillService = {
@@ -208,14 +209,21 @@ describe('JobSeekerService', () => {
         '123e4567-e89b-12d3-a456-426614174002',
       ],
     };
+    const meta = { total: 1, page: 1, totalPages: 1 };
 
     it('should search job seekers', async () => {
-      searchService.search.mockResolvedValue([mockJobSeeker]);
+      searchService.search.mockResolvedValue({
+        data: [mockJobSeeker],
+        meta,
+      });
 
       const result = await service.search(dto);
 
       expect(searchService.search).toHaveBeenCalledWith(dto);
-      expect(result).toEqual([mockJobSeeker]);
+      expect(result).toEqual({
+        data: [mockJobSeeker],
+        meta,
+      });
     });
   });
 
