@@ -14,7 +14,6 @@ type RequiredLanguage = {
 };
 
 export type JobSeekerSearchForm = {
-  seniorityLevels: ('TRAINEE' | 'JUNIOR' | 'MIDDLE' | 'SENIOR' | 'LEAD')[];
   languages: RequiredLanguage[];
   skillIds: { skill: { id: string; name?: string } }[] | string[];
   newSkill: string;

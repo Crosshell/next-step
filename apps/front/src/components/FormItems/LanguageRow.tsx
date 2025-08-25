@@ -11,7 +11,7 @@ interface Props {
   index: number;
   languagesList: LanguageData[];
   onRemove: () => void;
-  type?: 'tagBox';
+  type?: 'tagBox' | 'jobSeekers';
 }
 
 export default function LanguageRow({
@@ -23,9 +23,9 @@ export default function LanguageRow({
   return (
     <div
       className={
-        type !== 'tagBox'
-          ? classes['language-row']
-          : classes['language-row-tag-box']
+        type === 'tagBox' || type === 'jobSeekers'
+          ? classes['language-row-tag-box']
+          : classes['language-row']
       }
     >
       <Field

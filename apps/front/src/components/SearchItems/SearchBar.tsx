@@ -1,7 +1,7 @@
 import { Form, Formik } from 'formik';
 
 import InputContainer from './InputContainer';
-import VacanciesTagBox from './SearchTagBox';
+import SearchTagBox from './SearchTagBox';
 
 import classes from './SearchVacancies.module.css';
 
@@ -15,11 +15,13 @@ import { companiesSearchDefaults } from '@/lib/companies-search-data';
 import { submitCompaniesSearchForm } from '@/utils/companiesSearchValidation';
 import { CompaniesSearchForm } from '@/types/companiesSearch';
 import { jobSeekerSearchDefaults } from '@/lib/jobseeker-search-data';
+import { submitJobSeekersSearchForm } from '@/utils/jobSeekerSearchValidation';
+import { JobSeekerSearchForm } from '@/types/jobSeekerSearch';
 
 interface Props {
   type?: 'vacancies' | 'companies' | 'jobSeekers';
   onSubmit?: (values: any) => void;
-  fieldsValues: VacancySearchForm | CompaniesSearchForm;
+  fieldsValues: VacancySearchForm | CompaniesSearchForm | JobSeekerSearchForm;
 }
 
 export default function SearchBar({
@@ -32,6 +34,7 @@ export default function SearchBar({
   let defaultValues = {};
   let validate;
   let submit: any;
+
   if (type === 'vacancies') {
     defaultValues = vacancySearchDefaults;
     validate = searchFormValidate;
@@ -44,7 +47,7 @@ export default function SearchBar({
   if (type === 'jobSeekers') {
     defaultValues = jobSeekerSearchDefaults;
     validate = () => {};
-    submit = () => {};
+    submit = submitJobSeekersSearchForm;
   }
 
   return (
@@ -64,7 +67,7 @@ export default function SearchBar({
           >
             {type !== 'jobSeekers' && <InputContainer type={type} />}
           </div>
-          {/* {type !== 'companies' && <VacanciesTagBox type={type} />} */}
+          {type !== 'companies' && <SearchTagBox type={type} />}
         </Form>
       </Formik>
     </div>

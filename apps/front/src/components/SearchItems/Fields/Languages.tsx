@@ -10,7 +10,11 @@ import { LanguageData, UpdatedUserLanguages } from '@/types/profile';
 import { ApiError } from '@/types/authForm';
 import { getLanguages } from '@/services/jobseekerService';
 
-export default function LanguagesInput() {
+interface Props {
+  type?: 'vacancies' | 'jobSeekers';
+}
+
+export default function LanguagesInput({ type = 'vacancies' }: Props) {
   const { data: languagesList = [], error: fetchLangError } = useQuery<
     LanguageData[] | null,
     ApiError
@@ -21,27 +25,29 @@ export default function LanguagesInput() {
     retry: false,
   });
 
+  const name = type === 'vacancies' ? 'requiredLanguages' : 'languages';
+  console.log(name);
+
   return (
     <div className={classes['languages']}>
       <label>Languages</label>
-
-      <FieldArray name="requiredLanguages">
+      <FieldArray name={name}>
         {({ push, remove, form }) => (
           <>
-            {form.values.requiredLanguages.map(
+            {form.values[name]?.map(
               (lang: UpdatedUserLanguages, index: number) => (
                 <LanguageRow
                   key={index}
                   index={index}
                   languagesList={languagesList || []}
                   onRemove={() => remove(index)}
-                  type="tagBox"
+                  type="jobSeekers"
                 />
               )
             )}
 
             <ErrorMessage
-              name="requiredLanguages"
+              name={name}
               component="div"
               className={classes['error-msg']}
             />

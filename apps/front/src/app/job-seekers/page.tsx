@@ -12,7 +12,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import classes from './page.module.css';
 
-import { JobSeekerItemData } from '@/types/jobSeekerSearch';
+import {
+  JobSeekerItemData,
+  JobSeekerSearchForm,
+} from '@/types/jobSeekerSearch';
 import { VacancyFormValues } from '@/types/vacancy';
 import { mapQueryToJobSeekerForm } from '@/utils/jobSeekerSearchValidation';
 import { isEmptyValue } from '@/utils/vacancyValidation';
@@ -24,24 +27,25 @@ export default function JobSeekersPage() {
 
   const queryData = Object.fromEntries(searchParams.entries());
 
-  const vacancyForm = mapQueryToJobSeekerForm(queryData);
+  const jobSeekerForm = mapQueryToJobSeekerForm(queryData);
 
   const {
-    data: vacanciesData,
+    data: jobSeekersData,
     isError,
     error,
   } = useQuery({
-    queryKey: ['vacancies', queryData],
-    queryFn: () => searchJobSeekers(vacancyForm),
+    queryKey: ['job-seekers', queryData],
+    queryFn: () => searchJobSeekers(jobSeekerForm),
   });
 
-  const updateUrl = (values: VacancyFormValues) => {
+  const updateUrl = (values: JobSeekerSearchForm) => {
+    console.log(values);
     const params = new URLSearchParams();
 
     Object.entries(values).forEach(([key, value]) => {
       if (isEmptyValue(value)) return;
 
-      if (key === 'requiredSkillIds' && Array.isArray(value)) {
+      if (key === 'skillIds' && Array.isArray(value)) {
         if (value.length) params.set(key, value.join(','));
       } else if (Array.isArray(value)) {
         if (
@@ -68,7 +72,7 @@ export default function JobSeekersPage() {
       </MessageBox>
     );
 
-  console.log(vacancyForm);
+  console.log(jobSeekerForm);
 
   return (
     <div className="container">
@@ -76,7 +80,7 @@ export default function JobSeekersPage() {
       <SearchBar
         type={'jobSeekers'}
         onSubmit={updateUrl}
-        fieldsValues={vacancyForm}
+        fieldsValues={jobSeekerForm}
       />
 
       <Link href="/vacancies">
@@ -89,8 +93,8 @@ export default function JobSeekersPage() {
       </Link>
 
       <div className={classes['vacancies-container']}>
-        {vacanciesData &&
-          vacanciesData.data.map((vacancyData: JobSeekerItemData) => {
+        {jobSeekersData &&
+          jobSeekersData.data.map((vacancyData: JobSeekerItemData) => {
             console.log(vacancyData);
             return (
               <JobSeekerItem

@@ -9,12 +9,13 @@ import WorkFormatsInput from './Fields/WorkFormats';
 
 import classes from './SearchVacancies.module.css';
 import { useState } from 'react';
+import HoveredItem from '../HoveredItem/HoveredItem';
 
 interface Props {
   type?: 'vacancies' | 'jobSeekers';
 }
 
-export default function VacanciesTagBox({ type = 'vacancies' }: Props) {
+export default function SearchTagBox({ type = 'vacancies' }: Props) {
   const [moreFilters, setMoreFilters] = useState<boolean>(
     type === 'jobSeekers' ? true : false
   );
@@ -26,19 +27,15 @@ export default function VacanciesTagBox({ type = 'vacancies' }: Props) {
         <>
           <SalarySlider />
           <ExperienceInput />
-        </>
-      )}
-      <SeniorityInput />
-      {type === 'vacancies' && (
-        <>
+          <SeniorityInput />
           <WorkFormatsInput />
           <EmploymentTypesInput />
         </>
       )}
       {moreFilters && (
         <>
-          <LanguagesInput />
-          <SkillsInput />
+          <LanguagesInput type={type} />
+          {/* <SkillsInput /> */}
           <h3>Add sorting:</h3>
           <OrderFields />
         </>
@@ -51,6 +48,11 @@ export default function VacanciesTagBox({ type = 'vacancies' }: Props) {
           onClick={() => setMoreFilters((prev) => !prev)}
         >
           {moreFilters ? 'Less filters' : 'More filters...'}
+        </button>
+      )}
+      {type === 'jobSeekers' && (
+        <button type="submit" className={classes['tags-search-btn']}>
+          <HoveredItem>Search</HoveredItem>
         </button>
       )}
     </div>

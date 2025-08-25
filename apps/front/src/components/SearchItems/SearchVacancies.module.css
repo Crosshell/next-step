@@ -107,6 +107,23 @@
   font-size: 1.25rem;
 }
 
+.tags-search-btn {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.tags-search-btn div {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #1f1f21;
+  text-align: center;
+}
+
 /* TagBox */
 
 /* Responsiveness */
