@@ -1,8 +1,4 @@
-import {
-  RequiredLanguage,
-  VacancyData,
-  VacancySearchForm,
-} from '@/types/vacancies';
+import { VacancyData, VacancySearchForm } from '@/types/vacancies';
 import { VacancyFormValues } from '@/types/vacancy';
 
 export function validateVacancyForm(values: VacancyFormValues) {
@@ -144,6 +140,14 @@ export function searchFormValidate(values: VacancySearchForm) {
   if (values.title && values.title.length < 10) {
     errors.title = 'Title must be at least 10 characters';
   }
+
+  const invalid = values.requiredLanguages.some(
+    (l: any) => !l.language?.id || !l.level
+  );
+  if (invalid) {
+    errors.requiredLanguages = 'Please select a language';
+  }
+
   return errors;
 }
 

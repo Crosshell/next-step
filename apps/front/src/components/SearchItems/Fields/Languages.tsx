@@ -41,7 +41,7 @@ export default function LanguagesInput({ type = 'vacancies' }: Props) {
                   index={index}
                   languagesList={languagesList || []}
                   onRemove={() => remove(index)}
-                  type="jobSeekers"
+                  type={type === 'vacancies' ? 'tagBox' : 'jobSeekers'}
                 />
               )
             )}

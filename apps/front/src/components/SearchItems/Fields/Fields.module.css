@@ -162,4 +162,8 @@
   font-size: 1.1rem;
 }
 
+.error-msg {
+  margin-bottom: 15px;
+}
+
 /* Sorting Fields */

@@ -1,4 +1,5 @@
 import { JobSeekerSearchForm } from '@/types/jobSeekerSearch';
+import { VacancySearchForm } from '@/types/vacancies';
 
 export function mapQueryToJobSeekerForm(query: {
   [k: string]: string;
@@ -25,14 +26,25 @@ export function mapQueryToJobSeekerForm(query: {
   return result as JobSeekerSearchForm;
 }
 
+export function validateLanguages(values: JobSeekerSearchForm) {
+  const errors: Record<string, any> = {};
+
+  const invalid = values.languages.some(
+    (l: any) => !l.language?.id || !l.level
+  );
+  if (invalid) errors.languages = 'Please select a language';
+
+  return errors;
+}
+
 export function submitJobSeekersSearchForm(
   values: JobSeekerSearchForm,
   onSubmit: (values: any) => void
 ) {
+  console.log(values);
   const cleaned = Object.fromEntries(
     Object.entries(values).filter(([key, value]) => {
       if (key === 'newSkill') return false;
-
       if (Array.isArray(value)) return value.length > 0;
       if (typeof value === 'string') return value.trim() !== '';
       if (typeof value === 'number') return value !== 0;
