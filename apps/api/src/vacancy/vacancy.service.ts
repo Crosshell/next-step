@@ -14,6 +14,7 @@ import { SetLanguagesDto } from './dto/set-languages.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
 import { VacancySearchService } from './vacancy-search.service';
 import { CompanyService } from '../company/company.service';
+import { PagedDataResponse } from '@common/responses';
 
 @Injectable()
 export class VacancyService {
@@ -43,14 +44,21 @@ export class VacancyService {
     return vacancy;
   }
 
-  async findByCompanyId(companyId: string): Promise<Vacancy[]> {
+  async searchByCompanyId(
+    companyId: string,
+    dto: SearchVacancyDto,
+  ): Promise<PagedDataResponse<Vacancy[]>> {
     const company = await this.companyService.findOne({ id: companyId });
     if (!company) throw new BadRequestException('Company not found');
-    return this.repository.findMany({ where: { companyId } }, true);
+
+    return this.searchService.search(dto, { companyId });
   }
 
-  async search(dto: SearchVacancyDto): Promise<Vacancy[]> {
-    return this.searchService.search(dto);
+  async search(
+    dto: SearchVacancyDto,
+    additionalWhereParams?: Prisma.VacancyWhereInput,
+  ): Promise<PagedDataResponse<Vacancy[]>> {
+    return this.searchService.search(dto, additionalWhereParams);
   }
 
   async update(

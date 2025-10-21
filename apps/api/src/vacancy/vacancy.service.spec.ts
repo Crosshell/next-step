@@ -201,33 +201,42 @@ describe('VacancyService', () => {
     });
   });
 
-  describe('findByCompanyId', () => {
+  describe('searchByCompanyId', () => {
     const companyId = '123e4567-e89b-12d3-a456-426614174001';
     const vacancies = [mockVacancy];
+    const dto: SearchVacancyDto = {
+      page: 1,
+    };
+    const meta = { total: 1, page: 1, totalPages: 1 };
 
     it('should return vacancies for valid company', async () => {
+      searchService.search.mockResolvedValue({
+        data: vacancies,
+        meta,
+      });
       companyService.findOne.mockResolvedValue(mockCompany);
-      vacancyRepository.findMany.mockResolvedValue(vacancies);
 
-      const result = await service.findByCompanyId(companyId);
+      const result = await service.searchByCompanyId(companyId, dto);
 
       expect(companyService.findOne).toHaveBeenCalledWith({ id: companyId });
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
-        { where: { companyId } },
-        true,
-      );
-      expect(result).toEqual(vacancies);
+      expect(searchService.search).toHaveBeenCalledWith(dto, {
+        companyId,
+      });
+      expect(result).toEqual({
+        data: vacancies,
+        meta,
+      });
     });
 
     it('should throw BadRequestException when company not found', async () => {
       companyService.findOne.mockResolvedValue(null);
 
-      await expect(service.findByCompanyId(companyId)).rejects.toThrow(
+      await expect(service.searchByCompanyId(companyId, dto)).rejects.toThrow(
         new BadRequestException('Company not found'),
       );
 
       expect(companyService.findOne).toHaveBeenCalledWith({ id: companyId });
-      expect(vacancyRepository.findMany).not.toHaveBeenCalled();
+      expect(searchService.search).not.toHaveBeenCalled();
     });
   });
 
@@ -237,14 +246,15 @@ describe('VacancyService', () => {
       page: 1,
     };
     const vacancies = [mockVacancy];
+    const meta = { total: 1, page: 1, totalPages: 1 };
 
     it('should return search results', async () => {
-      searchService.search.mockResolvedValue(vacancies);
+      searchService.search.mockResolvedValue({ meta, data: vacancies });
 
       const result = await service.search(dto);
 
-      expect(searchService.search).toHaveBeenCalledWith(dto);
-      expect(result).toEqual(vacancies);
+      expect(searchService.search).toHaveBeenCalledWith(dto, undefined);
+      expect(result).toEqual({ meta, data: vacancies });
     });
   });
 

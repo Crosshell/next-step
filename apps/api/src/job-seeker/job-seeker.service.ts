@@ -14,6 +14,7 @@ import { SkillService } from '../skill/skill.service';
 import { LanguageService } from '../language/language.service';
 import { JobSeekerSearchService } from './job-seeker-search.service';
 import { SetContactsDto } from './dto/set-contacts.dto';
+import { PagedDataResponse } from '@common/responses';
 
 @Injectable()
 export class JobSeekerService {
@@ -50,7 +51,9 @@ export class JobSeekerService {
     if (jobSeeker) throw new BadRequestException('Job seeker already exists');
   }
 
-  async search(dto: SearchJobSeekerDto): Promise<JobSeeker[]> {
+  async search(
+    dto: SearchJobSeekerDto,
+  ): Promise<PagedDataResponse<JobSeeker[]>> {
     return this.searchService.search(dto);
   }
 

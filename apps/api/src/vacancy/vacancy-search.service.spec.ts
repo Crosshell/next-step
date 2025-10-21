@@ -13,11 +13,16 @@ import {
   Vacancy,
   WorkFormat,
 } from '@prisma/client';
-import { getPaginationByPage, getLanguageLevelsFromLevel } from '@common/utils';
+import {
+  getPaginationByPage,
+  getLanguageLevelsFromLevel,
+  createPaginationMeta,
+} from '@common/utils';
 
 jest.mock('@common/utils', () => ({
   getPaginationByPage: jest.fn(),
   getLanguageLevelsFromLevel: jest.fn(),
+  createPaginationMeta: jest.fn(),
 }));
 
 const mockedGetPaginationByPage = getPaginationByPage as jest.MockedFunction<
@@ -29,9 +34,13 @@ const mockedGetLanguageLevelsFromLevel =
     typeof getLanguageLevelsFromLevel
   >;
 
+const mockedCreatePaginationMeta = createPaginationMeta as jest.MockedFunction<
+  typeof createPaginationMeta
+>;
+
 describe('VacancySearchService', () => {
   let service: VacancySearchService;
-  let vacancyRepository: jest.Mocked<VacancyRepository>;
+  let repository: jest.Mocked<VacancyRepository>;
   let languageService: jest.Mocked<LanguageService>;
   let skillService: jest.Mocked<SkillService>;
 
@@ -75,6 +84,7 @@ describe('VacancySearchService', () => {
   beforeEach(async () => {
     const mockVacancyRepository = {
       findMany: jest.fn(),
+      count: jest.fn(),
     };
 
     const mockConfigService = {
@@ -112,7 +122,7 @@ describe('VacancySearchService', () => {
     }).compile();
 
     service = module.get<VacancySearchService>(VacancySearchService);
-    vacancyRepository = module.get(VacancyRepository);
+    repository = module.get(VacancyRepository);
     languageService = module.get(LanguageService);
     skillService = module.get(SkillService);
 
@@ -130,18 +140,25 @@ describe('VacancySearchService', () => {
   });
 
   describe('search', () => {
+    const mockPagination = { skip: 0, take: pageSize };
+
     it('should search vacancies with basic filters', async () => {
       const dto: SearchVacancyDto = {
         title: 'Software Engineer',
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
+      mockedGetPaginationByPage.mockReturnValue(mockPagination);
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       const result = await service.search(dto);
 
-      expect(result).toEqual(mockVacancies);
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(result).toEqual({ meta, data: mockVacancies });
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -161,12 +178,17 @@ describe('VacancySearchService', () => {
         orderBy: { salaryMin: 'desc' },
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
+      mockedGetPaginationByPage.mockReturnValue(mockPagination);
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       await service.search(dto);
 
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -185,12 +207,17 @@ describe('VacancySearchService', () => {
         salaryMin: 80000,
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
+      mockedGetPaginationByPage.mockReturnValue(mockPagination);
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       await service.search(dto);
 
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -209,12 +236,17 @@ describe('VacancySearchService', () => {
         experienceRequired: 5,
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
+      mockedGetPaginationByPage.mockReturnValue(mockPagination);
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       await service.search(dto);
 
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -233,12 +265,17 @@ describe('VacancySearchService', () => {
         workFormats: [WorkFormat.REMOTE, WorkFormat.HYBRID],
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
+      mockedGetPaginationByPage.mockReturnValue(mockPagination);
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       await service.search(dto);
 
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -257,12 +294,17 @@ describe('VacancySearchService', () => {
         employmentTypes: [EmploymentType.FULL_TIME, EmploymentType.PART_TIME],
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
+      mockedGetPaginationByPage.mockReturnValue(mockPagination);
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       await service.search(dto);
 
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -283,12 +325,17 @@ describe('VacancySearchService', () => {
         seniorityLevel: SeniorityLevel.SENIOR,
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
+      mockedGetPaginationByPage.mockReturnValue(mockPagination);
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       await service.search(dto);
 
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -310,9 +357,14 @@ describe('VacancySearchService', () => {
         ],
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
       skillService.assertExists.mockResolvedValue();
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
+      mockedGetPaginationByPage.mockReturnValue(mockPagination);
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       await service.search(dto);
 
@@ -320,7 +372,7 @@ describe('VacancySearchService', () => {
         '123e4567-e89b-12d3-a456-426614174010',
         '123e4567-e89b-12d3-a456-426614174011',
       ]);
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -357,9 +409,14 @@ describe('VacancySearchService', () => {
         ],
         page: 1,
       };
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
 
       languageService.assertExists.mockResolvedValue();
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
+      mockedGetPaginationByPage.mockReturnValue(mockPagination);
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       await service.search(dto);
 
@@ -373,7 +430,7 @@ describe('VacancySearchService', () => {
       expect(mockedGetLanguageLevelsFromLevel).toHaveBeenCalledWith({
         maxLevel: LanguageLevel.ADVANCED,
       });
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -429,13 +486,18 @@ describe('VacancySearchService', () => {
         orderBy: { createdAt: 'asc' },
       };
 
+      const total = 60;
+      const meta = { total, page: dto.page, totalPages: 4 };
+
       skillService.assertExists.mockResolvedValue();
       languageService.assertExists.mockResolvedValue();
-      vacancyRepository.findMany.mockResolvedValue(mockVacancies);
       mockedGetPaginationByPage.mockReturnValue({
         skip: pageSize,
         take: pageSize,
       });
+      repository.findMany.mockResolvedValue(mockVacancies);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       await service.search(dto);
 
@@ -443,7 +505,7 @@ describe('VacancySearchService', () => {
         dto.page,
         pageSize,
       );
-      expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+      expect(repository.findMany).toHaveBeenCalledWith(
         {
           where: {
             isActive: true,
@@ -494,8 +556,14 @@ describe('VacancySearchService', () => {
           ],
           page: 1,
         };
+        const total = 60;
+        const meta = { total, page: dto.page, totalPages: 4 };
 
         skillService.assertExists.mockResolvedValue();
+        mockedGetPaginationByPage.mockReturnValue(mockPagination);
+        repository.findMany.mockResolvedValue(mockVacancies);
+        repository.count.mockResolvedValue(total);
+        mockedCreatePaginationMeta.mockReturnValue(meta);
 
         await service.search(dto);
 
@@ -519,8 +587,14 @@ describe('VacancySearchService', () => {
           ],
           page: 1,
         };
+        const total = 60;
+        const meta = { total, page: dto.page, totalPages: 4 };
 
         languageService.assertExists.mockResolvedValue();
+        mockedGetPaginationByPage.mockReturnValue(mockPagination);
+        repository.findMany.mockResolvedValue(mockVacancies);
+        repository.count.mockResolvedValue(total);
+        mockedCreatePaginationMeta.mockReturnValue(meta);
 
         await service.search(dto);
 
@@ -554,9 +628,14 @@ describe('VacancySearchService', () => {
           ],
           page: 1,
         };
+        const total = 60;
+        const meta = { total, page: dto.page, totalPages: 4 };
 
+        mockedGetPaginationByPage.mockReturnValue(mockPagination);
+        repository.findMany.mockResolvedValue(mockVacancies);
+        repository.count.mockResolvedValue(total);
+        mockedCreatePaginationMeta.mockReturnValue(meta);
         languageService.assertExists.mockResolvedValue();
-        vacancyRepository.findMany.mockResolvedValue(mockVacancies);
         mockedGetLanguageLevelsFromLevel.mockReturnValue([
           LanguageLevel.ELEMENTARY,
           LanguageLevel.PRE_INTERMEDIATE,
@@ -570,7 +649,7 @@ describe('VacancySearchService', () => {
         expect(getLanguageLevelsFromLevel).toHaveBeenCalledWith({
           maxLevel: LanguageLevel.ADVANCED,
         });
-        expect(vacancyRepository.findMany).toHaveBeenCalledWith(
+        expect(repository.findMany).toHaveBeenCalledWith(
           expect.objectContaining({
             where: expect.objectContaining({
               requiredLanguages: {

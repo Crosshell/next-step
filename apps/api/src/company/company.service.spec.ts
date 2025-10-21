@@ -5,21 +5,28 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { Company, Prisma } from '@prisma/client';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
-import { getPaginationByPage } from '@common/utils';
+import { createPaginationMeta, getPaginationByPage } from '@common/utils';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { SearchCompanyDto } from './dto/search-company.dto';
 
 jest.mock('@common/utils', () => ({
   getPaginationByPage: jest.fn(),
+  createPaginationMeta: jest.fn(),
 }));
 
 const mockedGetPaginationByPage = getPaginationByPage as jest.MockedFunction<
   typeof getPaginationByPage
 >;
 
+const mockedCreatePaginationMeta = createPaginationMeta as jest.MockedFunction<
+  typeof createPaginationMeta
+>;
+
 describe('CompanyService', () => {
   let service: CompanyService;
   let repository: jest.Mocked<CompanyRepository>;
+
+  const pageSize = 10;
 
   const mockCompany: Company = {
     id: '123e4567-e89b-12d3-a456-426614174000',
@@ -39,13 +46,14 @@ describe('CompanyService', () => {
       findOne: jest.fn(),
       findMany: jest.fn(),
       update: jest.fn(),
+      count: jest.fn(),
     };
 
     const mockConfigService = {
       getOrThrow: jest.fn(),
     };
 
-    mockConfigService.getOrThrow.mockReturnValue(10);
+    mockConfigService.getOrThrow.mockReturnValue(pageSize);
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -173,7 +181,9 @@ describe('CompanyService', () => {
       name: 'Company',
       page: 2,
     };
-    const pagination = { skip: 10, take: 10 };
+    const total = 11;
+    const pagination = { skip: pageSize, take: pageSize };
+    const meta = { total, page: dto.page, totalPages: 10 };
     const where: Prisma.CompanyWhereInput = {
       name: { contains: dto.name, mode: 'insensitive' },
     };
@@ -181,37 +191,57 @@ describe('CompanyService', () => {
     it('should return companies', async () => {
       mockedGetPaginationByPage.mockReturnValue(pagination);
       repository.findMany.mockResolvedValue([mockCompany]);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       const result = await service.search(dto);
 
-      expect(mockedGetPaginationByPage).toHaveBeenCalledWith(dto.page, 10);
+      expect(mockedGetPaginationByPage).toHaveBeenCalledWith(
+        dto.page,
+        pageSize,
+      );
       expect(repository.findMany).toHaveBeenCalledWith({
         where,
         ...pagination,
       });
-      expect(result).toEqual([mockCompany]);
+      expect(repository.count).toHaveBeenCalledWith(where);
+      expect(mockedCreatePaginationMeta).toHaveBeenCalledWith(
+        total,
+        dto.page,
+        pageSize,
+      );
+      expect(result).toEqual({ data: [mockCompany], meta });
     });
 
     it('should search without name filter', async () => {
       const dtoWithoutName: SearchCompanyDto = {
         page: 3,
       };
+      const meta = { total, page: dtoWithoutName.page, totalPages: 10 };
       const whereWithoutName: Prisma.CompanyWhereInput = {};
 
       mockedGetPaginationByPage.mockReturnValue(pagination);
       repository.findMany.mockResolvedValue([mockCompany]);
+      repository.count.mockResolvedValue(total);
+      mockedCreatePaginationMeta.mockReturnValue(meta);
 
       const result = await service.search(dtoWithoutName);
 
       expect(mockedGetPaginationByPage).toHaveBeenCalledWith(
         dtoWithoutName.page,
-        10,
+        pageSize,
       );
       expect(repository.findMany).toHaveBeenCalledWith({
         where: whereWithoutName,
         ...pagination,
       });
-      expect(result).toEqual([mockCompany]);
+      expect(repository.count).toHaveBeenCalledWith(whereWithoutName);
+      expect(mockedCreatePaginationMeta).toHaveBeenCalledWith(
+        total,
+        dtoWithoutName.page,
+        pageSize,
+      );
+      expect(result).toEqual({ data: [mockCompany], meta });
     });
   });
 

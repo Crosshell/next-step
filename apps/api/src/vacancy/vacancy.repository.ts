@@ -119,4 +119,8 @@ export class VacancyRepository {
       include: includeRelations ? this.vacancyRelations : null,
     });
   }
+
+  async count(where: Prisma.VacancyWhereInput): Promise<number> {
+    return this.prisma.vacancy.count({ where });
+  }
 }

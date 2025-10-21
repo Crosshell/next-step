@@ -131,4 +131,8 @@ export class JobSeekerRepository {
       include: includeRelations ? this.jobSeekerRelations : undefined,
     });
   }
+
+  async count(where: Prisma.JobSeekerWhereInput): Promise<number> {
+    return this.prisma.jobSeeker.count({ where });
+  }
 }

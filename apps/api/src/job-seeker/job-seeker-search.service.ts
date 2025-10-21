@@ -6,7 +6,12 @@ import { JobSeekerRepository } from './job-seeker.repository';
 import { SkillService } from '../skill/skill.service';
 import { LanguageService } from '../language/language.service';
 import { JobSeekerLanguageDto } from './dto/job-seeker-language.dto';
-import { getPaginationByPage, getLanguageLevelsFromLevel } from '@common/utils';
+import {
+  getPaginationByPage,
+  getLanguageLevelsFromLevel,
+  createPaginationMeta,
+} from '@common/utils';
+import { PagedDataResponse } from '@common/responses';
 
 @Injectable()
 export class JobSeekerSearchService {
@@ -23,14 +28,26 @@ export class JobSeekerSearchService {
     );
   }
 
-  async search(dto: SearchJobSeekerDto): Promise<JobSeeker[]> {
+  async search(
+    dto: SearchJobSeekerDto,
+  ): Promise<PagedDataResponse<JobSeeker[]>> {
     await this.validateSearchFilters(dto);
     const where = this.buildSearchFilter(dto);
 
     const pagination = getPaginationByPage(dto.page, this.searchPageSize);
     const orderBy = dto.orderBy ?? { updatedAt: 'desc' };
 
-    return this.repository.findMany({ where, ...pagination, orderBy });
+    const data = await this.repository.findMany({
+      where,
+      ...pagination,
+      orderBy,
+    });
+
+    const total = await this.repository.count(where);
+
+    const meta = createPaginationMeta(total, dto.page, this.searchPageSize);
+
+    return { data, meta };
   }
 
   private buildSearchFilter(
