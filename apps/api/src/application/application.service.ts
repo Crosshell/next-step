@@ -74,9 +74,9 @@ export class ApplicationService {
 
   async search(
     dto: SearchApplicationDto,
-    additionalFilters: Prisma.ApplicationWhereInput,
+    additionalWhereParams: Prisma.ApplicationWhereInput,
   ): Promise<PagedDataResponse<Application[]>> {
-    const where: Prisma.ApplicationWhereInput = { ...additionalFilters };
+    const where: Prisma.ApplicationWhereInput = { ...additionalWhereParams };
     const orderBy = dto.orderBy ?? { createdAt: 'desc' };
 
     const pagination = getPaginationByPage(dto.page, this.pageSize);

@@ -341,11 +341,11 @@ describe('ApplicationService', () => {
       page: dto.page,
       totalPages: pageSize,
     };
-    const additionalFilters: Prisma.ApplicationWhereInput = {
+    const additionalWhereParams: Prisma.ApplicationWhereInput = {
       jobSeekerId: '123e4567-e89b-12d3-a456-426614174001',
       status: dto.status,
     };
-    const where = { ...additionalFilters };
+    const where = { ...additionalWhereParams };
 
     it('should return applications', async () => {
       mockedGetPaginationByPage.mockReturnValue(mockPagination);
@@ -353,7 +353,7 @@ describe('ApplicationService', () => {
       repository.count.mockResolvedValue(applications.length);
       mockedCreatePaginationMeta.mockReturnValue(meta);
 
-      const result = await service.search(dto, additionalFilters);
+      const result = await service.search(dto, additionalWhereParams);
 
       expect(mockedGetPaginationByPage).toHaveBeenCalledWith(
         dto.page,
@@ -380,20 +380,20 @@ describe('ApplicationService', () => {
     });
 
     it('should return applications with default orderBy and status', async () => {
-      const additionalFilters: Prisma.ApplicationWhereInput = {
+      const additionalWhereParams: Prisma.ApplicationWhereInput = {
         jobSeekerId: '123e4567-e89b-12d3-a456-426614174001',
       };
       const dto: SearchApplicationDto = {
         page: 1,
       };
-      const where = { ...additionalFilters };
+      const where = { ...additionalWhereParams };
 
       mockedGetPaginationByPage.mockReturnValue(mockPagination);
       repository.findMany.mockResolvedValue(applications);
       repository.count.mockResolvedValue(applications.length);
       mockedCreatePaginationMeta.mockReturnValue(meta);
 
-      const result = await service.search(dto, additionalFilters);
+      const result = await service.search(dto, additionalWhereParams);
 
       expect(mockedGetPaginationByPage).toHaveBeenCalledWith(
         dto.page,

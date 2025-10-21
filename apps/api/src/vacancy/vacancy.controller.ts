@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { VacancyService } from './vacancy.service';
@@ -18,7 +19,7 @@ import { CreateVacancyDto } from './dto/create-vacancy.dto';
 import { CurrentCompany } from '../company/decorators/current-company.decorator';
 import { CompanyGuard } from '../company/guards/company.guard';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
-import { MessageResponse } from '@common/responses';
+import { MessageResponse, PagedDataResponse } from '@common/responses';
 import { UpdateVacancyDto } from './dto/update-vacancy.dto';
 import { SearchVacancyDto } from './dto/search-vacancy.dto';
 import { SetSkillsDto } from './dto/set-skills.dto';
@@ -41,28 +42,34 @@ export class VacancyController {
     return this.service.create(company.id, dto);
   }
 
-  @Get('my')
+  @Get('search/my')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   @HttpCode(HttpStatus.OK)
   @VacancySwagger.getMyVacancies()
-  async getMyVacancies(@CurrentCompany() company: Company): Promise<Vacancy[]> {
-    return this.service.findByCompanyId(company.id);
+  async getMyVacancies(
+    @CurrentCompany() company: Company,
+    @Query() dto: SearchVacancyDto,
+  ): Promise<PagedDataResponse<Vacancy[]>> {
+    return this.service.searchByCompanyId(company.id, dto);
   }
 
-  @Post('search')
+  @Get('search')
   @HttpCode(HttpStatus.OK)
   @VacancySwagger.search()
-  async search(@Body() dto: SearchVacancyDto): Promise<Vacancy[]> {
+  async search(
+    @Query() dto: SearchVacancyDto,
+  ): Promise<PagedDataResponse<Vacancy[]>> {
     return this.service.search(dto);
   }
 
-  @Get('company/:companyId')
+  @Get('search/company/:companyId')
   @HttpCode(HttpStatus.OK)
   @VacancySwagger.getByCompany()
-  async getByCompany(
+  async searchByCompany(
     @Param('companyId') companyId: string,
-  ): Promise<Vacancy[]> {
-    return this.service.findByCompanyId(companyId);
+    @Query() dto: SearchVacancyDto,
+  ): Promise<PagedDataResponse<Vacancy[]>> {
+    return this.service.searchByCompanyId(companyId, dto);
   }
 
   @Get(':id')

@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { SessionAuthGuard } from '../auth/guards/session-auth.guard';
@@ -60,12 +61,12 @@ export class JobSeekerController {
     return this.service.findOneOrThrow({ id });
   }
 
-  @Post('search')
+  @Get('search')
   @UseGuards(SessionAuthGuard, CompanyGuard)
   @HttpCode(HttpStatus.OK)
   @JobSeekerSwagger.search()
   async search(
-    @Body() dto: SearchJobSeekerDto,
+    @Query() dto: SearchJobSeekerDto,
   ): Promise<PagedDataResponse<JobSeeker[]>> {
     return this.service.search(dto);
   }
