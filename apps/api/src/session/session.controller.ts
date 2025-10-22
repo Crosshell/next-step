@@ -4,7 +4,6 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { UserWithoutPassword } from '../user/types/user-without-password.type';
 import { SessionService } from './session.service';
 import { Session } from './schemas/session.schema';
-import { SessionSwagger } from '../../docs/swagger/session.swagger';
 
 @Controller('sessions')
 export class SessionController {
@@ -12,7 +11,6 @@ export class SessionController {
 
   @Get()
   @UseGuards(SessionAuthGuard)
-  @SessionSwagger.getAllSessions()
   async getAllSessions(
     @CurrentUser() user: UserWithoutPassword,
   ): Promise<Session[]> {
