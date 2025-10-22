@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApplicationRepository } from './application.repository';
 import { Application, Prisma } from '@prisma/client';
@@ -52,7 +53,7 @@ export class ApplicationService {
     where: Prisma.ApplicationWhereUniqueInput,
   ): Promise<Application> {
     const application = await this.repository.findOne(where, true);
-    if (!application) throw new BadRequestException('Application not found');
+    if (!application) throw new NotFoundException('Application not found');
     return application;
   }
 

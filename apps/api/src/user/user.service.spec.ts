@@ -4,7 +4,7 @@ import { UserRepository } from './user.repository';
 import { Prisma, User } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { UserWithoutPassword } from './types/user-without-password.type';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 jest.mock('argon2');
 const mockedArgon2 = argon2 as jest.Mocked<typeof argon2>;
@@ -31,6 +31,7 @@ describe('UserService', () => {
     const mockUserRepository = {
       create: jest.fn(),
       findOne: jest.fn(),
+      findOneWithPassword: jest.fn(),
       deleteMany: jest.fn(),
       update: jest.fn(),
     };
@@ -162,26 +163,17 @@ describe('UserService', () => {
     });
   });
 
-  describe('findOne', () => {
+  describe('findOneWithPassword', () => {
     const where: Prisma.UserWhereUniqueInput = {
       id: '123e4567-e89b-12d3-a456-426614174000',
     };
 
-    it('should find user without password', async () => {
-      repository.findOne.mockResolvedValue(mockUserWithoutPassword);
-
-      const result = await service.findOne(where);
-
-      expect(repository.findOne).toHaveBeenCalledWith(where, true);
-      expect(result).toEqual(mockUserWithoutPassword);
-    });
-
     it('should find user with password', async () => {
-      repository.findOne.mockResolvedValue(mockUser);
+      repository.findOneWithPassword.mockResolvedValue(mockUser);
 
-      const result = await service.findOne(where, false);
+      const result = await service.findOneWithPassword(where);
 
-      expect(repository.findOne).toHaveBeenCalledWith(where, false);
+      expect(repository.findOneWithPassword).toHaveBeenCalledWith(where);
       expect(result).toEqual(mockUser);
     });
   });
@@ -200,11 +192,11 @@ describe('UserService', () => {
       expect(result).toEqual(mockUserWithoutPassword);
     });
 
-    it('should throw BadRequestException if user does not exist', async () => {
+    it('should throw NotFoundException if user does not exist', async () => {
       repository.findOne.mockResolvedValue(null);
 
       await expect(service.findOneOrThrow(where)).rejects.toThrow(
-        new BadRequestException('User not found'),
+        new NotFoundException('User not found'),
       );
 
       expect(repository.findOne).toHaveBeenCalledWith(where);

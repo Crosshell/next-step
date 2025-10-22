@@ -30,12 +30,6 @@ export class CompanyService {
     return this.repository.create(userId, dto);
   }
 
-  async findOne(
-    where: Prisma.CompanyWhereUniqueInput,
-  ): Promise<Company | null> {
-    return this.repository.findOne(where);
-  }
-
   async findOneOrThrow(
     where: Prisma.CompanyWhereUniqueInput,
   ): Promise<Company> {

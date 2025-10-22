@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { VacancyRepository } from './vacancy.repository';
 import { CreateVacancyDto } from './dto/create-vacancy.dto';
 import { Prisma, Vacancy } from '@prisma/client';
@@ -48,9 +44,7 @@ export class VacancyService {
     companyId: string,
     dto: SearchVacancyDto,
   ): Promise<PagedDataResponse<Vacancy[]>> {
-    const company = await this.companyService.findOne({ id: companyId });
-    if (!company) throw new BadRequestException('Company not found');
-
+    await this.companyService.findOneOrThrow({ id: companyId });
     return this.searchService.search(dto, { companyId });
   }
 

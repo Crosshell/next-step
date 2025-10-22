@@ -136,21 +136,6 @@ describe('JobSeekerService', () => {
     });
   });
 
-  describe('findOne', () => {
-    const where: Prisma.JobSeekerWhereUniqueInput = {
-      userId: '123e4567-e89b-12d3-a456-426614174001',
-    };
-
-    it('should find a job seeker', async () => {
-      repository.findOne.mockResolvedValue(mockJobSeeker);
-
-      const result = await service.findOne(where);
-
-      expect(repository.findOne).toHaveBeenCalledWith(where, true);
-      expect(result).toEqual(mockJobSeeker);
-    });
-  });
-
   describe('findOneOrThrow', () => {
     const where: Prisma.JobSeekerWhereUniqueInput = {
       userId: '123e4567-e89b-12d3-a456-426614174001',

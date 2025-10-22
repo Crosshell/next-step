@@ -16,7 +16,6 @@ import { TokenType } from '../token/enums/token-type.enum';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
-import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -28,15 +27,11 @@ export class AuthService {
   ) {}
 
   async validateCredentials(dto: LoginDto): Promise<UserWithoutPassword> {
-    const user = (await this.userService.findOne(
-      { email: dto.email },
-      false,
-    )) as User | null;
+    const user = await this.userService.findOneWithPassword({
+      email: dto.email,
+    });
 
-    const isValid =
-      user &&
-      user.password &&
-      (await argon2.verify(user.password, dto.password));
+    const isValid = user && (await argon2.verify(user.password, dto.password));
 
     if (!isValid) {
       throw new UnauthorizedException('Invalid credentials');

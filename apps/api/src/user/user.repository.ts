@@ -20,13 +20,18 @@ export class UserRepository {
     });
   }
 
+  async findOneWithPassword(
+    where: Prisma.UserWhereUniqueInput,
+  ): Promise<User | null> {
+    return this.prisma.user.findUnique({ where });
+  }
+
   async findOne(
     where: Prisma.UserWhereUniqueInput,
-    excludePassword: boolean = true,
-  ): Promise<UserWithoutPassword | User | null> {
+  ): Promise<UserWithoutPassword | null> {
     return this.prisma.user.findUnique({
       where,
-      omit: { password: excludePassword },
+      omit: { password: true },
     });
   }
 

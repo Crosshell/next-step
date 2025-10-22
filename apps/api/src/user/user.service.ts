@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { UserWithoutPassword } from './types/user-without-password.type';
@@ -30,18 +34,17 @@ export class UserService {
     return this.repository.update(where, { ...data, password: hashedPassword });
   }
 
-  async findOne(
+  async findOneWithPassword(
     where: Prisma.UserWhereUniqueInput,
-    excludePassword = true,
-  ): Promise<UserWithoutPassword | User | null> {
-    return this.repository.findOne(where, excludePassword);
+  ): Promise<User | null> {
+    return this.repository.findOneWithPassword(where);
   }
 
   async findOneOrThrow(
     where: Prisma.UserWhereUniqueInput,
   ): Promise<UserWithoutPassword> {
     const user = await this.repository.findOne(where);
-    if (!user) throw new BadRequestException('User not found');
+    if (!user) throw new NotFoundException('User not found');
     return user;
   }
 

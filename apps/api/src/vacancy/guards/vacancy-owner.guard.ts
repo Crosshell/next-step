@@ -19,11 +19,7 @@ export class VacancyOwnerGuard implements CanActivate {
       throw new ForbiddenException('Vacancy id not found');
     }
 
-    const vacancy = await this.service.findOne({ id: vacancyId });
-
-    if (!vacancy) {
-      throw new ForbiddenException('Vacancy not found');
-    }
+    const vacancy = await this.service.findOneOrThrow({ id: vacancyId });
 
     if (vacancy.companyId !== req.company.id) {
       throw new ForbiddenException('You are not the owner of this vacancy');

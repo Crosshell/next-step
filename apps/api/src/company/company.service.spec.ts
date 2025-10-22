@@ -111,21 +111,6 @@ describe('CompanyService', () => {
     });
   });
 
-  describe('findOne', () => {
-    const where: Prisma.CompanyWhereUniqueInput = {
-      id: '123e4567-e89b-12d3-a456-426614174001',
-    };
-
-    it('should return company', async () => {
-      repository.findOne.mockResolvedValue(mockCompany);
-
-      const result = await service.findOne(where);
-
-      expect(repository.findOne).toHaveBeenCalledWith(where);
-      expect(result).toEqual(mockCompany);
-    });
-  });
-
   describe('findOneOrThrow', () => {
     const where: Prisma.CompanyWhereUniqueInput = {
       id: '123e4567-e89b-12d3-a456-426614174001',
