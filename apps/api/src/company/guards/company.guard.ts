@@ -22,13 +22,7 @@ export class CompanyGuard implements CanActivate {
       throw new ForbiddenException('User is not a company');
     }
 
-    const company = await this.service.findOne({ userId: req.user.id });
-
-    if (!company) {
-      throw new ForbiddenException('Company profile not found');
-    }
-
-    req.company = company;
+    req.company = await this.service.findOneOrThrow({ userId: req.user.id });
     return true;
   }
 }

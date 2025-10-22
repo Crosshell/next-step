@@ -40,10 +40,10 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const mockUserService = {
-      findOne: jest.fn(),
+      findOneOrThrow: jest.fn(),
+      findOneWithPassword: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
-      findOneOrThrow: jest.fn(),
     };
 
     const mockSessionService = {
@@ -110,15 +110,14 @@ describe('AuthService', () => {
     };
 
     it('should validate credentials and return user', async () => {
-      userService.findOne.mockResolvedValue(mockUser);
+      userService.findOneWithPassword.mockResolvedValue(mockUser);
       mockedArgon2.verify.mockResolvedValue(true);
 
       const result = await service.validateCredentials(dto);
 
-      expect(userService.findOne).toHaveBeenCalledWith(
-        { email: dto.email },
-        false,
-      );
+      expect(userService.findOneWithPassword).toHaveBeenCalledWith({
+        email: dto.email,
+      });
       expect(mockedArgon2.verify).toHaveBeenCalledWith(
         mockUser.password,
         dto.password,
@@ -127,31 +126,29 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if user does not exist', async () => {
-      userService.findOne.mockResolvedValue(null);
+      userService.findOneWithPassword.mockResolvedValue(null);
 
       await expect(service.validateCredentials(dto)).rejects.toThrow(
         new UnauthorizedException('Invalid credentials'),
       );
 
-      expect(userService.findOne).toHaveBeenCalledWith(
-        { email: dto.email },
-        false,
-      );
+      expect(userService.findOneWithPassword).toHaveBeenCalledWith({
+        email: dto.email,
+      });
       expect(mockedArgon2.verify).not.toHaveBeenCalled();
     });
 
     it('should throw UnauthorizedException if password is incorrect', async () => {
-      userService.findOne.mockResolvedValue(mockUser);
+      userService.findOneWithPassword.mockResolvedValue(mockUser);
       mockedArgon2.verify.mockResolvedValue(false);
 
       await expect(service.validateCredentials(dto)).rejects.toThrow(
         new UnauthorizedException('Invalid credentials'),
       );
 
-      expect(userService.findOne).toHaveBeenCalledWith(
-        { email: dto.email },
-        false,
-      );
+      expect(userService.findOneWithPassword).toHaveBeenCalledWith({
+        email: dto.email,
+      });
       expect(mockedArgon2.verify).toHaveBeenCalledWith(
         mockUser.password,
         dto.password,

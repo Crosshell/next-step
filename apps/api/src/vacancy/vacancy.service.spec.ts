@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { VacancyService } from './vacancy.service';
 import { VacancyRepository } from './vacancy.repository';
 import { LanguageService } from '../language/language.service';
@@ -82,7 +82,7 @@ describe('VacancyService', () => {
     };
 
     const mockCompanyService = {
-      findOne: jest.fn(),
+      findOneOrThrow: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -152,30 +152,6 @@ describe('VacancyService', () => {
     });
   });
 
-  describe('findOne', () => {
-    const where: Prisma.VacancyWhereUniqueInput = {
-      id: '123e4567-e89b-12d3-a456-426614174000',
-    };
-
-    it('should return a vacancy', async () => {
-      vacancyRepository.findOne.mockResolvedValue(mockVacancy);
-
-      const result = await service.findOne(where);
-
-      expect(vacancyRepository.findOne).toHaveBeenCalledWith(where, true);
-      expect(result).toEqual(mockVacancy);
-    });
-
-    it('should return null when vacancy not found', async () => {
-      vacancyRepository.findOne.mockResolvedValue(null);
-
-      const result = await service.findOne(where);
-
-      expect(vacancyRepository.findOne).toHaveBeenCalledWith(where, true);
-      expect(result).toBeNull();
-    });
-  });
-
   describe('findOneOrThrow', () => {
     const where: Prisma.VacancyWhereUniqueInput = {
       id: '123e4567-e89b-12d3-a456-426614174000',
@@ -214,11 +190,13 @@ describe('VacancyService', () => {
         data: vacancies,
         meta,
       });
-      companyService.findOne.mockResolvedValue(mockCompany);
+      companyService.findOneOrThrow.mockResolvedValue(mockCompany);
 
       const result = await service.searchByCompanyId(companyId, dto);
 
-      expect(companyService.findOne).toHaveBeenCalledWith({ id: companyId });
+      expect(companyService.findOneOrThrow).toHaveBeenCalledWith({
+        id: companyId,
+      });
       expect(searchService.search).toHaveBeenCalledWith(dto, {
         companyId,
       });
@@ -226,17 +204,6 @@ describe('VacancyService', () => {
         data: vacancies,
         meta,
       });
-    });
-
-    it('should throw BadRequestException when company not found', async () => {
-      companyService.findOne.mockResolvedValue(null);
-
-      await expect(service.searchByCompanyId(companyId, dto)).rejects.toThrow(
-        new BadRequestException('Company not found'),
-      );
-
-      expect(companyService.findOne).toHaveBeenCalledWith({ id: companyId });
-      expect(searchService.search).not.toHaveBeenCalled();
     });
   });
 

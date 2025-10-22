@@ -16,7 +16,11 @@ import { JobSeekerService } from '../job-seeker/job-seeker.service';
 import { getPaginationByPage, createPaginationMeta } from '@common/utils';
 import { ConfigService } from '@nestjs/config';
 import { CreateApplicationDto } from './dto/create-application.dto';
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { SearchApplicationDto } from './dto/search-application';
 import { SetStatusDto } from './dto/set-status.dto';
 
@@ -205,11 +209,11 @@ describe('ApplicationService', () => {
       expect(result).toEqual(mockedApplication);
     });
 
-    it('should throw BadRequestException if application does not exist', async () => {
+    it('should throw NotFoundException if application does not exist', async () => {
       repository.findOne.mockResolvedValue(null);
 
       await expect(service.findOneOrThrow(where)).rejects.toThrow(
-        new BadRequestException('Application not found'),
+        new NotFoundException('Application not found'),
       );
 
       expect(repository.findOne).toHaveBeenCalledWith(where, true);

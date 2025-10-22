@@ -22,13 +22,9 @@ export class JobSeekerGuard implements CanActivate {
       throw new ForbiddenException('User is not a job seeker');
     }
 
-    const jobSeeker = await this.service.findOne({ userId: req.user.id });
-
-    if (!jobSeeker) {
-      throw new ForbiddenException('Job seeker profile not found');
-    }
-
-    req.jobSeeker = jobSeeker;
+    req.jobSeeker = await this.service.findOneOrThrow({
+      userId: req.user.id,
+    });
     return true;
   }
 }

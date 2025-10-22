@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
   imports: [
     MailerModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         transport: configService.getOrThrow('email'),
         defaults: {
           from: '"Next Step" <no-reply@gmail.com>',

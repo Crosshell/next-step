@@ -30,12 +30,6 @@ export class JobSeekerService {
     return this.repository.create(userId, dto, true);
   }
 
-  async findOne(
-    where: Prisma.JobSeekerWhereUniqueInput,
-  ): Promise<JobSeeker | null> {
-    return this.repository.findOne(where, true);
-  }
-
   async findOneOrThrow(
     where: Prisma.JobSeekerWhereUniqueInput,
   ): Promise<JobSeeker> {
