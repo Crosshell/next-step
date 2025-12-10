@@ -10,6 +10,10 @@ export class EmailService {
   ) {}
 
   async sendVerificationEmail(email: string, token: string): Promise<void> {
+    if (this.config.get('NODE_ENV') === 'test-k6') {
+      return;
+    }
+
     const clientUrl = this.config.getOrThrow<string>('client.url');
     const verifyLink = `${clientUrl}/confirm-page?token=${token}`;
 
@@ -24,6 +28,10 @@ export class EmailService {
   }
 
   async sendResetPasswordEmail(email: string, token: string): Promise<void> {
+    if (this.config.get('NODE_ENV') === 'test-k6') {
+      return;
+    }
+
     const clientUrl = this.config.getOrThrow<string>('client.url');
     const resetLink = `${clientUrl}/reset-password?token=${token}`;
 
@@ -42,6 +50,10 @@ export class EmailService {
     token: string,
     companyName: string,
   ): Promise<void> {
+    if (this.config.get('NODE_ENV') === 'test-k6') {
+      return;
+    }
+
     const clientUrl = this.config.getOrThrow<string>('client.url');
     const invitationLink = `${clientUrl}/company-invitation?token=${token}`;
 
