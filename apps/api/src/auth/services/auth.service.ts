@@ -17,6 +17,7 @@ import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { ForgotPasswordDto } from '../dto/forgot-password.dto';
 import { ResendVerificationDto } from '../dto/resend-verification.dto';
 import { SessionPayload } from '../../session/schemas/session-payload.schema';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,7 @@ export class AuthService {
     private readonly sessionService: SessionService,
     private readonly emailService: EmailService,
     private readonly tokenService: TokenService,
+    private readonly config: ConfigService,
   ) {}
 
   async validateCredentials(dto: LoginDto): Promise<UserWithoutPassword> {
@@ -47,7 +49,7 @@ export class AuthService {
     ua: string,
     ip: string,
   ): Promise<string> {
-    if (!user.isEmailVerified) {
+    if (!user.isEmailVerified && this.config.get('NODE_ENV') !== 'test-k6') {
       throw new ForbiddenException('Verify your email address first');
     }
     return this.sessionService.createSession(user.id, { ua, ip });

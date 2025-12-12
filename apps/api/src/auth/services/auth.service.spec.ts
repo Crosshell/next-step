@@ -16,6 +16,7 @@ import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { UserWithoutPassword } from '../../user/types/user-without-password.type';
 import { User } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
 
 jest.mock('argon2');
 const mockedArgon2 = argon2 as jest.Mocked<typeof argon2>;
@@ -74,6 +75,13 @@ describe('AuthService', () => {
     consumeToken: jest.fn(),
   };
 
+  const mockConfigService = {
+    get: jest.fn((key: string) => {
+      if (key === 'NODE_ENV') return 'test';
+      return null;
+    }),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -82,6 +90,7 @@ describe('AuthService', () => {
         { provide: SessionService, useValue: mockSessionService },
         { provide: EmailService, useValue: mockEmailService },
         { provide: TokenService, useValue: mockTokenService },
+        { provide: ConfigService, useValue: mockConfigService },
       ],
     }).compile();
 
