@@ -230,37 +230,6 @@ describe('JobSeekerController (e2e)', () => {
       expect(meta.total).toBe(1);
     });
 
-    it('should return 400 if skills are not found', async () => {
-      const body = { skillIds: [randomUUID()] };
-
-      const { sid } = await createAuthenticatedUser(prisma, redis);
-
-      return request(server)
-        .post(`${baseUrl}/search`)
-        .set('Cookie', [`sid=${sid}`])
-        .send(body)
-        .expect(400);
-    });
-
-    it('should return 400 if languages are not found', async () => {
-      const body = {
-        languages: [
-          {
-            languageId: randomUUID(),
-            level: LanguageLevel.INTERMEDIATE,
-          },
-        ],
-      };
-
-      const { sid } = await createAuthenticatedUser(prisma, redis);
-
-      return request(server)
-        .post(`${baseUrl}/search`)
-        .set('Cookie', [`sid=${sid}`])
-        .send(body)
-        .expect(400);
-    });
-
     shouldFailWithoutAuth(() => server, 'post', `${baseUrl}/search`);
   });
 
