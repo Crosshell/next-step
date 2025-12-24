@@ -146,24 +146,6 @@ describe('JobSeekerService', () => {
       expect(result.data).toEqual(data);
       expect(result.meta.total).toBe(total);
     });
-
-    it('should validate skills and languages if provided', async () => {
-      const dto: FindManyJobSeekersDto = {
-        ...defaultDto,
-        skillIds: ['skill-uuid-1'],
-        languages: [{ languageId: 'lang-uuid-1', level: LanguageLevel.NATIVE }],
-      };
-
-      repository.findMany.mockResolvedValue([]);
-      repository.count.mockResolvedValue(0);
-
-      await service.findMany(dto);
-
-      expect(skillService.assertExists).toHaveBeenCalledWith(['skill-uuid-1']);
-      expect(languageService.assertExists).toHaveBeenCalledWith([
-        'lang-uuid-1',
-      ]);
-    });
   });
 
   describe('update', () => {

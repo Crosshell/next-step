@@ -47,14 +47,6 @@ export class JobSeekerService {
   async findMany(
     dto: FindManyJobSeekersDto,
   ): Promise<PagedDataResponse<JobSeekerWithRelations[]>> {
-    if (dto.skillIds?.length) {
-      await this.skillService.assertExists(dto.skillIds);
-    }
-    if (dto.languages?.length) {
-      const languageIds = dto.languages.map((lang) => lang.languageId);
-      await this.languageService.assertExists(languageIds);
-    }
-
     const where = new JobSeekerQueryBuilder()
       .withLanguages(dto.languages)
       .withSkillIds(dto.skillIds)
