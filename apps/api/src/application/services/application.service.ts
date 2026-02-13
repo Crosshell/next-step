@@ -48,21 +48,6 @@ export class ApplicationService {
     return application;
   }
 
-  async findManyByVacancyId(
-    vacancyId: string,
-    dto: FindManyApplicationsDto,
-  ): Promise<PagedDataResponse<ApplicationWithRelations[]>> {
-    await this.vacancyService.findOneOrThrow({ id: vacancyId });
-    return this.search(dto, { vacancyId });
-  }
-
-  async findManyByJobSeekerId(
-    jobSeekerId: string,
-    dto: FindManyApplicationsDto,
-  ): Promise<PagedDataResponse<ApplicationWithRelations[]>> {
-    return this.search(dto, { jobSeekerId });
-  }
-
   async search(
     dto: FindManyApplicationsDto,
     additionalWhereParams: Prisma.ApplicationWhereInput,

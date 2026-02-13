@@ -186,45 +186,6 @@ describe('ApplicationService', () => {
     });
   });
 
-  describe('findManyByVacancyId', () => {
-    it('should verify vacancy existence and call search', async () => {
-      const dto = { page: 1, take: 10 };
-      vacancyService.findOneOrThrow.mockResolvedValue(mockVacancy);
-
-      repository.findMany.mockResolvedValue([]);
-      repository.count.mockResolvedValue(0);
-
-      await service.findManyByVacancyId(mockVacancy.id, dto);
-
-      expect(vacancyService.findOneOrThrow).toHaveBeenCalledWith({
-        id: mockVacancy.id,
-      });
-      expect(repository.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({ vacancyId: mockVacancy.id }),
-        expect.anything(),
-        expect.anything(),
-        expect.anything(),
-      );
-    });
-  });
-
-  describe('findManyByJobSeekerId', () => {
-    it('should verify vacancy existence and call search', async () => {
-      const dto = { page: 1, take: 10 };
-      repository.findMany.mockResolvedValue([]);
-      repository.count.mockResolvedValue(0);
-
-      await service.findManyByJobSeekerId(mockJobSeeker.id, dto);
-
-      expect(repository.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({ jobSeekerId: mockJobSeeker.id }),
-        expect.anything(),
-        expect.anything(),
-        expect.anything(),
-      );
-    });
-  });
-
   describe('search', () => {
     it('should calculate skip correctly and apply filters', async () => {
       const dto: FindManyApplicationsDto = {

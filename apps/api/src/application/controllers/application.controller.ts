@@ -51,7 +51,7 @@ export class ApplicationController {
     @Query() dto: FindManyApplicationsDto,
     @Param('id', ParseUUIDPipe) vacancyId: string,
   ): Promise<PagedDataResponse<ApplicationWithRelations[]>> {
-    return this.service.findManyByVacancyId(vacancyId, dto);
+    return this.service.search(dto, { vacancyId: vacancyId });
   }
 
   @Get('job-seekers/my')
@@ -60,7 +60,7 @@ export class ApplicationController {
     @Query() dto: FindManyApplicationsDto,
     @CurrentJobSeeker() jobSeeker: JobSeekerWithRelations,
   ): Promise<PagedDataResponse<ApplicationWithRelations[]>> {
-    return this.service.findManyByJobSeekerId(jobSeeker.id, dto);
+    return this.service.search(dto, { jobSeekerId: jobSeeker.id });
   }
 
   @Put(':id/status')
