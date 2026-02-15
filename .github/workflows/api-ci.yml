@@ -24,10 +24,11 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: 'apps/api/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
+        working-directory: ./apps/api
 
       - name: Generate Prisma client
         run: npx prisma generate
@@ -83,10 +84,11 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: 'apps/api/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
+        working-directory: ./apps/api
 
       - name: Generate Prisma client
         run: npx prisma generate
@@ -147,10 +149,11 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: 'apps/api/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
+        working-directory: ./apps/api
 
       - name: Generate Prisma client
         run: npx prisma generate
