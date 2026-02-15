@@ -13,10 +13,10 @@ import { JobSeekerRepository } from '../repositories/job-seeker.repository';
 import { SkillService } from '../../skill/services/skill.service';
 import { LanguageService } from '../../language/services/language.service';
 import { SetContactsDto } from '../dto/set-contacts.dto';
-import { PagedDataResponse } from '@common/responses';
-import { createPaginationMeta } from '@common/utils';
+import { PaginatedResponse } from '@common/responses';
 import { JobSeekerQueryBuilder } from '../builders/job-seeker-query.builder';
 import { JobSeekerWithRelations } from '../types/job-seeker-with-relations.type';
+import { paginate } from '@common/utils/pagination.util';
 
 @Injectable()
 export class JobSeekerService {
@@ -46,23 +46,22 @@ export class JobSeekerService {
 
   async findMany(
     dto: FindManyJobSeekersDto,
-  ): Promise<PagedDataResponse<JobSeekerWithRelations[]>> {
+  ): Promise<PaginatedResponse<JobSeekerWithRelations>> {
     const where = new JobSeekerQueryBuilder()
       .withLanguages(dto.languages)
       .withSkillIds(dto.skillIds)
       .withSeniorityLevels(dto.seniorityLevels)
       .build();
 
-    const skip = (dto.page - 1) * dto.take;
     const orderBy = dto.orderBy ?? { updatedAt: Prisma.SortOrder.desc };
 
-    const data = await this.repository.findMany(where, orderBy, skip, dto.take);
-
-    const total = await this.repository.count(where);
-
-    const meta = createPaginationMeta(total, dto.page, dto.take);
-
-    return { data, meta };
+    return paginate({
+      repository: this.repository,
+      where,
+      page: dto.page,
+      take: dto.take,
+      orderBy,
+    });
   }
 
   async update(

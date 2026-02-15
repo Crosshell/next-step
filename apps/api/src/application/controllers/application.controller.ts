@@ -17,7 +17,7 @@ import { CreateApplicationDto } from '../dto/create-application.dto';
 import { FindManyApplicationsDto } from '../dto/find-many-applications.dto';
 import { SetStatusDto } from '../dto/set-status.dto';
 import { VacancyOwnerGuard } from '../../vacancy/guards/vacancy-owner.guard';
-import { PagedDataResponse } from '@common/responses';
+import { PaginatedResponse } from '@common/responses';
 import { RecruiterWithCompanyGuard } from '../../recruiter/guards/recruiter-with-company.guard';
 import { CurrentRecruiter } from '../../recruiter/decorators/current-recruiter.decorator';
 import { RecruiterWithCompany } from '../../recruiter/types/recruiter-with-company.type';
@@ -50,8 +50,8 @@ export class ApplicationController {
   async findManyByVacancy(
     @Query() dto: FindManyApplicationsDto,
     @Param('id', ParseUUIDPipe) vacancyId: string,
-  ): Promise<PagedDataResponse<ApplicationWithRelations[]>> {
-    return this.service.search(dto, { vacancyId: vacancyId });
+  ): Promise<PaginatedResponse<ApplicationWithRelations>> {
+    return this.service.findMany(dto, { vacancyId: vacancyId });
   }
 
   @Get('job-seekers/my')
@@ -59,8 +59,8 @@ export class ApplicationController {
   async findMy(
     @Query() dto: FindManyApplicationsDto,
     @CurrentJobSeeker() jobSeeker: JobSeekerWithRelations,
-  ): Promise<PagedDataResponse<ApplicationWithRelations[]>> {
-    return this.service.search(dto, { jobSeekerId: jobSeeker.id });
+  ): Promise<PaginatedResponse<ApplicationWithRelations>> {
+    return this.service.findMany(dto, { jobSeekerId: jobSeeker.id });
   }
 
   @Put(':id/status')

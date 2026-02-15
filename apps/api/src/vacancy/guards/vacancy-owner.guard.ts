@@ -13,11 +13,13 @@ export class VacancyOwnerGuard implements CanActivate {
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
     const req = ctx.switchToHttp().getRequest<RecruiterRequest>();
-    const vacancyId = req.params['id'] || req.params['vacancyId'];
+    const rawId = req.params['id'] ?? req.params['vacancyId'];
 
-    if (!vacancyId) {
+    if (!rawId) {
       throw new ForbiddenException('Vacancy id not found in request url');
     }
+
+    const vacancyId = Array.isArray(rawId) ? rawId[0] : rawId;
 
     const vacancy = await this.service.findOneOrThrow({ id: vacancyId });
 

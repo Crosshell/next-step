@@ -15,7 +15,7 @@ import {
 import { VacancyService } from '../services/vacancy.service';
 import { CreateVacancyDto } from '../dto/create-vacancy.dto';
 import { SessionAuthGuard } from '../../auth/guards/session-auth.guard';
-import { MessageResponse, PagedDataResponse } from '@common/responses';
+import { MessageResponse, PaginatedResponse } from '@common/responses';
 import { UpdateVacancyDto } from '../dto/update-vacancy.dto';
 import { FindManyVacanciesDto } from '../dto/find-many-vacancies.dto';
 import { SetSkillsDto } from '../dto/set-skills.dto';
@@ -50,7 +50,7 @@ export class VacancyController {
   @HttpCode(HttpStatus.OK)
   async findMany(
     @Body() dto: FindManyVacanciesDto,
-  ): Promise<PagedDataResponse<VacancyWithRelations[]>> {
+  ): Promise<PaginatedResponse<VacancyWithRelations>> {
     return this.service.findMany(dto);
   }
 

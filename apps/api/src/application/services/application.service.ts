@@ -8,11 +8,11 @@ import { ApplicationRepository } from '../repositories/application.repository';
 import { Prisma } from '@prisma/client';
 import { CreateApplicationDto } from '../dto/create-application.dto';
 import { VacancyService } from '../../vacancy/services/vacancy.service';
-import { createPaginationMeta } from '@common/utils';
 import { FindManyApplicationsDto } from '../dto/find-many-applications.dto';
 import { SetStatusDto } from '../dto/set-status.dto';
-import { PagedDataResponse } from '@common/responses';
+import { PaginatedResponse } from '@common/responses';
 import { ApplicationWithRelations } from '../types/application-with-relations.type';
+import { paginate } from '@common/utils/pagination.util';
 
 @Injectable()
 export class ApplicationService {
@@ -48,26 +48,25 @@ export class ApplicationService {
     return application;
   }
 
-  async search(
+  async findMany(
     dto: FindManyApplicationsDto,
     additionalWhereParams: Prisma.ApplicationWhereInput,
-  ): Promise<PagedDataResponse<ApplicationWithRelations[]>> {
+  ): Promise<PaginatedResponse<ApplicationWithRelations>> {
     const where: Prisma.ApplicationWhereInput = { ...additionalWhereParams };
 
     if (dto.status) {
       where.status = dto.status;
     }
 
-    const skip = (dto.page - 1) * dto.take;
     const orderBy = dto.orderBy ?? { createdAt: Prisma.SortOrder.desc };
 
-    const data = await this.repository.findMany(where, orderBy, skip, dto.take);
-
-    const total = await this.repository.count(where);
-
-    const meta = createPaginationMeta(total, dto.page, dto.take);
-
-    return { data, meta };
+    return paginate({
+      repository: this.repository,
+      where,
+      page: dto.page,
+      take: dto.take,
+      orderBy,
+    });
   }
 
   async setStatus(

@@ -18,7 +18,7 @@ import { CreateCompanyDto } from '../dto/create-company.dto';
 import { SessionAuthGuard } from '../../auth/guards/session-auth.guard';
 import { UpdateCompanyDto } from '../dto/update-company.dto';
 import { FindManyCompaniesDto } from '../dto/find-many-companies.dto';
-import { MessageResponse, PagedDataResponse } from '@common/responses';
+import { MessageResponse, PaginatedResponse } from '@common/responses';
 import { InviteDto } from '../dto/invite.dto';
 import { RecruiterWithoutCompanyGuard } from '../../recruiter/guards/recruiter-without-company.guard';
 import { CurrentRecruiter } from '../../recruiter/decorators/current-recruiter.decorator';
@@ -57,7 +57,7 @@ export class CompanyController {
   @Get()
   async findMany(
     @Query() dto: FindManyCompaniesDto,
-  ): Promise<PagedDataResponse<Company[]>> {
+  ): Promise<PaginatedResponse<Company>> {
     return this.service.findMany(dto);
   }
 

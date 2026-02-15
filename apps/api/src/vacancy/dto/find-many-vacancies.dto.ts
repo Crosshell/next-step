@@ -10,7 +10,6 @@ import {
   ArrayUnique,
   IsArray,
   IsEnum,
-  IsInt,
   IsOptional,
   IsString,
   IsUUID,
@@ -20,6 +19,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { PaginationDto } from '@common/dto/pagination.dto';
 
 class OrderBy {
   @IsOptional()
@@ -31,7 +31,7 @@ class OrderBy {
   salaryMin?: Prisma.SortOrder;
 }
 
-export class FindManyVacanciesDto {
+export class FindManyVacanciesDto extends PaginationDto {
   @IsOptional()
   @IsString()
   @Length(2, 100)
@@ -93,16 +93,4 @@ export class FindManyVacanciesDto {
   @ValidateNested()
   @Type(() => OrderBy)
   orderBy?: OrderBy;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  page: number = 1;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  take: number = 20;
 }

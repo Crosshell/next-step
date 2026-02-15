@@ -25,7 +25,6 @@ describe('VacancyService', () => {
   let repository: jest.Mocked<VacancyRepository>;
   let skillService: jest.Mocked<SkillService>;
   let languageService: jest.Mocked<LanguageService>;
-  let companyService: jest.Mocked<CompanyService>;
 
   const mockVacancy: VacancyWithRelations = {
     id: 'vacancy-uuid-1',
@@ -88,7 +87,6 @@ describe('VacancyService', () => {
     repository = module.get(VacancyRepository);
     skillService = module.get(SkillService);
     languageService = module.get(LanguageService);
-    companyService = module.get(CompanyService);
 
     jest.clearAllMocks();
   });
@@ -164,28 +162,6 @@ describe('VacancyService', () => {
       expect(result).toEqual({
         data,
         meta: { total: 1, page: 1, totalPages: 1 },
-      });
-    });
-
-    it('should validate skills, languages and company if provided', async () => {
-      const dto: FindManyVacanciesDto = {
-        ...defaultDto,
-        requiredSkillIds: ['skill-1'],
-        requiredLanguages: [
-          { languageId: 'lang-1', level: LanguageLevel.ELEMENTARY },
-        ],
-        companyId: 'company-1',
-      };
-
-      repository.findMany.mockResolvedValue([]);
-      repository.count.mockResolvedValue(0);
-
-      await service.findMany(dto);
-
-      expect(skillService.assertExists).toHaveBeenCalledWith(['skill-1']);
-      expect(languageService.assertExists).toHaveBeenCalledWith(['lang-1']);
-      expect(companyService.findOneOrThrow).toHaveBeenCalledWith({
-        id: 'company-1',
       });
     });
 

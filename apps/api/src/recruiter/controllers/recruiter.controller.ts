@@ -16,7 +16,7 @@ import { CreateRecruiterDto } from '../dto/create-recruiter.dto';
 import { SessionAuthGuard } from '../../auth/guards/session-auth.guard';
 import { UserWithoutPassword } from '../../user/types/user-without-password.type';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { MessageResponse } from '@common/responses';
+import { MessageResponse, PaginatedResponse } from '@common/responses';
 import { RecruiterGuard } from '../guards/recruiter.guard';
 import { CurrentRecruiter } from '../decorators/current-recruiter.decorator';
 import { FindManyRecruitersDto } from '../dto/find-many-recruiters.dto';
@@ -49,7 +49,9 @@ export class RecruiterController {
   }
 
   @Get()
-  async findMany(@Query() dto: FindManyRecruitersDto): Promise<Recruiter[]> {
+  async findMany(
+    @Query() dto: FindManyRecruitersDto,
+  ): Promise<PaginatedResponse<Recruiter>> {
     return this.service.findMany(dto);
   }
 

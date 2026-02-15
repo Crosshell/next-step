@@ -24,7 +24,7 @@ import { SetSkillsDto } from '../dto/set-skills.dto';
 import { SetLanguagesDto } from '../dto/set-languages.dto';
 import { CurrentJobSeeker } from '../decorators/current-job-seeker.decorator';
 import { SetContactsDto } from '../dto/set-contacts.dto';
-import { MessageResponse, PagedDataResponse } from '@common/responses';
+import { MessageResponse, PaginatedResponse } from '@common/responses';
 import { JobSeekerWithRelations } from '../types/job-seeker-with-relations.type';
 
 @Controller('job-seekers')
@@ -61,7 +61,7 @@ export class JobSeekerController {
   @UseGuards(SessionAuthGuard)
   async findMany(
     @Body() dto: FindManyJobSeekersDto,
-  ): Promise<PagedDataResponse<JobSeekerWithRelations[]>> {
+  ): Promise<PaginatedResponse<JobSeekerWithRelations>> {
     return this.service.findMany(dto);
   }
 

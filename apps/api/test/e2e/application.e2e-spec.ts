@@ -16,7 +16,7 @@ import { randomUUID } from 'node:crypto';
 import { FindManyApplicationsDto } from '../../src/application/dto/find-many-applications.dto';
 import { createRecruiter } from './utils/recruiter.helper';
 import { ApplicationWithRelations } from '../../src/application/types/application-with-relations.type';
-import { PagedDataResponse } from '@common/responses';
+import { PaginatedResponse } from '@common/responses';
 import {
   shouldFailForRecruiterWithoutCompany,
   shouldFailForVacancyOfAnotherCompany,
@@ -238,9 +238,8 @@ describe('ApplicationController (e2e)', () => {
         .query(body)
         .expect(200);
 
-      const { data, meta } = res.body as PagedDataResponse<
-        ApplicationWithRelations[]
-      >;
+      const { data, meta } =
+        res.body as PaginatedResponse<ApplicationWithRelations>;
 
       expect(data).toHaveLength(1);
       expect(data[0].id).toBe(targetApplication.id);
@@ -318,9 +317,8 @@ describe('ApplicationController (e2e)', () => {
         .query(body)
         .expect(200);
 
-      const { data, meta } = res.body as PagedDataResponse<
-        ApplicationWithRelations[]
-      >;
+      const { data, meta } =
+        res.body as PaginatedResponse<ApplicationWithRelations>;
       expect(data).toHaveLength(1);
       expect(data[0].id).toBe(targetApplication.id);
       expect(meta.total).toBe(1);

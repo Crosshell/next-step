@@ -9,8 +9,7 @@ import { CreateCompanyDto } from '../dto/create-company.dto';
 import { UpdateCompanyDto } from '../dto/update-company.dto';
 import { FindManyCompaniesDto } from '../dto/find-many-companies.dto';
 import { CompanyRepository } from '../repositories/company.repository';
-import { createPaginationMeta } from '@common/utils';
-import { PagedDataResponse } from '@common/responses';
+import { PaginatedResponse } from '@common/responses';
 import { InviteDto } from '../dto/invite.dto';
 import { RecruiterService } from '../../recruiter/services/recruiter.service';
 import { EmailService } from '../../email/services/email.service';
@@ -20,6 +19,7 @@ import { UserService } from '../../user/services/user.service';
 import { RecruiterWithCompany } from '../../recruiter/types/recruiter-with-company.type';
 import { UserWithoutPassword } from '../../user/types/user-without-password.type';
 import { AcceptInviteDto } from '../dto/accept-invite.dto';
+import { paginate } from '@common/utils/pagination.util';
 
 @Injectable()
 export class CompanyService {
@@ -56,7 +56,7 @@ export class CompanyService {
 
   async findMany(
     dto: FindManyCompaniesDto,
-  ): Promise<PagedDataResponse<Company[]>> {
+  ): Promise<PaginatedResponse<Company>> {
     const where: Prisma.CompanyWhereInput = {};
 
     if (dto.name) {
@@ -67,14 +67,13 @@ export class CompanyService {
     }
     const orderBy = { name: Prisma.SortOrder.desc };
 
-    const skip = (dto.page - 1) * dto.take;
-
-    const data = await this.repository.findMany(where, orderBy, skip, dto.take);
-    const total = await this.repository.count(where);
-
-    const meta = createPaginationMeta(total, dto.page, dto.take);
-
-    return { data, meta };
+    return paginate({
+      repository: this.repository,
+      where,
+      page: dto.page,
+      take: dto.take,
+      orderBy,
+    });
   }
 
   async invite(companyId: string, dto: InviteDto): Promise<void> {

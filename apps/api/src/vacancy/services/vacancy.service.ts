@@ -8,11 +8,10 @@ import { LanguageService } from '../../language/services/language.service';
 import { SkillService } from '../../skill/services/skill.service';
 import { SetLanguagesDto } from '../dto/set-languages.dto';
 import { SetSkillsDto } from '../dto/set-skills.dto';
-import { CompanyService } from '../../company/services/company.service';
-import { PagedDataResponse } from '@common/responses';
+import { PaginatedResponse } from '@common/responses';
 import { VacancyQueryBuilder } from '../builders/vacancy-query.builder';
-import { createPaginationMeta } from '@common/utils';
 import { VacancyWithRelations } from '../types/vacancy-with-relations.type';
+import { paginate } from '@common/utils/pagination.util';
 
 @Injectable()
 export class VacancyService {
@@ -20,7 +19,6 @@ export class VacancyService {
     private readonly repository: VacancyRepository,
     private readonly languageService: LanguageService,
     private readonly skillService: SkillService,
-    private readonly companyService: CompanyService,
   ) {}
 
   async create(
@@ -40,18 +38,7 @@ export class VacancyService {
 
   async findMany(
     dto: FindManyVacanciesDto,
-  ): Promise<PagedDataResponse<VacancyWithRelations[]>> {
-    if (dto.requiredSkillIds?.length) {
-      await this.skillService.assertExists(dto.requiredSkillIds);
-    }
-    if (dto.requiredLanguages?.length) {
-      const languageIds = dto.requiredLanguages.map((lang) => lang.languageId);
-      await this.languageService.assertExists(languageIds);
-    }
-    if (dto.companyId) {
-      await this.companyService.findOneOrThrow({ id: dto.companyId });
-    }
-
+  ): Promise<PaginatedResponse<VacancyWithRelations>> {
     const where = new VacancyQueryBuilder()
       .withTitle(dto.title)
       .withSalaryMin(dto.salaryMin)
@@ -65,15 +52,14 @@ export class VacancyService {
       .build();
 
     const orderBy = dto.orderBy ?? { createdAt: Prisma.SortOrder.desc };
-    const skip = (dto.page - 1) * dto.take;
 
-    const data = await this.repository.findMany(where, orderBy, skip, dto.take);
-
-    const total = await this.repository.count(where);
-
-    const meta = createPaginationMeta(total, dto.page, dto.take);
-
-    return { data, meta };
+    return paginate({
+      repository: this.repository,
+      where,
+      page: dto.page,
+      take: dto.take,
+      orderBy,
+    });
   }
 
   async update(

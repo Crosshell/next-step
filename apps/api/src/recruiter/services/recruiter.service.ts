@@ -9,6 +9,8 @@ import { CreateRecruiterDto } from '../dto/create-recruiter.dto';
 import { CompanyRole, Prisma, Recruiter } from '@prisma/client';
 import { FindManyRecruitersDto } from '../dto/find-many-recruiters.dto';
 import { UpdateRecruiterDto } from '../dto/update-recruiter.dto';
+import { paginate } from '@common/utils/pagination.util';
+import { PaginatedResponse } from '@common/responses';
 
 @Injectable()
 export class RecruiterService {
@@ -62,8 +64,20 @@ export class RecruiterService {
     return this.repository.update({ id }, dto);
   }
 
-  async findMany(dto: FindManyRecruitersDto): Promise<Recruiter[]> {
-    return this.repository.findMany(dto);
+  async findMany(
+    dto: FindManyRecruitersDto,
+  ): Promise<PaginatedResponse<Recruiter>> {
+    const where: Prisma.RecruiterWhereInput = { companyId: dto.companyId };
+
+    const orderBy = { createdAt: Prisma.SortOrder.desc };
+
+    return paginate({
+      repository: this.repository,
+      where,
+      page: dto.page,
+      take: dto.take,
+      orderBy,
+    });
   }
 
   async delete(recruiter: Recruiter): Promise<Recruiter> {

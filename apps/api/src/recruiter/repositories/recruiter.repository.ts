@@ -21,8 +21,18 @@ export class RecruiterRepository {
     return this.prisma.recruiter.findUnique({ where });
   }
 
-  async findMany(where: Prisma.RecruiterWhereInput): Promise<Recruiter[]> {
-    return this.prisma.recruiter.findMany({ where });
+  async findMany(
+    where: Prisma.RecruiterWhereInput,
+    orderBy: Prisma.RecruiterOrderByWithRelationInput,
+    skip: number,
+    take: number,
+  ): Promise<Recruiter[]> {
+    return this.prisma.recruiter.findMany({
+      where,
+      orderBy,
+      skip,
+      take,
+    });
   }
 
   async update(
@@ -52,5 +62,9 @@ export class RecruiterRepository {
 
   async delete(where: Prisma.RecruiterWhereUniqueInput): Promise<Recruiter> {
     return this.prisma.recruiter.delete({ where });
+  }
+
+  async count(where: Prisma.RecruiterWhereInput): Promise<number> {
+    return this.prisma.recruiter.count({ where });
   }
 }

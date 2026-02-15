@@ -1,12 +1,7 @@
-import {
-  IsEnum,
-  IsInt,
-  IsOptional,
-  Min,
-  ValidateNested,
-} from 'class-validator';
+import { IsEnum, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApplicationStatus, Prisma } from '@prisma/client';
+import { PaginationDto } from '@common/dto/pagination.dto';
 
 class OrderBy {
   @IsOptional()
@@ -14,7 +9,7 @@ class OrderBy {
   createdAt?: Prisma.SortOrder;
 }
 
-export class FindManyApplicationsDto {
+export class FindManyApplicationsDto extends PaginationDto {
   @IsOptional()
   @IsEnum(ApplicationStatus)
   status?: ApplicationStatus;
@@ -23,16 +18,4 @@ export class FindManyApplicationsDto {
   @ValidateNested()
   @Type(() => OrderBy)
   orderBy?: OrderBy;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  page: number = 1;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  take: number = 20;
 }

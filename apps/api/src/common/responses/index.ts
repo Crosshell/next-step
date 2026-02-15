@@ -1,2 +1,2 @@
 export * from './message.response';
-export * from './paged-data.response';
+export * from './paginated.response';

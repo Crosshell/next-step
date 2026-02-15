@@ -18,6 +18,7 @@ import {
   shouldFailWithoutAuth,
   shouldFailWithoutRecruiterProfile,
 } from './utils/guards.helper';
+import { PaginatedResponse } from '@common/responses';
 
 describe('RecruiterController (e2e)', () => {
   let app: INestApplication;
@@ -180,10 +181,11 @@ describe('RecruiterController (e2e)', () => {
         .query({ companyId: company.id })
         .expect(200);
 
-      const resBody = res.body as Recruiter[];
+      const { data, meta } = res.body as PaginatedResponse<Recruiter>;
 
-      expect(res.body).toHaveLength(1);
-      expect(resBody[0].id).toBe(targetRecruiter.id);
+      expect(data).toHaveLength(1);
+      expect(data[0].id).toBe(targetRecruiter.id);
+      expect(meta.total).toBe(1);
     });
   });
 

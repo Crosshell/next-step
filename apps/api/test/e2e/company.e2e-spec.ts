@@ -13,7 +13,7 @@ import { createRecruiter } from './utils/recruiter.helper';
 import { createCompany } from './utils/company.helper';
 import { Company, CompanyRole } from '@prisma/client';
 import { FindManyCompaniesDto } from '../../src/company/dto/find-many-companies.dto';
-import { PagedDataResponse } from '@common/responses';
+import { PaginatedResponse } from '@common/responses';
 import { randomUUID } from 'node:crypto';
 import { TokenType } from '../../src/token/enums/token-type.enum';
 import { UpdateCompanyDto } from '../../src/company/dto/update-company.dto';
@@ -187,7 +187,7 @@ describe('CompanyController (e2e)', () => {
 
       const res = await request(server).get(baseUrl).query(query).expect(200);
 
-      const resBody = res.body as PagedDataResponse<Company[]>;
+      const resBody = res.body as PaginatedResponse<Company>;
 
       expect(resBody.data).toHaveLength(1);
       expect(resBody.data[0].id).toBe(targetCompany.id);

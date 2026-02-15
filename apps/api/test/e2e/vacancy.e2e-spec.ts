@@ -19,7 +19,7 @@ import {
   LanguageLevel,
 } from '@prisma/client';
 import { VacancyWithRelations } from '../../src/vacancy/types/vacancy-with-relations.type';
-import { PagedDataResponse } from '@common/responses';
+import { PaginatedResponse } from '@common/responses';
 import { FindManyVacanciesDto } from '../../src/vacancy/dto/find-many-vacancies.dto';
 import { SetSkillsDto } from '../../src/vacancy/dto/set-skills.dto';
 import { SetLanguagesDto } from '../../src/vacancy/dto/set-languages.dto';
@@ -177,31 +177,12 @@ describe('VacancyController (e2e)', () => {
         .send(dto)
         .expect(200);
 
-      const { data, meta } = res.body as PagedDataResponse<
-        VacancyWithRelations[]
-      >;
+      const { data, meta } =
+        res.body as PaginatedResponse<VacancyWithRelations>;
 
       expect(data).toHaveLength(1);
       expect(data[0].id).toBe(targetVacancy.id);
       expect(meta.total).toBe(1);
-    });
-
-    it('should return 400 if required skills not found', async () => {
-      return request(server)
-        .post(`${baseUrl}/search`)
-        .send({ requiredSkillIds: [randomUUID()] })
-        .expect(400);
-    });
-
-    it('should return 400 if required languages not found', async () => {
-      return request(server)
-        .post(`${baseUrl}/search`)
-        .send({
-          requiredLanguages: [
-            { languageId: randomUUID(), level: LanguageLevel.NATIVE },
-          ],
-        })
-        .expect(400);
     });
   });
 

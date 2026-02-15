@@ -11,7 +11,7 @@ import { createAuthenticatedUser } from './utils/auth.helper';
 import { LanguageLevel, SeniorityLevel } from '@prisma/client';
 import { FindManyJobSeekersDto } from '../../src/job-seeker/dto/find-many-job-seekers.dto';
 import { createJobSeekerWithProps } from './utils/job-seeker.helper';
-import { PagedDataResponse } from '@common/responses';
+import { PaginatedResponse } from '@common/responses';
 import { UpdateJobSeekerDto } from '../../src/job-seeker/dto/update-job-seeker.dto';
 import { JobSeekerWithRelations } from '../../src/job-seeker/types/job-seeker-with-relations.type';
 import { SetLanguagesDto } from '../../src/job-seeker/dto/set-languages.dto';
@@ -221,9 +221,8 @@ describe('JobSeekerController (e2e)', () => {
         .send(searchDto)
         .expect(200);
 
-      const { data, meta } = res.body as PagedDataResponse<
-        JobSeekerWithRelations[]
-      >;
+      const { data, meta } =
+        res.body as PaginatedResponse<JobSeekerWithRelations>;
 
       expect(data).toHaveLength(1);
       expect(data[0].id).toBe(targetUserJobSeeker.id);

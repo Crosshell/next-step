@@ -34,6 +34,7 @@ describe('RecruiterService', () => {
     update: jest.fn(),
     setCompany: jest.fn(),
     delete: jest.fn(),
+    count: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -194,14 +195,30 @@ describe('RecruiterService', () => {
 
   describe('findMany', () => {
     it('should return list of recruiters', async () => {
-      const dto: FindManyRecruitersDto = { companyId: 'company-uuid-1' };
+      const dto: FindManyRecruitersDto = {
+        companyId: 'company-uuid-1',
+        page: 1,
+        take: 10,
+      };
       const recruiters = [mockRecruiter];
       repository.findMany.mockResolvedValue(recruiters);
+      repository.count.mockResolvedValue(recruiters.length);
 
       const result = await service.findMany(dto);
 
-      expect(repository.findMany).toHaveBeenCalledWith(dto);
-      expect(result).toEqual(recruiters);
+      expect(repository.findMany).toHaveBeenCalledWith(
+        { companyId: dto.companyId },
+        { createdAt: 'desc' },
+        0,
+        dto.take,
+      );
+      expect(repository.count).toHaveBeenCalledWith({
+        companyId: dto.companyId,
+      });
+      expect(result).toEqual({
+        data: recruiters,
+        meta: { total: recruiters.length, page: dto.page, totalPages: 1 },
+      });
     });
   });
 

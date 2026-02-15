@@ -1,2 +1,2 @@
-export * from './language-level';
-export * from './pagination-meta';
+export * from './language-level.util';
+export * from './pagination.util';

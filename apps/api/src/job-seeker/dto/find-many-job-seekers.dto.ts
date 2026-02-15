@@ -3,14 +3,13 @@ import {
   ArrayUnique,
   IsArray,
   IsEnum,
-  IsInt,
   IsOptional,
   IsUUID,
-  Min,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { JobSeekerLanguageDto } from './job-seeker-language.dto';
+import { PaginationDto } from '@common/dto/pagination.dto';
 
 class OrderBy {
   @IsOptional()
@@ -22,7 +21,7 @@ class OrderBy {
   updatedAt?: Prisma.SortOrder;
 }
 
-export class FindManyJobSeekersDto {
+export class FindManyJobSeekersDto extends PaginationDto {
   @IsOptional()
   @IsArray()
   @ArrayUnique()
@@ -46,16 +45,4 @@ export class FindManyJobSeekersDto {
   @ValidateNested()
   @Type(() => OrderBy)
   orderBy?: OrderBy;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  page: number = 1;
-
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  take: number = 20;
 }

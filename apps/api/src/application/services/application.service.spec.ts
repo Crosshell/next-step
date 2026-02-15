@@ -201,7 +201,7 @@ describe('ApplicationService', () => {
       repository.findMany.mockResolvedValue(mockData);
       repository.count.mockResolvedValue(total);
 
-      const result = await service.search(dto, {
+      const result = await service.findMany(dto, {
         jobSeekerId: mockJobSeeker.id,
       });
 
@@ -236,7 +236,7 @@ describe('ApplicationService', () => {
       repository.findMany.mockResolvedValue([]);
       repository.count.mockResolvedValue(0);
 
-      await service.search(dto, {});
+      await service.findMany(dto, {});
 
       expect(repository.findMany).toHaveBeenCalledWith(
         {},
